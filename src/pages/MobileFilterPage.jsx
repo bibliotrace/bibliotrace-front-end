@@ -4,9 +4,12 @@ import Cookies from "js-cookie";
 import NavBar from "../components/NavBar";
 import FilterBox from "../components/FilterBox.jsx";
 const MobileFilter = () => {
-  const [searchInput, setSearchInput] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState(
+    location.state?.initSearchInput ?? ''
+  );
+  console.log("IN FIlter page search input: " , searchInput);
   const [filterInput, setFilterInput] = useState(
     location.state?.initFilterCheckBox ?? { Audiences: [], Genres: [], Special: [] }
   );
@@ -105,7 +108,7 @@ const MobileFilter = () => {
           setFilterInput(selectedFilters);
           setTimeout(() => {  // Ensure state update before navigation
             console.log("post set:", filterInput);
-            navigate("/search", { state: { initFilterInput: selectedFilters } });
+            navigate("/search", { state: { initFilterInput: selectedFilters, initSearchInput: searchInput} });
           }, 0);
         }}
         prevSelectedItems={filterInput}

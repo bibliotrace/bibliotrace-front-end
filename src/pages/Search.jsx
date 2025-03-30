@@ -204,7 +204,7 @@ const Search = () => {
       Genres: [...filterInput.Genres], 
       Special: [...filterInput.Special] 
     };
-    navigate('/filter', { state: { initFilterCheckBox: filterBody }});
+    navigate('/filter', { state: { initFilterCheckBox: filterBody, initSearchInput: searchInput }});
   };
 
   return (
@@ -214,7 +214,7 @@ const Search = () => {
     >
       <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} />
       <h1 className="mt-16 text-5xl">Bibliotrace 3.0</h1>
-      <div className="h-16 my-6 flex w-7/12 justify-center">
+      <div className="h-16 my-6 flex w-10/12 md:w-7/12 justify-center">
         {" "}
         {/* Search Bar */}
         <input
