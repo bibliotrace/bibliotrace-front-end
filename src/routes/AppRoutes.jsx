@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Genre from "../pages/MobileGenrePage.jsx";
@@ -23,14 +23,6 @@ import ManageGenresTags from "../pages/ManageGenresTags.jsx";
 import Audit from "../pages/Audit.jsx";
 
 const AppRoutes = () => {
-  const [token, setToken] = useState();
-  const [location, setLocation] = useState();
-
-  const saveToken = (userToken) => {
-    localStorage.setItem("token", JSON.stringify(userToken));
-    setToken(userToken);
-  };
-
   const getToken = () => {
     const tokenString = Cookies.get("jwtData");
     if (tokenString == null) {
