@@ -5,9 +5,8 @@ import { useEffect, useRef, useState } from "react";
 import AddIcon from "../assets/add.svg?react";
 import EditIcon from "../assets/edit.svg?react";
 
-export default function BookDetailEditor({ bookData, imageSrc, onExit }) {
+export default function BookDetailEditor({ bookData, onExit }) {
   const [synopsis, setSynopsis] = useState("");
-  const [thumbnail, setThumbnail] = useState(imageSrc);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [isbn, setIsbn] = useState("");
@@ -45,8 +44,6 @@ export default function BookDetailEditor({ bookData, imageSrc, onExit }) {
     setTags(bookData.tag_list);
     setLanguage(bookData.language);
     setImgCallback(bookData.img_callback);
-
-    setThumbnail(imageSrc);
   };
 
   const installGlobalMetadata = async () => {
@@ -293,6 +290,15 @@ export default function BookDetailEditor({ bookData, imageSrc, onExit }) {
                       return <option value={audience}>{audience}</option>;
                     })}
                   </select>{" "}
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Page Count:</h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={pages}
+                    placeHolder="e.g. 1"
+                    onChange={(e) => setPages(e.target.value)}
+                  />
                 </div>
                 <div className="flex text-xl pt-4">
                   <h6 className="font-bold pr-2">Published:</h6>

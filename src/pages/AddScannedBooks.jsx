@@ -136,6 +136,7 @@ export default function AddScannedBooks() {
       synopsis: short_description,
       secondaryGenres: genres,
       audience,
+      pages,
       publishDate: publish_date,
       tag_list: tags,
       series_name,
@@ -193,27 +194,6 @@ export default function AddScannedBooks() {
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Add New Books</h1>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex flex-col max-w-2xl">
-            <label>
-              Location:
-              <select
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                value={location}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setLocation(e.target.value);
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose an option --
-                </option>
-                {locations.map((location_obj) => {
-                  return <option key={location_obj.id} value={location_obj.id}>{location_obj.location_name}</option>;
-                })}
-              </select>
-            </label>
-
-            <br></br>
-
             <h4>ISBN Number</h4>
             <form
               className="flex rounded-xl items-center"
@@ -240,6 +220,27 @@ export default function AddScannedBooks() {
                 Grab Book Information
               </button>
             </form>
+
+            <br></br>
+
+            <label>
+              Location:
+              <select
+                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
+                value={location}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setLocation(e.target.value);
+                }}
+              >
+                <option value="" disabled>
+                  -- Choose an option --
+                </option>
+                {locations.map((location_obj) => {
+                  return <option key={location_obj.id} value={location_obj.id}>{location_obj.location_name}</option>;
+                })}
+              </select>
+            </label>
 
             <br></br>
 
@@ -350,9 +351,6 @@ export default function AddScannedBooks() {
                   <label>
                     <b>Publish Date:</b> {publish_date}
                   </label>
-                  <label>
-                    <b>Short Description:</b> {short_description}
-                  </label>
                   <label className="flex items-center">
                     <b className="pr-2">Tags: </b>
                     {tags.map(tag => {
@@ -362,6 +360,9 @@ export default function AddScannedBooks() {
                         </p>
                       );
                     })}
+                  </label>
+                  <label>
+                    <b>Synopsis:</b> {short_description}
                   </label>
                   {author && (
                     <button className="mt-2 text-nowrap" onClick={(e) => handleEditButton(e)}>
