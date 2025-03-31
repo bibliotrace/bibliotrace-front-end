@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Home from "../pages/Home";
 import Genre from "../pages/MobileGenrePage.jsx";
@@ -79,19 +79,6 @@ const AppRoutes = () => {
           <Route path="/search" element={<SearchPage />} />
         </Route>
         {/*private pages*/}
-        <Route element={<PrivateRoute />}>
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/add-scanned" element={<AddScannedBooks />} />
-          <Route path="/edit-genres-tags" element={<ManageGenresTags />} />
-          <Route path="/remove-book" element={<RemoveBook />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/checkin" element={<CheckIn />} />
-          <Route path="/shopping-list" element={<ShoppingList />} />
-          <Route path="/restock-list" element={<RestockList />} />
-          <Route path="/set-location" element={<SetLocation />} />
-          <Route path="/manage-locations" element={<ManageLocations />} />
-          <Route path="/create-user" element={<CreateUser />} />
-        </Route>
         <Route element={<PrivateRoute />}>
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/add-scanned" element={<AddScannedBooks />} />
