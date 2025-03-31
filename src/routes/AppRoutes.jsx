@@ -3,12 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from "react-
 import Home from "../pages/Home";
 import Genre from "../pages/MobileGenrePage.jsx";
 import Age from "../pages/MobileAgePage.jsx";
+import Cookies from "js-cookie";
+import Filter from "../pages/MobileFilterPage.jsx";
 import SearchPage from "../pages/Search";
 import SuggestPage from "../pages/SuggestPage";
 import NotFound from "../pages/NotFound";
-import Cookies from "js-cookie";
-import Filter from "../pages/MobileFilterPage.jsx";
-
 import Login from "../pages/Login";
 import AdminHome from "../pages/AdminHome";
 import AddScannedBooks from "../pages/AddScannedBooks";
@@ -21,6 +20,7 @@ import SetLocation from "../pages/SetLocation.jsx";
 import CreateUser from "../pages/CreateNewUser.jsx";
 import ManageLocations from "../pages/ManageLocations.jsx";
 import ManageGenresTags from "../pages/ManageGenresTags.jsx";
+import Audit from "../pages/Audit.jsx";
 
 const AppRoutes = () => {
   const getToken = () => {
@@ -67,31 +67,31 @@ const AppRoutes = () => {
 
   return (
     <Router basename={"/"}>
-      {/*PLEASE do not change the basename, the default name is what the deployment pipeline expects.-->*/}
       <Routes>
         <Route path="/login" element={<Login />} />
+        {/*public pages*/}
         <Route element={<PublicRoute />}>
-          {/*public pages*/}
           <Route path="/" element={<Home />} />
           <Route path="/genre" element={<Genre />} />
           <Route path="/age" element={<Age />} />
           <Route path="/filter" element={<Filter />} />
           <Route path="/suggest" element={<SuggestPage />} />
           <Route path="/search" element={<SearchPage />} />
-          {/*private pages*/}
-          <Route element={<PrivateRoute />}>
-            <Route path="/admin" element={<AdminHome />} />
-            <Route path="/add-scanned" element={<AddScannedBooks />} />
-            <Route path="/edit-genres-tags" element={<ManageGenresTags />} />
-            <Route path="/remove-book" element={<RemoveBook />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/checkin" element={<CheckIn />} />
-            <Route path="/shopping-list" element={<ShoppingList />} />
-            <Route path="/restock-list" element={<RestockList />} />
-            <Route path="/set-location" element={<SetLocation />} />
-            <Route path="/manage-locations" element={<ManageLocations />} />
-            <Route path="/create-user" element={<CreateUser />} />
-          </Route>
+        </Route>
+        {/*private pages*/}
+        <Route element={<PrivateRoute />}>
+          <Route path="/admin" element={<AdminHome />} />
+          <Route path="/add-scanned" element={<AddScannedBooks />} />
+          <Route path="/edit-genres-tags" element={<ManageGenresTags />} />
+          <Route path="/audit" element={<Audit />} />
+          <Route path="/remove-book" element={<RemoveBook />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkin" element={<CheckIn />} />
+          <Route path="/shopping-list" element={<ShoppingList />} />
+          <Route path="/restock-list" element={<RestockList />} />
+          <Route path="/set-location" element={<SetLocation />} />
+          <Route path="/manage-locations" element={<ManageLocations />} />
+          <Route path="/create-user" element={<CreateUser />} />
         </Route>
         <Route path="*" element={<NotFound />} /> {/* Catch-all route for 404 */}
       </Routes>
