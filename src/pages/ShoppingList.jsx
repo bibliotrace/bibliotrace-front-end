@@ -20,7 +20,9 @@ export default function ShoppingList() {
         },
       });
       const data = await response.json();
-      setShoppingList(data.object);
+      if (data.object) {
+        setShoppingList(data.object);
+      }
     } catch (e) {
       console.log(e.message);
     }

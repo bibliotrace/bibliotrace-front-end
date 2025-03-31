@@ -20,7 +20,9 @@ export default function RestockList() {
         },
       });
       const data = await response.json();
-      setRestockList(data.object);
+      if (data.object) {
+        setRestockList(data.object);
+      }
     } catch (e) {
       console.log(e.message);
     }
