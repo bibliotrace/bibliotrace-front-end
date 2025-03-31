@@ -182,7 +182,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
               </button>
             </div>
             <div className="flex flex-wrap justify-between">
-              <form className="p-6 flex-1 flex-col flex" onSubmit={(e) => handleFormSubmit(e)}>
+              <form className="p-6 flex-1 flex-col flex max-h-[90vh] overflow-y-auto" onSubmit={(e) => handleFormSubmit(e)}>
                 <div className="flex text-xl items-center">
                   <h6 className="font-bold pr-2">ISBN: </h6>
                   <input
