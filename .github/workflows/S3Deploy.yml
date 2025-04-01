@@ -1,10 +1,6 @@
 name: S3 Deployment Pipeline
 
 on:
-  pull_request:
-    branches:
-      - main
-    types: [opened, reopened, synchronize, edited]
   push:
     branches:
       - main
@@ -33,7 +29,7 @@ jobs:
 
       - name: Replace localhost with production URL
         run: |
-          find dist -type f -exec sed -i 's|http://localhost:8080|https://bibliotrace-service.bibliotrace.com|g' {} +
+          find dist -type f -exec sed -i 's|http://localhost:8080|${{ secrets.BACKEND_SERVICE_URL }}|g' {} +
 
       - name: Create OIDC token to AWS
         uses: aws-actions/configure-aws-credentials@v4
