@@ -47,7 +47,13 @@ export default function Login({ loginType }) {
   }, []);
 
   useEffect(() => {
-    if (message && errorModalRef.current && inputRef1.current && inputRef2.current && loginButton.current) {
+    if (
+      message &&
+      errorModalRef.current &&
+      inputRef1.current &&
+      inputRef2.current &&
+      loginButton.current
+    ) {
       inputRef1.current.blur();
       inputRef2.current.blur();
       loginButton.current.blur();
@@ -172,7 +178,7 @@ export default function Login({ loginType }) {
 
     if (message == null) {
       try {
-        const response = await fetch("http://localhost:8080/api/auth/login", {
+        const response = await fetch("https://bibliotrace-service.bibliotrace.com/api/auth/login", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -208,7 +214,13 @@ export default function Login({ loginType }) {
         className="size-full bg-cover bg-center bg-no-repeat "
         style={{ backgroundImage: `url(${loginBackground})` }}
       >
-        <NavBar useDarkTheme={false} showTitle={true} bgColor={"#ff50e0"} textColor={"white"} showNavButtons={false} />
+        <NavBar
+          useDarkTheme={false}
+          showTitle={true}
+          bgColor={"#ff50e0"}
+          textColor={"white"}
+          showNavButtons={false}
+        />
         <div className="h-[calc(100%-64px)] flex flex-col items-center">
           <h1 className="text-white mb-10 mt-20">{location.state?.loginType ?? ""}</h1>
           <form className="flex flex-col w-1/2 items-center" onSubmit={handleSubmit}>
