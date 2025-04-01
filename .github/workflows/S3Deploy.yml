@@ -1,6 +1,10 @@
 name: S3 Deployment Pipeline
 
 on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, edited]
   push:
     branches:
       - main
