@@ -21,6 +21,8 @@ import CreateUser from "../pages/CreateNewUser.jsx";
 import ManageLocations from "../pages/ManageLocations.jsx";
 import ManageGenresTags from "../pages/ManageGenresTags.jsx";
 import Audit from "../pages/Audit.jsx";
+import AuditList from "../pages/AuditList.jsx";
+import AuditReport from "../pages/AuditReport.jsx";
 
 const AppRoutes = () => {
   const getToken = () => {
@@ -84,6 +86,8 @@ const AppRoutes = () => {
           <Route path="/add-scanned" element={<AddScannedBooks />} />
           <Route path="/edit-genres-tags" element={<ManageGenresTags />} />
           <Route path="/audit" element={<Audit />} />
+          <Route path="/audit-list" element={<AuditList />} />
+          <Route path="/audit-report" element={<AuditReport />} />
           <Route path="/remove-book" element={<RemoveBook />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/checkin" element={<CheckIn />} />

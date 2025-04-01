@@ -263,10 +263,10 @@ export default function Audit() {
             <button
               className="m-5"
               onClick={() => {
-                navigate("/reports");
+                navigate("/audit-list");
               }}
             >
-              Go to Reports
+              View Audit Reports
             </button>
           </div>
         </>

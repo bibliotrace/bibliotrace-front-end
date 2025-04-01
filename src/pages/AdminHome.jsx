@@ -218,7 +218,7 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleTestClick,
+      onClick: () => navigate("/audit-list"),
       width: "20vw",
       height: "10vh",
     },

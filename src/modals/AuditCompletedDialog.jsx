@@ -20,10 +20,10 @@ export default function AuditCompletedDialog({ auditCompletedDialog }) {
         <button
           className="mx-2 bg-darkBlue text-white"
           onClick={() => {
-            navigate("/reports");
+            navigate("/audit-list");
           }}
         >
-          Go to Reports
+          View Audit Reports
         </button>
       </div>
     </dialog>
