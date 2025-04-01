@@ -16,6 +16,10 @@ jobs:
   deploy-s3:
     runs-on: ubuntu-latest
     steps:
+      - name: Set back-end url
+        run: |
+          find ./ -type f -exec sed -i 's|http://localhost:8080|https://bibliotrace-service.bibliotrace.com|g' {} +
+
       - name: Check out repo
         uses: actions/checkout@v4
 
