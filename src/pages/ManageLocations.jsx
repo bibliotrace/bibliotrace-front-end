@@ -12,13 +12,13 @@ export default function ManageLocations() {
   const authToken = Cookies.get("authToken");
 
   useEffect(() => {
-    const locationCookie = Cookies.get("locationList");
-    setLocations(JSON.parse(locationCookie));
+    updateLocationList();
     console.log(locations);
   }, []);
 
   const handleAddNewLocation = () => {
     console.log(newLocation);
+    setNewLocation('');
     fetch("http://localhost:8080/api/metadata/locations", {
       method: "POST",
       headers: {
@@ -33,31 +33,35 @@ export default function ManageLocations() {
         response.json().then((json) => {
           // Then refresh the location data
           setSuccessMessage(json.message);
-          fetch("http://localhost:8080/api/metadata/locations", {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }).then((response) => {
-            response.json().then((json) => {
-              if (!response.ok) {
-                setErrorMessage(`Error Fetching Metadata: ${json.message}`);
-              } else {
-                if (json.object) {
-                  Cookies.set("locationList", JSON.stringify(json.object));
-                  setLocations(json.object)
-                }
-              }
-            });
-          });
+          updateLocationList();
         });
       } else {
         console.error(response);
-        setErrorMessage("response not ok from setting metadata.");
+        setErrorMessage("Response not ok from setting location.");
       }
     });
 
     setNewLocation(null);
   };
+
+  const updateLocationList = () => {
+    fetch("http://localhost:8080/api/metadata/locations", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    }).then((response) => {
+      response.json().then((json) => {
+        if (!response.ok) {
+          setErrorMessage(`Error Fetching Metadata: ${json.message}`);
+        } else {
+          if (json.object) {
+            Cookies.set("locationList", JSON.stringify(json.object));
+            setLocations(json.object)
+          }
+        }
+      });
+    });
+  }
 
   const handleUpdateExistingLocation = (existingLocation, value) => {
     console.log(existingLocation);
@@ -188,7 +192,7 @@ export default function ManageLocations() {
                 onKeyDown={(e) => {
                   e.stopPropagation();
                   if (e.key === "Enter") {
-                    handleAddNewLocation();
+                    e.preventDefault();
                   }
                 }}
               />

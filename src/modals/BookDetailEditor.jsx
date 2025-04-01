@@ -2,6 +2,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
+import ErrorModal from "../modals/ErrorModal.jsx";
 import AddIcon from "../assets/add.svg?react";
 import EditIcon from "../assets/edit.svg?react";
 
@@ -24,9 +25,13 @@ export default function BookDetailEditor({ bookData, onExit }) {
   const [audiences, setAudiences] = useState([]);
   const [tags, setTags] = useState([]);
   const [tagOptions, setTagOptions] = useState([]);
-  const [targetTag, setTargetTag] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+  const [targetTag, setTargetTag] = useState("");
 
-  console.log(bookData);
+  const allGenresList = Cookies.get("genreList");
+  const allAudiencesList = Cookies.get("audienceList");
+  const jwt = Cookies.get("authToken");
 
   const installExistingBookData = async () => {
     setTitle(bookData.title);
@@ -47,34 +52,30 @@ export default function BookDetailEditor({ bookData, onExit }) {
   };
 
   const installGlobalMetadata = async () => {
-    const allGenresList = Cookies.get("genreList");
-    const allAudiencesList = Cookies.get("audienceList");
-    const jwt = Cookies.get("authToken");
-    const fetchResponse = fetch(`http://localhost:8080/api/inventory/tag`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-    });
-
-    let allTagsList;
-    if (fetchResponse.ok) {
-      const jsonData = await fetchResponse.json();
-      allTagsList = jsonData.object.map((tagItem) => {
-        return tagItem.tag_name;
+    try {
+      const fetchResponse = await fetch(`http://localhost:8080/api/metadata/tag`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
       });
-      Cookies.set('tagList', allTagsList)
-      setTagOptions(allTagsList);
-      console.log(allTagsList)
-    } else {
-      console.error(fetchResponse)
+
+      if (fetchResponse.ok) {
+        const jsonData = await fetchResponse.json();
+        const allTagsList = jsonData.object.map((tagItem) => tagItem.tag_name);
+        Cookies.set("tagList", allTagsList);
+        setTagOptions(allTagsList);
+      } else {
+        console.error("Failed to fetch tags:", fetchResponse.statusText);
+      }
+    } catch (error) {
+      console.error("Error fetching tags:", error);
     }
 
-    setGenres(allGenresList.split(","));
-    setAudiences(allAudiencesList.split(","));
+    if (allGenresList) setGenres(allGenresList.split(","));
+    if (allAudiencesList) setAudiences(allAudiencesList.split(","));
   };
 
-  const handleSuggestionCall = async (e) => {
-    e.preventDefault();
+  const handleSuggestionCall = async () => {
     const jwt = Cookies.get("authToken");
     const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbn.split("||")[0]}`, {
       headers: {
@@ -122,6 +123,11 @@ export default function BookDetailEditor({ bookData, onExit }) {
       body: JSON.stringify(fetchBody),
     });
 
+    if (result.ok) {
+      setErrorMessage((await result.json()).message)
+      setShowMessage(true)
+    }
+
     console.log(result);
   };
 
@@ -131,7 +137,6 @@ export default function BookDetailEditor({ bookData, onExit }) {
       genre: targetSecondaryGenre,
     };
     console.log(fetchBody);
-    const jwt = Cookies.get("authToken");
     const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -147,17 +152,40 @@ export default function BookDetailEditor({ bookData, onExit }) {
     console.log(secondaryGenres);
   };
 
-  useEffect(() => {
-    if (isbn) {
-      handleSuggestionCall();
+  const handleAddTag = async (e) => {
+    e.preventDefault();
+    const fetchBody = {
+      tag: targetTag,
     }
-  }, [isbn]);
+    console.log(fetchBody)
+    const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(fetchBody)
+    });
+
+    if (result.ok) {
+      setTags([...tags, targetTag])
+      setTargetTag(null);
+    }
+  }
 
   useEffect(() => {
-    installGlobalMetadata();
-    installExistingBookData();
+    const initializeData = async () => {
+      await installGlobalMetadata();
+      await installExistingBookData();
+      if (isbn) {
+        handleSuggestionCall();
+      }
+      console.log(tagOptions);
+    };
+    
+    initializeData();
   }, []);
-
+  
   return (
     <AnimatePresence>
       {
@@ -182,7 +210,10 @@ export default function BookDetailEditor({ bookData, onExit }) {
               </button>
             </div>
             <div className="flex flex-wrap justify-between">
-              <form className="p-6 flex-1 flex-col flex max-h-[90vh] overflow-y-auto" onSubmit={(e) => handleFormSubmit(e)}>
+              <form
+                className="p-6 flex-1 flex-col flex max-h-[90vh] overflow-y-auto"
+                onSubmit={(e) => handleFormSubmit(e)}
+              >
                 <div className="flex text-xl items-center">
                   <h6 className="font-bold pr-2">ISBN: </h6>
                   <input
@@ -332,7 +363,11 @@ export default function BookDetailEditor({ bookData, onExit }) {
                         -- Choose an option --
                       </option>
                       {tagOptions.map((option) => {
-                        return <option key={option} value={option}>{option}</option>;
+                        return (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        );
                       })}
                     </select>
                     <button className="p-2 ml-2 text-nowrap text-base" onClick={(e) => handleAddTag(e)}>
@@ -355,6 +390,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
                 <button>Submit Changes</button>
               </form>
             </div>
+            {showMessage && <ErrorModal description={errorMessage} onExit={() => setShowMessage(!showMessage)} />}
           </motion.div>
         </motion.div>
       }
