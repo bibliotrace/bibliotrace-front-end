@@ -75,7 +75,11 @@ export default function BookDetailEditor({ bookData, onExit }) {
     if (allAudiencesList) setAudiences(allAudiencesList.split(","));
   };
 
-  const handleSuggestionCall = async () => {
+  const handleSuggestionCall = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     const jwt = Cookies.get("authToken");
     const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbn.split("||")[0]}`, {
       headers: {
@@ -148,6 +152,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
 
     if (result.ok) {
       setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
+      setTargetSecondaryGenre("");
     }
     console.log(secondaryGenres);
   };
@@ -169,7 +174,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
 
     if (result.ok) {
       setTags([...tags, targetTag])
-      setTargetTag(null);
+      setTargetTag("");
     }
   }
 

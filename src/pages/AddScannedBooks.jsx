@@ -31,9 +31,11 @@ export default function AddScannedBooks() {
   const [tags, setTags] = useState([]);
 
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [openEditModal, setOpenEditModal] = useState(false);
   const [bookData, setBookData] = useState({});
 
+  const jwt = Cookies.get("authToken");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,9 +67,7 @@ export default function AddScannedBooks() {
 
     setPrimaryGenre("");
     setAudience("");
-    setLocation("");
 
-    const jwt = Cookies.get("authToken");
     const response = await fetch(`http://localhost:8080/api/bookdata/${isbn}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -92,13 +92,13 @@ export default function AddScannedBooks() {
       console.log("Book successfully imported");
       qrInputRef.current.focus();
     } else {
-      console.log(response.status, 'response status')
+      console.log(response.status, "response status");
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
-        setError('Book Not Recognized. Set it up in the editor window.')
-        setTitle('Unrecognized Book')
-        setAuthor('Open the Book Editor Below')
+        setError("Book Not Recognized. Set it up in the editor window.");
+        setTitle("Unrecognized Book");
+        setAuthor("Open the Book Editor Below");
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -106,7 +106,6 @@ export default function AddScannedBooks() {
   }
 
   async function getCoverThumbnail(isbn) {
-    const jwt = Cookies.get("authToken");
     const response = await fetch(`http://localhost:8080/api/search/cover/${isbn}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -142,15 +141,42 @@ export default function AddScannedBooks() {
       series_name,
       series_number,
       language: "English",
-      imgCallback: null
-    })
-
+      imgCallback: null,
+    });
 
     setOpenEditModal(!openEditModal);
   }
 
   function onSubmit(e) {
-    // TODO: send a call to add a qr code up
+    console.log("hello world!", isbn, location, qr);
+    e.preventDefault();
+
+    const fetchBody = {
+      isbn,
+      location_id: location,
+      qr,
+    };
+
+    fetch("http://localhost:8080/api/inventory/add-book", {
+      method: "POST",
+      body: JSON.stringify(fetchBody),
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+    }).then((result) => {
+      result.json().then((data) => {
+        if (data.message) {
+          if (result.ok) {
+            setMessage(`${data.message} [QR: ${qr}]`);
+            setQr("")
+          } else {
+            setError(`Error Received: ${data.message}`);
+          }
+        }
+      });
+      
+    });
   }
 
   return (
@@ -237,7 +263,11 @@ export default function AddScannedBooks() {
                   -- Choose an option --
                 </option>
                 {locations.map((location_obj) => {
-                  return <option key={location_obj.id} value={location_obj.id}>{location_obj.location_name}</option>;
+                  return (
+                    <option key={location_obj.id} value={location_obj.id}>
+                      {location_obj.location_name}
+                    </option>
+                  );
                 })}
               </select>
             </label>
@@ -275,9 +305,10 @@ export default function AddScannedBooks() {
 
             <p>1. Use the scanner to scan a book's ISBN Number, usually on the back.</p>
             <p>2. Verify the information in the details to the right, updating it as needed.</p>
-            <p>3. Click the QR code field above then scan a new QR code in.</p>
+            <p>3. Select the location of this book in the location dropdown.</p>
+            <p>4. Click the QR code field above then scan a new QR code in.</p>
             <p>
-              4. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
+              5. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
             </p>
             <button
               className="w-fit mt-4"
@@ -328,12 +359,12 @@ export default function AddScannedBooks() {
                   </label>
                   <label className="flex items-center">
                     <b className="pr-2">Secondary Genres: </b>
-                    {genres.map(genreString => {
+                    {genres.map((genreString) => {
                       return (
                         <p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
                           {genreString}
                         </p>
-                      )
+                      );
                     })}
                   </label>
                   <label>
@@ -353,7 +384,7 @@ export default function AddScannedBooks() {
                   </label>
                   <label className="flex items-center">
                     <b className="pr-2">Tags: </b>
-                    {tags.map(tag => {
+                    {tags.map((tag) => {
                       return (
                         <p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
                           {tag}
@@ -375,7 +406,7 @@ export default function AddScannedBooks() {
           </section>
         </div>
         <div id="error-modal">
-          {error ? (
+          {error && (
             <ErrorModal
               id="error-modal"
               tabIndex="-1"
@@ -385,10 +416,27 @@ export default function AddScannedBooks() {
                 setError("");
               }}
             />
-          ) : null}
+          )}
+          {message && (
+            <ErrorModal
+            id="message-modal"
+            tabIndex="-1"
+            description={"Message"}
+            message={message}
+            onExit={() => {
+              setMessage("");
+            }}
+          />
+          )}
         </div>
         <div id="detail-editor-modal">
-          {openEditModal && <BookDetailEditor bookData={bookData} imageSrc={thumbnail} onExit={() => setOpenEditModal(false)}/>}
+          {openEditModal && (
+            <BookDetailEditor
+              bookData={bookData}
+              imageSrc={thumbnail}
+              onExit={() => setOpenEditModal(false)}
+            />
+          )}
         </div>
       </div>
     </div>
