@@ -16,10 +16,6 @@ jobs:
   deploy-s3:
     runs-on: ubuntu-latest
     steps:
-      - name: Set back-end url
-        run: |
-          find ./ -type f -exec sed -i 's|http://localhost:8080|https://bibliotrace-service.bibliotrace.com|g' {} +
-
       - name: Check out repo
         uses: actions/checkout@v4
 
@@ -34,6 +30,10 @@ jobs:
       - name: Build project
         run: |
           npm ci && rm -rf dist && npm run build
+
+      - name: Replace localhost with production URL
+        run: |
+          find dist -type f -exec sed -i 's|http://localhost:8080|https://bibliotrace-service.bibliotrace.com|g' {} +
 
       - name: Create OIDC token to AWS
         uses: aws-actions/configure-aws-credentials@v4
