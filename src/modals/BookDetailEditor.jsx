@@ -28,7 +28,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const [tags, setTags] = useState(bookData.tag_list ?? []);
   const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
   const [messageString, setMessageString] = useState("");
-  const [exitMessage, setExitMessage] = useState("");
 
   const handleSuggestionCall = async (e) => {
     if (e) {
@@ -47,7 +46,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       const bookData = data.object;
       setTitle(bookData.book_title);
       setAuthor(bookData.author);
-      setImgCallback(bookData.img_callback);
       setIsbn(bookData.isbn_list);
       setLanguage(bookData.language);
       setPages(bookData.pages);
@@ -66,7 +64,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       audience_name: audience,
       pages,
       series_name: seriesName,
-      series_number: seriesNumber,
+      series_number: (seriesNumber != "") ? seriesNumber : 0,
       publish_date: publishDate,
       short_description: synopsis,
       language,
@@ -83,8 +81,9 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     });
 
     if (result.ok) {
-      setExitMessage('Successfully Submitted Book');
-      packageExit();
+      packageExit((await result.json()).message);
+    } else {
+      setMessageString(`Error Submitting: ${(await result.json()).message}`)
     }
 
     console.log(result);
@@ -179,8 +178,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     }
   };
 
-  const packageExit = async (e) => {
-    e?.preventDefault();
+  const packageExit = async (exitMessage) => {
     onExit({
       exitMessage,
       book_title: title,
@@ -329,42 +327,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                     })}
                   </select>
                 </div>
-                <div className="flex items-center text-xl pt-4 flex-wrap gap-2">
-                  <h6 className="font-bold pr-2">Secondary Genres:</h6>
-                  {secondaryGenres.map((genre, index) => {
-                    return (
-                      <button
-                        key={`${genre}${index}`}
-                        role="button"
-                        className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
-                        onClick={(e) => handleRemoveSecondaryGenre(e, index)}
-                      >
-                        {genre}
-                      </button>
-                    );
-                  })}
-                  <form onSubmit={(e) => handleAddSecondaryGenre(e)}>
-                    <select
-                      className=" mx-2 p-2 rounded-xl"
-                      value={targetSecondaryGenre}
-                      onChange={(e) => setTargetSecondaryGenre(e.target.value)}
-                    >
-                      <option value="" disabled>
-                        -- Choose an option --
-                      </option>
-                      {genres.map((genre) => {
-                        return <option key={genre} value={genre}>{genre}</option>;
-                      })}
-                    </select>
-                    <button
-                      className="p-2 ml-2 text-nowrap text-base"
-                      onClick={(e) => handleAddSecondaryGenre(e)}
-                      role="button"
-                    >
-                      Add Genre
-                    </button>
-                  </form>
-                </div>
                 <div className="flex text-xl pt-4">
                   <h6 className="font-bold pr-2">Audience:</h6>
                   <select
@@ -399,6 +361,51 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                     onSubmit={(e) => e.preventDefault()}
                   />
                 </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2 mt-1">Synopsis:</h6>
+                  <textarea
+                    className="w-full p-2 text-base h-32"
+                    value={synopsis}
+                    placeholder="A basic description"
+                    onChange={(e) => setSynopsis(e.target.value)}
+                  />
+                </div>
+                <div className="flex items-center text-xl pt-4 flex-wrap gap-2">
+                  <h6 className="font-bold pr-2">Secondary Genres:</h6>
+                  {secondaryGenres.map((genre, index) => {
+                    return (
+                      <button
+                        key={`${genre}${index}`}
+                        role="button"
+                        className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
+                        onClick={(e) => handleRemoveSecondaryGenre(e, index)}
+                      >
+                        {genre}
+                      </button>
+                    );
+                  })}
+                  <form onSubmit={(e) => handleAddSecondaryGenre(e)}>
+                    <select
+                      className=" mx-2 p-2 rounded-xl h-12"
+                      value={targetSecondaryGenre}
+                      onChange={(e) => setTargetSecondaryGenre(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        -- Choose an option --
+                      </option>
+                      {genres.map((genre) => {
+                        return <option key={genre} value={genre}>{genre}</option>;
+                      })}
+                    </select>
+                    <button
+                      className="p-2 ml-2 h-12 text-nowrap text-base"
+                      onClick={(e) => handleAddSecondaryGenre(e)}
+                      role="button"
+                    >
+                      Add Genre
+                    </button>
+                  </form>
+                </div>
                 <div className="flex text-xl pt-4 items-center flex-wrap gap-1">
                   <h6 className="font-bold pr-2">Tags:</h6>
                   {tags.map((tag, index) => {
@@ -416,13 +423,13 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <div className="w-full max-w-sm space-y-2">
                     <div className="flex space-x-2">
                       <input
-                        className="bg-[#f5f5f5] rounded-xl p-3 w-80"
+                        className="bg-[#f5f5f5] rounded-xl p-3 w-80 h-12"
                         type="text"
                         placeholder="Search..."
                         value={tagSearchTerm}
                         onChange={(event) => setTagSearchTerm(event.target.value)}
                       />
-                      <button onClick={handleAddNewTag}>Add</button>
+                      <button role="button" className="h-12 text-base" onClick={handleAddNewTag}>Add</button>
                     </div>
                     {tagSearchTerm && (
                       <ul className="bg-[#f5f5f5] rounded-xl max-h-60 overflow-auto">
@@ -436,15 +443,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       </ul>
                     )}
                   </div>
-                </div>
-                <div className="flex text-xl pt-4">
-                  <h6 className="font-bold pr-2 mt-1">Synopsis:</h6>
-                  <textarea
-                    className="w-full p-2 text-base h-32"
-                    value={synopsis}
-                    placeholder="A basic description"
-                    onChange={(e) => setSynopsis(e.target.value)}
-                  />
                 </div>
 
                 <br></br>

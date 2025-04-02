@@ -40,7 +40,7 @@ export default function AddScannedBooks() {
     isbnInputRef.current.focus();
 
     if (isbn) {
-      getBookInformationFromIsbn()
+      getBookInformationFromIsbn();
     }
 
     async function getLocations() {
@@ -97,9 +97,9 @@ export default function AddScannedBooks() {
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
+        handleEditButton()
         setError("Book Not Recognized. Set it up in the editor window.");
         setTitle("Unrecognized Book");
-        setAuthor("Open the Book Editor Below");
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -127,7 +127,7 @@ export default function AddScannedBooks() {
     }
   }
 
-  function handleEditButton(e) {
+  function handleEditButton() {
     setBookData({
       title,
       author,
@@ -170,13 +170,12 @@ export default function AddScannedBooks() {
         if (data.message) {
           if (result.ok) {
             setMessage(`${data.message} [QR: ${qr}]`);
-            setQr("")
+            setQr("");
           } else {
             setError(`Error Received: ${data.message}`);
           }
         }
       });
-      
     });
   }
 
@@ -195,8 +194,8 @@ export default function AddScannedBooks() {
     setSeries_number(book.series_number ?? series_number);
     setTags(book.tag_list ?? tags);
     setGenres(book.genre_list ?? genres);
-    setOpenEditModal(false)
-    getCoverThumbnail(isbn)
+    setOpenEditModal(false);
+    getCoverThumbnail(isbn);
   }
 
   return (
@@ -331,7 +330,9 @@ export default function AddScannedBooks() {
               5. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
             </p>
             <br></br>
-            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">Don't have an ISBN? Get one here.</a>
+            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">
+              Don't have an ISBN? Get one here.
+            </a>
             {/* <button
               className="w-fit mt-4"
               onClick={() => {
@@ -354,9 +355,7 @@ export default function AddScannedBooks() {
 
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
-              <h4 className="bg-lightBlue text-center text-black text-2xl p-2">
-                Last Scanned Book:
-              </h4>
+              <h4 className="bg-lightBlue text-center text-black text-2xl p-2">Last Scanned Book:</h4>
 
               <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
                 <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
@@ -376,7 +375,10 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
-                        <p key={genreString} className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
+                        <p
+                          key={genreString}
+                          className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap"
+                        >
                           {genreString}
                         </p>
                       );
@@ -392,7 +394,7 @@ export default function AddScannedBooks() {
                     <b>Series Name:</b> {series_name}
                   </label>
                   <label>
-                    <b>Series Number:</b> {series_number}
+                    <b>Series Number:</b> {series_number === 0 ? "" : series_number}
                   </label>
                   <label>
                     <b>Publish Date:</b> {publish_date}
@@ -401,7 +403,10 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
-                        <p key={tag} className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
+                        <p
+                          key={tag}
+                          className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap"
+                        >
                           {tag}
                         </p>
                       );
@@ -420,7 +425,7 @@ export default function AddScannedBooks() {
             </div>
           </section>
         </div>
-        <div id="error-modal">
+        <div id="error-modal" style={{ zIndex: 100 }}>
           {error && (
             <ErrorModal
               id="error-modal"
@@ -434,14 +439,14 @@ export default function AddScannedBooks() {
           )}
           {message && (
             <ErrorModal
-            id="message-modal"
-            tabIndex="-1"
-            description={"Message"}
-            message={message}
-            onExit={() => {
-              setMessage("");
-            }}
-          />
+              id="message-modal"
+              tabIndex="-1"
+              description={"Message"}
+              message={message}
+              onExit={() => {
+                setMessage("");
+              }}
+            />
           )}
         </div>
         <div id="detail-editor-modal">

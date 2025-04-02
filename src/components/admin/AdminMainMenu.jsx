@@ -128,7 +128,7 @@ export default function MainMenu() {
     <div className="absolute left-0 top-auto z-10 w-1/2 pl-5">
       <CustomButton
         imageSrc={PurpleIcon}
-        text="CHECK OUT"
+        text="Check Out"
         textColor="#FFFFFF" //same
         onClick={handleCheckout}
         borderColor="#4b00e3"
