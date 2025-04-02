@@ -154,8 +154,27 @@ export default function BookDetailEditor({ bookData, onExit }) {
       setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
       setTargetSecondaryGenre("");
     }
-    console.log(secondaryGenres);
   };
+
+  const handleRemoveSecondaryGenre = async (e, index) => {
+    e.preventDefault();
+    const fetchBody = {
+      genre: secondaryGenres[index],
+    };
+    console.log(fetchBody);
+    const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+      body: JSON.stringify(fetchBody),
+    });
+
+    if (result.ok) {
+      setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
+    }
+  }
 
   const handleAddTag = async (e) => {
     e.preventDefault();
@@ -176,6 +195,41 @@ export default function BookDetailEditor({ bookData, onExit }) {
       setTags([...tags, targetTag])
       setTargetTag("");
     }
+  }
+
+  const handleRemoveTag = async (e, index) => {
+    e.preventDefault();
+    const fetchBody = {
+      tag: tags[index]
+    }
+    const result = await fetch (`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+      body: JSON.stringify(fetchBody)
+    })
+
+    if (result.ok) {
+      setTags(tags.filter((_, i) => i !== index));
+    }
+  }
+
+  const packageExit = async (e) => {
+    onExit({
+      book_title: title,
+      author,
+      pages,
+      publish_date: publishDate,
+      short_description: synopsis,
+      audience_name: audience,
+      primary_genre_name: primaryGenre,
+      series_name: seriesName,
+      series_number: seriesNumber,
+      tag_list: tags,
+      genre_list: secondaryGenres
+    })
   }
 
   useEffect(() => {
@@ -199,7 +253,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onExit}
+          onClick={packageExit}
         >
           <motion.div
             className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl relative"
@@ -210,7 +264,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
           >
             <div className="flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-lightBlue rounded-t-lg">
               <h2 className="flex-1 text-center text-white text-lg font-semibold">{title}</h2>
-              <button className="text-gray-600" onClick={onExit}>
+              <button className="text-gray-600" onClick={packageExit}>
                 Back
               </button>
             </div>
@@ -284,11 +338,11 @@ export default function BookDetailEditor({ bookData, onExit }) {
                 </div>
                 <div className="flex items-center text-xl pt-4 flex-wrap">
                   <h6 className="font-bold pr-2">Secondary Genres:</h6>
-                  {secondaryGenres.map((genre) => {
+                  {secondaryGenres.map((genre, index) => {
                     return (
                       <button
                         className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white font-normal text-center text-nowrap"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => handleRemoveSecondaryGenre(e, index)}
                       >
                         {genre}
                       </button>
@@ -352,7 +406,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
                     return (
                       <button
                         className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white font-normal text-center text-nowrap"
-                        onClick={(e) => e.preventDefault()}
+                        onClick={(e) => handleRemoveTag(e, index)}
                       >
                         {tag}
                       </button>

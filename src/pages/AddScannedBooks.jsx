@@ -179,6 +179,22 @@ export default function AddScannedBooks() {
     });
   }
 
+  function onEditExit(book) {
+    setTitle(book.book_title ?? title);
+    setAuthor(book.author ?? author);
+    setPages(book.pages ?? pages);
+    setPublish_date(book.publish_date ?? publish_date);
+    setShort_description(book.short_description ?? short_description);
+    setAudience(book.audience_name ?? audience);
+    setPrimaryGenre(book.primary_genre_name ?? primary_genre);
+    setSeries_name(book.series_name ?? series_name);
+    setSeries_number(book.series_number ?? series_number);
+    setTags(book.tag_list ?? tags);
+    setGenres(book.genre_list ?? genres);
+    setOpenEditModal(false)
+    getCoverThumbnail(isbn)
+  }
+
   return (
     <div className="h-lvh">
       <svg
@@ -434,7 +450,7 @@ export default function AddScannedBooks() {
             <BookDetailEditor
               bookData={bookData}
               imageSrc={thumbnail}
-              onExit={() => setOpenEditModal(false)}
+              onExit={(bookData) => onEditExit(bookData)}
             />
           )}
         </div>
