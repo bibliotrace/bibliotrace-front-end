@@ -26,6 +26,14 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
   const isbn = bookData.isbn;
   console.log("made it here");
 
+  const handleAddBook = () => {
+    navigate(`/add-scanned?isbn=${isbn}`)
+  }
+
+  const handleEditBook = () => {
+    
+  }
+
   const getExtraBookData = async () => {
     const jwt = Cookies.get("authToken");
     let result = await fetch(`http://localhost:8080/api/bookdata/${isbn}`, {
@@ -105,7 +113,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <p>{audience}</p>
                   </div>
                   <div className="flex text-xl pt-4">
-                    <h6 className="font-bold px-2">Published:</h6>
+                    <h6 className="font-bold pr-2">Published:</h6>
                     <p>{published}</p>
                   </div>
                   <div className="flex text-xl pt-4 items-center flex-wrap">
@@ -145,10 +153,10 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button className="bg-white">
+                <button className="bg-white" onClick={(e) => handleAddBook(e)}>
                   <AddIcon />
                 </button>
-                <button className="bg-white">
+                <button className="bg-white" onClick={(e) => handleEditBook(e)}>
                   <EditIcon />
                 </button>
               </div>

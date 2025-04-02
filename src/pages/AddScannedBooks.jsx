@@ -1,7 +1,7 @@
 import NavBar from "../components/NavBar";
 import tailwindConfig from "../../tailwind.config";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
 import BulkQrAndISBNDump from "../modals/BulkQrAndISBNDump";
@@ -9,10 +9,11 @@ import ErrorModal from "../modals/ErrorModal.jsx";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 
 export default function AddScannedBooks() {
+  const [searchParams] = useSearchParams();
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState(""); // this stores what the user types in
+  const [isbn, setIsbn] = useState(searchParams.get("isbn")); // this stores what the user types in
   const [primary_genre, setPrimaryGenre] = useState("");
   const [audience, setAudience] = useState("");
   const [pages, setPages] = useState("");
@@ -41,6 +42,10 @@ export default function AddScannedBooks() {
   useEffect(() => {
     isbnInputRef.current.focus();
 
+    if (isbn) {
+      getBookInformationFromIsbn()
+    }
+
     async function getLocations() {
       const locationList = await JSON.parse(Cookies.get("locationList"));
       setLocations(locationList);
@@ -56,7 +61,7 @@ export default function AddScannedBooks() {
   }, [error]);
 
   async function getBookInformationFromIsbn(e) {
-    e.preventDefault();
+    e?.preventDefault();
     setError("");
     setSuccessType(false);
     if (!isbn) {
@@ -326,7 +331,9 @@ export default function AddScannedBooks() {
             <p>
               5. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
             </p>
-            <button
+            <br></br>
+            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">Don't have an ISBN? Get one here.</a>
+            {/* <button
               className="w-fit mt-4"
               onClick={() => {
                 setBulkModalShow(true);
@@ -343,7 +350,7 @@ export default function AddScannedBooks() {
                 }}
                 operationType="add"
               />
-            )}
+            )} */}
           </section>
 
           <section className="p-20 flex-1">

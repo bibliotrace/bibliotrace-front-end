@@ -1,10 +1,8 @@
 // This is the modal that shows all of the details for a particular book. The details shown will differ depending on if we're in an Admin page or not.
 import { motion, AnimatePresence } from "framer-motion";
 import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorModal from "../modals/ErrorModal.jsx";
-import AddIcon from "../assets/add.svg?react";
-import EditIcon from "../assets/edit.svg?react";
 
 export default function BookDetailEditor({ bookData, onExit }) {
   const [synopsis, setSynopsis] = useState("");
@@ -128,8 +126,8 @@ export default function BookDetailEditor({ bookData, onExit }) {
     });
 
     if (result.ok) {
-      setErrorMessage((await result.json()).message)
-      setShowMessage(true)
+      setErrorMessage((await result.json()).message);
+      setShowMessage(true);
     }
 
     console.log(result);
@@ -174,47 +172,47 @@ export default function BookDetailEditor({ bookData, onExit }) {
     if (result.ok) {
       setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
     }
-  }
+  };
 
-  const handleAddTag = async (e) => {
+  const handleAddTag = async (e, newTag) => {
     e.preventDefault();
     const fetchBody = {
-      tag: targetTag,
-    }
-    console.log(fetchBody)
+      tag: newTag,
+    };
+    console.log(fetchBody);
     const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       method: "PUT",
-      body: JSON.stringify(fetchBody)
+      body: JSON.stringify(fetchBody),
     });
 
     if (result.ok) {
-      setTags([...tags, targetTag])
-      setTargetTag("");
+      setTags([...tags, newTag]);
+      setTagSearchTerm("");
     }
-  }
+  };
 
   const handleRemoveTag = async (e, index) => {
     e.preventDefault();
     const fetchBody = {
-      tag: tags[index]
-    }
-    const result = await fetch (`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
+      tag: tags[index],
+    };
+    const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
       },
       method: "DELETE",
-      body: JSON.stringify(fetchBody)
-    })
+      body: JSON.stringify(fetchBody),
+    });
 
     if (result.ok) {
       setTags(tags.filter((_, i) => i !== index));
     }
-  }
+  };
 
   const packageExit = async (e) => {
     onExit({
@@ -228,23 +226,61 @@ export default function BookDetailEditor({ bookData, onExit }) {
       series_name: seriesName,
       series_number: seriesNumber,
       tag_list: tags,
-      genre_list: secondaryGenres
-    })
-  }
+      genre_list: secondaryGenres,
+    });
+  };
 
   useEffect(() => {
     const initializeData = async () => {
       await installGlobalMetadata();
       await installExistingBookData();
-      if (isbn) {
-        handleSuggestionCall();
-      }
       console.log(tagOptions);
     };
-    
+
     initializeData();
   }, []);
-  
+
+  const [tagSearchTerm, setTagSearchTerm] = useState("")
+  const [tagSearchResults, setTagSearchResults] = useState([])
+
+  useEffect(() => {
+    let results = tagOptions.filter((item) => item.toLowerCase().includes(tagSearchTerm.toLowerCase()))
+    results = results.filter((item) => !(tags.includes(item)))
+    setTagSearchResults(results)
+  }, [tagSearchTerm, tagOptions])
+
+  const handleTagSearch = (event) => {
+    setTagSearchTerm(event.target.value)
+  }
+
+  const handleTagAdd = () => {
+    if (tagSearchTerm && !tagOptions.includes(tagSearchTerm)) {
+      fetch('http://localhost:8080/api/inventory/tag', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`
+        },
+        body: JSON.stringify({
+          tag_name: tagSearchTerm,
+        })
+      }).then((response) => {
+        if (response.ok) {
+          response.json().then((data) => {
+            setShowMessage(true)
+            setTagOptions([...tagOptions, tagSearchTerm])
+            setTags([...tags, tagSearchTerm])
+            setErrorMessage(data.message)
+          })
+        } else {
+          setErrorMessage(`Tag Add was Unsuccessful`)
+        }
+      })
+
+      setTagSearchTerm("")
+    }
+  }
+
   return (
     <AnimatePresence>
       {
@@ -269,10 +305,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
               </button>
             </div>
             <div className="flex flex-wrap justify-between">
-              <form
-                className="p-6 flex-1 flex-col flex max-h-[90vh] overflow-y-auto"
-                onSubmit={(e) => handleFormSubmit(e)}
-              >
+              <div className="p-6 flex-1 flex-col flex max-h-[90vh] overflow-y-auto">
                 <div className="flex text-xl items-center">
                   <h6 className="font-bold pr-2">ISBN: </h6>
                   <input
@@ -281,7 +314,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
                     placeholder="978123456789"
                     onChange={(e) => setIsbn(e.target.value)}
                   />
-                  <button className="text-sm" onClick={(e) => handleSuggestionCall(e)}>
+                  <button type="button" className="text-sm" onClick={(e) => handleSuggestionCall(e)}>
                     Pull Data From ISBNdb
                   </button>
                 </div>
@@ -336,11 +369,12 @@ export default function BookDetailEditor({ bookData, onExit }) {
                     })}
                   </select>
                 </div>
-                <div className="flex items-center text-xl pt-4 flex-wrap">
+                <div className="flex items-center text-xl pt-4 flex-wrap gap-2">
                   <h6 className="font-bold pr-2">Secondary Genres:</h6>
                   {secondaryGenres.map((genre, index) => {
                     return (
                       <button
+                        role="button"
                         className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white font-normal text-center text-nowrap"
                         onClick={(e) => handleRemoveSecondaryGenre(e, index)}
                       >
@@ -361,7 +395,11 @@ export default function BookDetailEditor({ bookData, onExit }) {
                         return <option value={genre}>{genre}</option>;
                       })}
                     </select>
-                    <button className="p-2 ml-2 text-nowrap text-base" onClick={(e) => handleAddGenre(e)}>
+                    <button
+                      className="p-2 ml-2 text-nowrap text-base"
+                      onClick={(e) => handleAddGenre(e)}
+                      role="button"
+                    >
                       Add Genre
                     </button>
                   </form>
@@ -400,11 +438,12 @@ export default function BookDetailEditor({ bookData, onExit }) {
                     onSubmit={(e) => e.preventDefault()}
                   />
                 </div>
-                <div className="flex text-xl pt-4 items-center flex-wrap">
+                <div className="flex text-xl pt-4 items-center flex-wrap gap-1">
                   <h6 className="font-bold pr-2">Tags:</h6>
                   {tags.map((tag, index) => {
                     return (
                       <button
+                        role="button"
                         className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white font-normal text-center text-nowrap"
                         onClick={(e) => handleRemoveTag(e, index)}
                       >
@@ -412,27 +451,23 @@ export default function BookDetailEditor({ bookData, onExit }) {
                       </button>
                     );
                   })}
-                  <form onSubmit={(e) => handleAddTag(e)}>
-                    <select
-                      className=" mx-2 p-2 rounded-xl"
-                      value={targetTag}
-                      onChange={(e) => setTargetTag(e.target.value)}
-                    >
-                      <option value="" disabled>
-                        -- Choose an option --
-                      </option>
-                      {tagOptions.map((option) => {
-                        return (
-                          <option key={option} value={option}>
-                            {option}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <button className="p-2 ml-2 text-nowrap text-base" onClick={(e) => handleAddTag(e)}>
-                      Add Tag
-                    </button>
-                  </form>
+                  <div className="w-full max-w-sm space-y-2">
+                    <div className="flex space-x-2">
+                      <input className="bg-[#f5f5f5] rounded-xl p-3 w-80" type="text" placeholder="Search..." value={tagSearchTerm} onChange={handleTagSearch} />
+                      <button onClick={handleTagAdd}>Add</button>
+                    </div>
+                    {tagSearchTerm && (
+                      <ul className="bg-[#f5f5f5] rounded-xl max-h-60 overflow-auto">
+                        {tagSearchResults.map((item, index) => (
+                          <li key={index} className="px-4 py-2 hover:bg-gray-100">
+                            <button className="bg-white w-full" onClick={(e) => handleAddTag(e, item)}>
+                              {item}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                 </div>
                 <div className="flex text-xl pt-4">
                   <h6 className="font-bold pr-2 mt-1">Synopsis:</h6>
@@ -446,10 +481,12 @@ export default function BookDetailEditor({ bookData, onExit }) {
 
                 <br></br>
 
-                <button>Submit Changes</button>
-              </form>
+                <button onClick={(e) => handleFormSubmit(e)}>Submit Changes</button>
+              </div>
             </div>
-            {showMessage && <ErrorModal description={errorMessage} onExit={() => setShowMessage(!showMessage)} />}
+            {showMessage && (
+              <ErrorModal description={errorMessage} onExit={() => setShowMessage(!showMessage)} />
+            )}
           </motion.div>
         </motion.div>
       }
