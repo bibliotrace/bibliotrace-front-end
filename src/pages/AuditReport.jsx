@@ -89,6 +89,7 @@ export default function AuditReport() {
                 <th className="border">Title</th>
                 <th className="border">Author</th>
                 <th className="border">QR Code</th>
+                <th className="border">Location</th>
               </tr>
             </thead>
             <tbody>
@@ -100,6 +101,7 @@ export default function AuditReport() {
                       <td className="border p-5 text-center print:p-2">{entry.book_title}</td>
                       <td className="border p-5 text-center print:p-2">{entry.author}</td>
                       <td className="border p-5 text-center print:p-2">{entry.qr}</td>
+                      <td className="border p-5 text-center print:p-2">{entry.location_name}</td>
                     </tr>
                   </>
                 );
