@@ -12,7 +12,7 @@ export default function EditBooks() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState(searchParams.get("isbn")); // this stores what the user types in
+  const [isbn, setIsbn] = useState(searchParams.get("isbn") ?? ""); // this stores what the user types in
   const [primary_genre, setPrimaryGenre] = useState("");
   const [audience, setAudience] = useState("");
   const [pages, setPages] = useState("");
@@ -20,13 +20,7 @@ export default function EditBooks() {
   const [series_number, setSeries_number] = useState("");
   const [publish_date, setPublish_date] = useState("");
   const [short_description, setShort_description] = useState("");
-  const [location, setLocation] = useState("");
-  const [qr, setQr] = useState("");
-  const [bulkModalShow, setBulkModalShow] = useState(false);
-  const [successType, setSuccessType] = useState("");
   const isbnInputRef = useRef(null);
-  const qrInputRef = useRef(null);
-  const [locations, setLocations] = useState([]);
   const [genres, setGenres] = useState([]);
   const [tags, setTags] = useState([]);
 
@@ -42,35 +36,37 @@ export default function EditBooks() {
     isbnInputRef.current.focus();
 
     if (isbn) {
-      getBookInformationFromIsbn();
+      getBookInformationByIsbn();
     }
-
-    async function getLocations() {
-      const locationList = await JSON.parse(Cookies.get("locationList"));
-      setLocations(locationList);
-    }
-    getLocations();
   }, []);
 
   useEffect(() => {
     if (error) {
       isbnInputRef.current.blur();
-      qrInputRef.current.blur();
     }
   }, [error]);
 
-  async function getBookInformationFromIsbn(e) {
+  async function getBookInformationByIsbn(e) {
     e?.preventDefault();
     setError("");
-    setSuccessType(false);
     if (!isbn) {
       setError("Please enter an ISBN number.");
       isbnInputRef.current.focus();
       return;
     }
 
+    setTitle("");
+    setAuthor("");
     setPrimaryGenre("");
     setAudience("");
+    setPages("");
+    setSeries_name("");
+    setSeries_number("");
+    setPublish_date("");
+    setShort_description("");
+    setTags([]);
+    setGenres([]);
+    setThumbnail(defaultBook)
 
     const response = await fetch(`http://localhost:8080/api/bookdata/${isbn}`, {
       headers: {
@@ -94,7 +90,6 @@ export default function EditBooks() {
       setGenres(book.genre_list);
       await getCoverThumbnail(isbn);
       console.log("Book successfully imported");
-      qrInputRef.current.focus();
     } else {
       console.log(response.status, "response status");
       if (response.status === 401) {
@@ -130,7 +125,7 @@ export default function EditBooks() {
     }
   }
 
-  function handleEditButton(e) {
+  function handleEditButton() {
     setBookData({
       title,
       author,
@@ -151,38 +146,10 @@ export default function EditBooks() {
     setOpenEditModal(!openEditModal);
   }
 
-  function onSubmit(e) {
-    console.log("hello world!", isbn, location, qr);
-    e.preventDefault();
-
-    const fetchBody = {
-      isbn,
-      location_id: location,
-      qr,
-    };
-
-    fetch("http://localhost:8080/api/inventory/add-book", {
-      method: "POST",
-      body: JSON.stringify(fetchBody),
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    }).then((result) => {
-      result.json().then((data) => {
-        if (data.message) {
-          if (result.ok) {
-            setMessage(`${data.message} [QR: ${qr}]`);
-            setQr("");
-          } else {
-            setError(`Error Received: ${data.message}`);
-          }
-        }
-      });
-    });
-  }
-
   function onEditExit(book) {
+    if (book.exitMessage) {
+      setMessage(book.exitMessage);
+    }
     setTitle(book.book_title ?? title);
     setAuthor(book.author ?? author);
     setPages(book.pages ?? pages);
@@ -244,7 +211,7 @@ export default function EditBooks() {
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  getBookInformationFromIsbn(e);
+                  getBookInformationByIsbn(e);
                 }
               }}
             >
@@ -259,7 +226,7 @@ export default function EditBooks() {
               <button
                 className="m-4"
                 onClick={(e) => {
-                  getBookInformationFromIsbn(e);
+                  getBookInformationByIsbn(e);
                 }}
               >
                 Grab Book Information
@@ -281,13 +248,6 @@ export default function EditBooks() {
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
               <h4 className="bg-peachPink text-center text-black text-2xl p-2">
                 Last Scanned Book:
-                {successType === "create" ? (
-                  <p className="text-green-500">Book successfully created!</p>
-                ) : successType === "update" ? (
-                  <p className="text-green-500">Book successfully updated!</p>
-                ) : successType === "unknown" ? (
-                  <p className="text-green-500">Book successfully modified!</p>
-                ) : null}
               </h4>
 
               <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
@@ -308,7 +268,7 @@ export default function EditBooks() {
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
-                        <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
+                        <p key={genreString} className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
                           {genreString}
                         </p>
                       );
@@ -324,7 +284,7 @@ export default function EditBooks() {
                     <b>Series Name:</b> {series_name}
                   </label>
                   <label>
-                    <b>Series Number:</b> {series_number}
+                    <b>Series Number:</b> {(series_number == 0) ? "" : series_number}
                   </label>
                   <label>
                     <b>Publish Date:</b> {publish_date}
@@ -333,7 +293,7 @@ export default function EditBooks() {
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
-                        <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
+                        <p key={tag} className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
                           {tag}
                         </p>
                       );

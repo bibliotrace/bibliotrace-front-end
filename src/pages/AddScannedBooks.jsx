@@ -20,13 +20,14 @@ export default function AddScannedBooks() {
   const [series_number, setSeries_number] = useState("");
   const [publish_date, setPublish_date] = useState("");
   const [short_description, setShort_description] = useState("");
+  const [genres, setGenres] = useState([]);
+  const [tags, setTags] = useState([]);
+
   const [location, setLocation] = useState("");
   const [qr, setQr] = useState("");
   const isbnInputRef = useRef(null);
   const qrInputRef = useRef(null);
   const [locations, setLocations] = useState([]);
-  const [genres, setGenres] = useState([]);
-  const [tags, setTags] = useState([]);
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -40,7 +41,7 @@ export default function AddScannedBooks() {
     isbnInputRef.current.focus();
 
     if (isbn) {
-      getBookInformationFromIsbn();
+      getBookInformationByIsbn();
     }
 
     async function getLocations() {
@@ -57,7 +58,7 @@ export default function AddScannedBooks() {
     }
   }, [error]);
 
-  async function getBookInformationFromIsbn(e) {
+  async function getBookInformationByIsbn(e) {
     e?.preventDefault();
     setError("");
     if (!isbn) {
@@ -66,8 +67,18 @@ export default function AddScannedBooks() {
       return;
     }
 
+    setTitle("");
+    setAuthor("");
     setPrimaryGenre("");
     setAudience("");
+    setPages("");
+    setSeries_name("");
+    setSeries_number("");
+    setPublish_date("");
+    setShort_description("");
+    setTags([]);
+    setGenres([]);
+    setThumbnail(defaultBook);
 
     const response = await fetch(`http://localhost:8080/api/bookdata/${isbn}`, {
       headers: {
@@ -244,7 +255,7 @@ export default function AddScannedBooks() {
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  getBookInformationFromIsbn(e);
+                  getBookInformationByIsbn(e);
                 }
               }}
             >
@@ -259,7 +270,7 @@ export default function AddScannedBooks() {
               <button
                 className="m-4"
                 onClick={(e) => {
-                  getBookInformationFromIsbn(e);
+                  getBookInformationByIsbn(e);
                 }}
               >
                 Grab Book Information
