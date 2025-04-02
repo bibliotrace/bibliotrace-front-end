@@ -1,11 +1,11 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
-import ErrorModal from "../modals/ErrorModal.jsx";
+import NavBar from "../components/NavBar";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
+import ErrorModal from "../modals/ErrorModal.jsx";
 
 export default function EditBooks() {
   const [searchParams] = useSearchParams();
@@ -42,7 +42,7 @@ export default function EditBooks() {
     isbnInputRef.current.focus();
 
     if (isbn) {
-      getBookInformationFromIsbn()
+      getBookInformationFromIsbn();
     }
 
     async function getLocations() {
@@ -173,13 +173,12 @@ export default function EditBooks() {
         if (data.message) {
           if (result.ok) {
             setMessage(`${data.message} [QR: ${qr}]`);
-            setQr("")
+            setQr("");
           } else {
             setError(`Error Received: ${data.message}`);
           }
         }
       });
-      
     });
   }
 
@@ -195,8 +194,8 @@ export default function EditBooks() {
     setSeries_number(book.series_number ?? series_number);
     setTags(book.tag_list ?? tags);
     setGenres(book.genre_list ?? genres);
-    setOpenEditModal(false)
-    getCoverThumbnail(isbn)
+    setOpenEditModal(false);
+    getCoverThumbnail(isbn);
   }
 
   return (
@@ -252,7 +251,7 @@ export default function EditBooks() {
               <input
                 className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl min-w-60"
                 type="text"
-                placeHolder="Start Scanning Here"
+                placeholder="Start Scanning Here"
                 ref={isbnInputRef}
                 value={isbn}
                 onChange={(e) => setIsbn(e.target.value)}
@@ -269,10 +268,13 @@ export default function EditBooks() {
 
             <br></br>
             <p>1. Use the scanner to scan a book's ISBN Number, usually on the back.</p>
-            <p>2. Check the book data in the view to the right, and click the edit button to modify any data.</p>
+            <p>
+              2. Check the book data in the view to the right, and click the edit button to modify any data.
+            </p>
             <br></br>
-            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">Don't have an ISBN? Get one here.</a>
-
+            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">
+              Don't have an ISBN? Get one here.
+            </a>
           </section>
 
           <section className="p-20 flex-1">
@@ -364,14 +366,14 @@ export default function EditBooks() {
           )}
           {message && (
             <ErrorModal
-            id="message-modal"
-            tabIndex="-1"
-            description={"Message"}
-            message={message}
-            onExit={() => {
-              setMessage("");
-            }}
-          />
+              id="message-modal"
+              tabIndex="-1"
+              description={"Message"}
+              message={message}
+              onExit={() => {
+                setMessage("");
+              }}
+            />
           )}
         </div>
         <div id="detail-editor-modal">

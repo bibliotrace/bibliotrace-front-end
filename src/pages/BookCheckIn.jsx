@@ -1,10 +1,10 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
-import { useEffect, useRef, useState } from "react";
-import defaultBook from "../assets/generic-book.png?react";
-import { useNavigate } from "react-router-dom";
-import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
 import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import tailwindConfig from "../../tailwind.config";
+import defaultBook from "../assets/generic-book.png?react";
+import NavBar from "../components/NavBar";
+import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
 
 export default function Checkin() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
@@ -170,7 +170,7 @@ export default function Checkin() {
               className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
               type="text"
               onKeyDown={(e) => scanBook(e)}
-              placeHolder="Start Scanning"
+              placeholder="Start Scanning"
               ref={inputRef}
             />
 

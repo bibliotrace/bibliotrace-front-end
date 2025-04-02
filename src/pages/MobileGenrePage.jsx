@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import NavBar from "../components/NavBar";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BarButton from "../components/BarButtons";
+import NavBar from "../components/NavBar";
 
 const Genre = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -26,11 +26,10 @@ const Genre = () => {
 
   const handleGenreSearch = (filterInput) => {
     console.log("Whats in the filter: ", filterInput);
-    const filterBody = { Audiences: [], Genres: [], Special: [] }
-    filterBody.Genres.push(filterInput)
-    navigate("/search", { state: { initFilterInput: filterBody }});
+    const filterBody = { Audiences: [], Genres: [], Special: [] };
+    filterBody.Genres.push(filterInput);
+    navigate("/search", { state: { initFilterInput: filterBody } });
   };
-
 
   //event
   const handleKeyDown = (event) => {
@@ -47,16 +46,9 @@ const Genre = () => {
   }, []);
 
   return (
-    <div
-      className={`h-full w-full pb-5 start-bg flex flex-col items-center`}
-    >
-      <NavBar
-        useDarkTheme={false}
-        showTitle={false}
-        bgColor={"#110057"}
-        textColor={"#FFFFFF"}
-      />
-      
+    <div className={`h-full w-full pb-5 start-bg flex flex-col items-center`}>
+      <NavBar useDarkTheme={false} showTitle={false} bgColor={"#110057"} textColor={"#FFFFFF"} />
+
       <h1 className="mt-3 md:mt-16 md:text-5xl text-2xl text-white">Bibliotrace 3.0</h1>
 
       {/* Search Bar */}
@@ -64,7 +56,7 @@ const Genre = () => {
         <input
           className="m-2 px-3 w-10/12 border-2 border-purple rounded-2xl placeholder-purple placeholder:font-bold"
           type="text"
-          placeHolder="Search"
+          placeholder="Search"
           value={searchInput}
           onInput={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -76,25 +68,24 @@ const Genre = () => {
           Go!
         </button>
       </div>
-      
+
       <h1 className="text-white text-2xl">Explore by Genre</h1>
       <ul>
-          {genres.map((button, index) => (
-              <BarButton
-                key={index}
-                text={button.text}
-                textColor={"#FFFFFF"}
-                onClick={() => handleGenreSearch(button.text)}
-                borderColor={"#669bff"}
-                bgColor={ "#110057"}
-                buttonBgColor = {"#110057"}
-                width = {"20rem"}
-                height= {"3rem"}
-                className={"mt-12"}
-              />
-            ))}
-          </ul>
-      
+        {genres.map((button, index) => (
+          <BarButton
+            key={index}
+            text={button.text}
+            textColor={"#FFFFFF"}
+            onClick={() => handleGenreSearch(button.text)}
+            borderColor={"#669bff"}
+            bgColor={"#110057"}
+            buttonBgColor={"#110057"}
+            width={"20rem"}
+            height={"3rem"}
+            className={"mt-12"}
+          />
+        ))}
+      </ul>
     </div>
   );
 };

@@ -1,9 +1,9 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
+import NavBar from "../components/NavBar";
 import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
 import ErrorModal from "../modals/ErrorModal";
 
@@ -153,19 +153,17 @@ export default function Checkout() {
         homeNavOnClick="/admin"
       />
 
-      {message && <ErrorModal description="Error" message={message} onExit={() => setMessage(null)}/>}
+      {message && <ErrorModal description="Error" message={message} onExit={() => setMessage(null)} />}
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
-          Book Check Out
-        </h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Book Check Out</h1>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
             <input
               className="self-center w-full mb-10 border-2 border-purple text-purple p-4 rounded-lg text-2xl"
               type="text"
               onKeyDown={(e) => scanBook(e)}
-              placeHolder="Start Scanning"
+              placeholder="Start Scanning"
               ref={inputRef}
             />
 
@@ -194,9 +192,7 @@ export default function Checkout() {
 
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
-              <h4 className="bg-purple  text-center text-white text-2xl p-2">
-                Checked Out:{" "}
-              </h4>
+              <h4 className="bg-purple  text-center text-white text-2xl p-2">Checked Out: </h4>
               {title != null && author != null ? (
                 <div className="flex flex-row ">
                   <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">

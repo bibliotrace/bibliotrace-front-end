@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 
 export default function ManageGenresTags() {
@@ -142,7 +142,10 @@ export default function ManageGenresTags() {
             {genres.map((genre) => {
               return (
                 <>
-                  <li key={genre} className="flex flex-row flex-nowrap justify-between my-5 mx-10 text-lg items-center">
+                  <li
+                    key={genre}
+                    className="flex flex-row flex-nowrap justify-between my-5 mx-10 text-lg items-center"
+                  >
                     <p>{genre}</p>
                     <button onClick={() => handleRemoveGenre(genre)}>Remove</button>
                   </li>
@@ -155,7 +158,7 @@ export default function ManageGenresTags() {
             <input
               className="min-w-0 border grow mr-3 p-2"
               type="text"
-              placeHolder="Genre Name"
+              placeholder="Genre Name"
               name="genre_name"
             ></input>
             <button type="submit">Add Genre</button>
@@ -167,7 +170,10 @@ export default function ManageGenresTags() {
             {tags.map((tag) => {
               return (
                 <>
-                  <li key={tag} className="flex flex-row flex-nowrap justify-between my-5 mx-10 text-lg items-center">
+                  <li
+                    key={tag}
+                    className="flex flex-row flex-nowrap justify-between my-5 mx-10 text-lg items-center"
+                  >
                     <p>{tag}</p>
                     <button onClick={() => handleRemoveTag(tag)}>Remove</button>
                   </li>
@@ -177,7 +183,12 @@ export default function ManageGenresTags() {
             })}
           </ul>
           <form className="flex flex-row w-full my-3" onSubmit={(e) => handleAddTag(e)}>
-            <input className="min-w-0 border grow mr-3 p-2" type="text" placeHolder="Tag Name" name="tag_name"></input>
+            <input
+              className="min-w-0 border grow mr-3 p-2"
+              type="text"
+              placeholder="Tag Name"
+              name="tag_name"
+            ></input>
             <button type="submit">Add Tag</button>
           </form>
         </section>

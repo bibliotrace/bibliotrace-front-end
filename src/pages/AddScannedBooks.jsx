@@ -252,7 +252,7 @@ export default function AddScannedBooks() {
               <input
                 className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
                 type="text"
-                placeHolder="Start Scanning Here"
+                placeholder="Start Scanning Here"
                 ref={isbnInputRef}
                 value={isbn}
                 onChange={(e) => setIsbn(e.target.value)}
@@ -306,7 +306,7 @@ export default function AddScannedBooks() {
               <input
                 className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
                 type="text"
-                placeHolder="Scan Above, Then Scan Here"
+                placeholder="Scan Above, Then Scan Here"
                 ref={qrInputRef}
                 value={qr}
                 onChange={(e) => setQr(e.target.value)}

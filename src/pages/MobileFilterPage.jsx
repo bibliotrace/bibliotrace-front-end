@@ -1,25 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import NavBar from "../components/NavBar";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import FilterBox from "../components/FilterBox.jsx";
+import NavBar from "../components/NavBar";
 const MobileFilter = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [searchInput, setSearchInput] = useState(
-    location.state?.initSearchInput ?? ''
-  );
-  console.log("IN FIlter page search input: " , searchInput);
+  const [searchInput, setSearchInput] = useState(location.state?.initSearchInput ?? "");
+  console.log("IN FIlter page search input: ", searchInput);
   const [filterInput, setFilterInput] = useState(
     location.state?.initFilterCheckBox ?? { Audiences: [], Genres: [], Special: [] }
   );
-  console.log("IN FIlter page filter input: " , filterInput);
-  
+  console.log("IN FIlter page filter input: ", filterInput);
 
   //handle routes
   const handleSearch = () => {
     console.log("HOME.jsx searchInput: ", searchInput);
-    navigate("/search", { state: { initSearchInput: filterInput} });
+    navigate("/search", { state: { initSearchInput: filterInput } });
   };
 
   //event
@@ -68,20 +65,10 @@ const MobileFilter = () => {
     filterString += "||";
   }
 
-
-
-
   return (
-    <div
-      className={`h-full w-full pb-5  search-bg flex flex-col items-center`}
-    >
-      <NavBar
-        useDarkTheme={true}
-        showTitle={false}
-        bgColor={"none"}
-        textColor={"#000000"}
-      />
-      
+    <div className={`h-full w-full pb-5  search-bg flex flex-col items-center`}>
+      <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} textColor={"#000000"} />
+
       <h1 className="mt-3 md:mt-16 md:text-5xl text-2xl text-gray">Bibliotrace 3.0</h1>
 
       {/* Search Bar */}
@@ -89,7 +76,7 @@ const MobileFilter = () => {
         <input
           className="m-2 px-3 w-10/12 border-2 border-purple rounded-2xl placeholder-purple placeholder:font-bold"
           type="text"
-          placeHolder="Search"
+          placeholder="Search"
           value={searchInput}
           onInput={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -104,16 +91,18 @@ const MobileFilter = () => {
       <h1 className="text-darkBlue text-3xl m-3">Filter</h1>
       <FilterBox
         onClose={(selectedFilters) => {
-          console.log("pre set: " , filterInput);
+          console.log("pre set: ", filterInput);
           setFilterInput(selectedFilters);
-          setTimeout(() => {  // Ensure state update before navigation
+          setTimeout(() => {
+            // Ensure state update before navigation
             console.log("post set:", filterInput);
-            navigate("/search", { state: { initFilterInput: selectedFilters, initSearchInput: searchInput} });
+            navigate("/search", {
+              state: { initFilterInput: selectedFilters, initSearchInput: searchInput },
+            });
           }, 0);
         }}
         prevSelectedItems={filterInput}
       />
-      
     </div>
   );
 };

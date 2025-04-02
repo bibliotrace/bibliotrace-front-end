@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import loginBackground from "../assets/login-background.png";
+import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal.jsx";
 export default function Login({ loginType }) {
   const location = useLocation();
@@ -47,13 +46,7 @@ export default function Login({ loginType }) {
   }, []);
 
   useEffect(() => {
-    if (
-      message &&
-      errorModalRef.current &&
-      inputRef1.current &&
-      inputRef2.current &&
-      loginButton.current
-    ) {
+    if (message && errorModalRef.current && inputRef1.current && inputRef2.current && loginButton.current) {
       inputRef1.current.blur();
       inputRef2.current.blur();
       loginButton.current.blur();
@@ -229,7 +222,7 @@ export default function Login({ loginType }) {
               <input
                 ref={inputRef1}
                 className="border-2 border-[#ff78e6] border-solid rounded-md h-14 w-full p-4 placeholder-[#ff78e6] placeholder:font-bold text-lg"
-                placeHolder="Username"
+                placeholder="Username"
                 type="text"
                 onChange={(e) => setUsername(e.target.value)}
               ></input>
@@ -239,7 +232,7 @@ export default function Login({ loginType }) {
               <input
                 ref={inputRef2}
                 className="border-2 border-[#ff78e6] border-solid rounded-md h-14 w-full p-4 placeholder-[#ff78e6] placeholder:font-bold text-lg"
-                placeHolder="Password"
+                placeholder="Password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               ></input>

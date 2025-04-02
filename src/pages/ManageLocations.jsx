@@ -1,8 +1,8 @@
-import NavBar from "../components/NavBar";
-import ErrorModal from "../modals/ErrorModal";
+import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import tailwindConfig from "../../tailwind.config";
-import Cookies from "js-cookie";
+import NavBar from "../components/NavBar";
+import ErrorModal from "../modals/ErrorModal";
 
 export default function ManageLocations() {
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,7 +18,7 @@ export default function ManageLocations() {
 
   const handleAddNewLocation = () => {
     console.log(newLocation);
-    setNewLocation('');
+    setNewLocation("");
     fetch("http://localhost:8080/api/metadata/locations", {
       method: "POST",
       headers: {
@@ -56,12 +56,12 @@ export default function ManageLocations() {
         } else {
           if (json.object) {
             Cookies.set("locationList", JSON.stringify(json.object));
-            setLocations(json.object)
+            setLocations(json.object);
           }
         }
       });
     });
-  }
+  };
 
   const handleUpdateExistingLocation = (existingLocation, value) => {
     console.log(existingLocation);
@@ -112,9 +112,7 @@ export default function ManageLocations() {
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
-          Manage Locations
-        </h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Manage Locations</h1>
         {errorMessage && (
           <ErrorModal
             description={"Error Submitting Locations"}
@@ -163,8 +161,7 @@ export default function ManageLocations() {
                     <button
                       className="bg-lightBlue mx-4 text-white h-full"
                       onClick={(e) => {
-                        const inputElement =
-                          e.target.parentElement.parentElement.querySelector("input");
+                        const inputElement = e.target.parentElement.parentElement.querySelector("input");
                         if (inputElement) {
                           handleUpdateExistingLocation(location, inputElement.value);
                         }
@@ -172,10 +169,7 @@ export default function ManageLocations() {
                     >
                       Update
                     </button>
-                    <button
-                      className="bg-peachPink"
-                      onClick={(e) => handleRemoveExistingLocation(location)}
-                    >
+                    <button className="bg-peachPink" onClick={(e) => handleRemoveExistingLocation(location)}>
                       Remove
                     </button>
                   </div>
@@ -186,7 +180,7 @@ export default function ManageLocations() {
               <input
                 type="text"
                 className="text-2xl p-4 rounded-xl flex-1"
-                placeHolder="+ New Location"
+                placeholder="+ New Location"
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 onKeyDown={(e) => {

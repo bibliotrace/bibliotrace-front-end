@@ -271,7 +271,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 mr-2 p-1 bg-[#f5f5f5] rounded-xl"
                     value={isbn}
-                    placeHolder="978123456789"
+                    placeholder="978123456789"
                     onChange={(e) => setIsbn(e.target.value)}
                   />
                   <button type="button" className="text-sm" onClick={(e) => handleSuggestionCall(e)}>
@@ -283,7 +283,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={title}
-                    placeHolder="e.g. The Great Gatsby"
+                    placeholder="e.g. The Great Gatsby"
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
@@ -292,7 +292,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={author}
-                    placeHolder="e.g. Herman Melville"
+                    placeholder="e.g. Herman Melville"
                     onChange={(e) => setAuthor(e.target.value)}
                   />
                 </div>
@@ -301,7 +301,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={seriesName}
-                    placeHolder="e.g. Harry Potter"
+                    placeholder="e.g. Harry Potter"
                     onChange={(e) => setSeriesName(e.target.value)}
                   />
                 </div>
@@ -310,7 +310,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={seriesNumber === 0 ? "" : seriesNumber}
-                    placeHolder="e.g. 1"
+                    placeholder="e.g. 1"
                     onChange={(e) => setSeriesNumber(e.target.value)}
                   />
                 </div>
@@ -376,7 +376,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       -- Choose an option --
                     </option>
                     {audiences.map((audience) => {
-                      return <option value={audience}>{audience}</option>;
+                      return <option key={audience} value={audience}>{audience}</option>;
                     })}
                   </select>{" "}
                 </div>
@@ -385,7 +385,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={pages}
-                    placeHolder="e.g. 1"
+                    placeholder="e.g. 1"
                     onChange={(e) => setPages(e.target.value)}
                   />
                 </div>
@@ -394,7 +394,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={publishDate}
-                    placeHolder="e.g. 1975"
+                    placeholder="e.g. 1975"
                     onChange={(e) => setPublishDate(e.target.value)}
                     onSubmit={(e) => e.preventDefault()}
                   />
@@ -404,6 +404,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   {tags.map((tag, index) => {
                     return (
                       <button
+                        key={`${tag}${index}`}
                         role="button"
                         className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
                         onClick={(e) => handleRemoveTag(e, index)}
@@ -417,7 +418,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       <input
                         className="bg-[#f5f5f5] rounded-xl p-3 w-80"
                         type="text"
-                        placeHolder="Search..."
+                        placeholder="Search..."
                         value={tagSearchTerm}
                         onChange={(event) => setTagSearchTerm(event.target.value)}
                       />
@@ -441,7 +442,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <textarea
                     className="w-full p-2 text-base h-32"
                     value={synopsis}
-                    placeHolder="A basic description"
+                    placeholder="A basic description"
                     onChange={(e) => setSynopsis(e.target.value)}
                   />
                 </div>
