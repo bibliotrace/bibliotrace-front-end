@@ -5,13 +5,12 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
 import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
+import ErrorModal from "../modals/ErrorModal";
 
 export default function Checkout() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [series, setSeries] = useState("");
-  const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
   const [bulkModalShow, setBulkModalShow] = useState(false);
   const inputRef = useRef(null);
@@ -55,7 +54,6 @@ export default function Checkout() {
     setTitle("");
     setAuthor("");
     setThumbnail(defaultBook);
-    setSeries("");
     setMessage("");
 
     const jwtDataString = Cookies.get("jwtData");
@@ -155,6 +153,8 @@ export default function Checkout() {
         homeNavOnClick="/admin"
       />
 
+      {message && <ErrorModal description="Error" message={message} onExit={() => setMessage(null)}/>}
+
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
           Book Check Out
@@ -205,8 +205,6 @@ export default function Checkout() {
                   <div className="p-5 py-20 basis-1/2 flex-grow flex flex-col justify-evenly text-lg">
                     <p className="">Title: {title}</p>
                     <p className="">Author: {author}</p>
-                    <p className="">Series: {series}</p>
-                    <p className="">Location: {location}</p>
                   </div>
                 </div>
               ) : (
