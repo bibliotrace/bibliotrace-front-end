@@ -36,6 +36,10 @@ export default function AdminHome({}) {
     navigate("/manage-locations");
   };
 
+  const handleEditBookNav = () => {
+    navigate("/edit-book");
+  }
+
   //reports
   const handleShoppingList = () => {
     navigate("/shopping-list");
@@ -43,6 +47,7 @@ export default function AdminHome({}) {
   const handleRestockList = () => {
     navigate("/restock-list");
   };
+
 
   //buttons
   const settingButtons = [
@@ -160,7 +165,7 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
-      text: "Edit Genres",
+      text: "Edit Genres and Tags",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
@@ -170,22 +175,12 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
-      text: "Add Title",
+      text: "Edit Books",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleTestClick,
-      width: "20vw",
-      height: "10vh",
-    },
-    {
-      text: "Generate QR Codes",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
+      onClick: handleEditBookNav,
       width: "20vw",
       height: "10vh",
     },
@@ -199,6 +194,26 @@ export default function AdminHome({}) {
       width: "20vw",
       height: "10vh",
     },
+    // {
+    //   text: "Add Title",
+    //   textColor: "white",
+    //   bgColor: "#110057",
+    //   borderColor: "white",
+    //   buttonBgColor: "#110057",
+    //   onClick: handleTestClick,
+    //   width: "20vw",
+    //   height: "10vh",
+    // },
+    // {
+    //   text: "Generate QR Codes",
+    //   textColor: "white",
+    //   bgColor: "#110057",
+    //   borderColor: "white",
+    //   buttonBgColor: "#110057",
+    //   onClick: handleTestClick,
+    //   width: "20vw",
+    //   height: "10vh",
+    // },
   ];
 
   const ReportButtons = [

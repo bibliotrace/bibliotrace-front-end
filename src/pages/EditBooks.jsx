@@ -4,11 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
-import BulkQrAndISBNDump from "../modals/BulkQrAndISBNDump";
 import ErrorModal from "../modals/ErrorModal.jsx";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 
-export default function AddScannedBooks() {
+export default function EditBooks() {
   const [searchParams] = useSearchParams();
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
@@ -210,7 +209,7 @@ export default function AddScannedBooks() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-lightBlue"
+          className="fill-peachPink"
           d="
             M-0.5,12
             C7,10 12,14 17,16
@@ -232,14 +231,14 @@ export default function AddScannedBooks() {
       <NavBar
         useDarkTheme={true}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.lightBlue}
+        bgColor={tailwindConfig.theme.colors.peachPink}
         textColor={tailwindConfig.theme.colors.black}
         homeNavOnClick="/admin"
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Add New Books</h1>
-        <div className="flex flex-row pb-20">
+        <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Edit Book Data</h1>
+        <div className="flex flex-row pb-20 flex-wrap justify-center">
           <section className="p-20 flex flex-col max-w-2xl">
             <h4>ISBN Number</h4>
             <form
@@ -251,7 +250,7 @@ export default function AddScannedBooks() {
               }}
             >
               <input
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
+                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl min-w-60"
                 type="text"
                 placeholder="Start Scanning Here"
                 ref={isbnInputRef}
@@ -269,93 +268,16 @@ export default function AddScannedBooks() {
             </form>
 
             <br></br>
-
-            <label>
-              Location:
-              <select
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                value={location}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setLocation(e.target.value);
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose an option --
-                </option>
-                {locations.map((location_obj) => {
-                  return (
-                    <option key={location_obj.id} value={location_obj.id}>
-                      {location_obj.location_name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
-
-            <br></br>
-
-            <h4>QR Code</h4>
-            <form
-              className="flex rounded-xl items-center"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  onSubmit(e);
-                }
-              }}
-            >
-              <input
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                type="text"
-                placeholder="Scan Above, Then Scan Here"
-                ref={qrInputRef}
-                value={qr}
-                onChange={(e) => setQr(e.target.value)}
-              />
-              <button
-                className="m-4"
-                onClick={(e) => {
-                  onSubmit(e);
-                }}
-              >
-                Add To Inventory
-              </button>
-            </form>
-
-            <br></br>
-
             <p>1. Use the scanner to scan a book's ISBN Number, usually on the back.</p>
-            <p>2. Verify the information in the details to the right, updating it as needed.</p>
-            <p>3. Select the location of this book in the location dropdown.</p>
-            <p>4. Click the QR code field above then scan a new QR code in.</p>
-            <p>
-              5. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
-            </p>
+            <p>2. Check the book data in the view to the right, and click the edit button to modify any data.</p>
             <br></br>
             <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">Don't have an ISBN? Get one here.</a>
-            {/* <button
-              className="w-fit mt-4"
-              onClick={() => {
-                setBulkModalShow(true);
-              }}
-            >
-              Scanner Data Dump
-            </button>
-            {bulkModalShow && (
-              <BulkQrAndISBNDump
-                id="bulk-add-modal"
-                title="Bulk Add Scan Dump"
-                onExit={() => {
-                  setBulkModalShow(false);
-                }}
-                operationType="add"
-              />
-            )} */}
+
           </section>
 
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
-              <h4 className="bg-lightBlue text-center text-black text-2xl p-2">
+              <h4 className="bg-peachPink text-center text-black text-2xl p-2">
                 Last Scanned Book:
                 {successType === "create" ? (
                   <p className="text-green-500">Book successfully created!</p>
@@ -384,7 +306,7 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
-                        <p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
+                        <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
                           {genreString}
                         </p>
                       );
@@ -409,7 +331,7 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
-                        <p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
+                        <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
                           {tag}
                         </p>
                       );
@@ -456,7 +378,7 @@ export default function AddScannedBooks() {
           {openEditModal && (
             <BookDetailEditor
               bookData={bookData}
-              colorScheme="lightBlue"
+              colorScheme="peachPink"
               onExit={(bookData) => onEditExit(bookData)}
             />
           )}

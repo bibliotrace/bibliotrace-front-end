@@ -11,6 +11,7 @@ import NotFound from "../pages/NotFound";
 import Login from "../pages/Login";
 import AdminHome from "../pages/AdminHome";
 import AddScannedBooks from "../pages/AddScannedBooks";
+import EditBooks from "../pages/EditBooks.jsx";
 import RemoveBook from "../pages/RemoveBook.jsx";
 import Checkout from "../pages/BookCheckOut.jsx";
 import CheckIn from "../pages/BookCheckIn.jsx";
@@ -82,6 +83,7 @@ const AppRoutes = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/admin" element={<AdminHome />} />
           <Route path="/add-scanned" element={<AddScannedBooks />} />
+          <Route path="/edit-book" element={<EditBooks />} />
           <Route path="/edit-genres-tags" element={<ManageGenresTags />} />
           <Route path="/audit" element={<Audit />} />
           <Route path="/remove-book" element={<RemoveBook />} />

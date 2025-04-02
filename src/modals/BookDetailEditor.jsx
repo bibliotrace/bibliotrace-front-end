@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 
-export default function BookDetailEditor({ bookData, onExit }) {
+export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const [synopsis, setSynopsis] = useState("");
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
@@ -298,8 +298,8 @@ export default function BookDetailEditor({ bookData, onExit }) {
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-lightBlue rounded-t-lg">
-              <h2 className="flex-1 text-center text-white text-lg font-semibold">{title}</h2>
+            <div className={`flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-${colorScheme} rounded-t-lg`}>
+              <h2 className="flex-1 text-center text-black text-lg font-semibold">{title}</h2>
               <button className="text-gray-600" onClick={packageExit}>
                 Back
               </button>
@@ -375,7 +375,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
                     return (
                       <button
                         role="button"
-                        className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white font-normal text-center text-nowrap"
+                        className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
                         onClick={(e) => handleRemoveSecondaryGenre(e, index)}
                       >
                         {genre}
@@ -444,7 +444,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
                     return (
                       <button
                         role="button"
-                        className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white font-normal text-center text-nowrap"
+                        className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
                         onClick={(e) => handleRemoveTag(e, index)}
                       >
                         {tag}
@@ -472,7 +472,7 @@ export default function BookDetailEditor({ bookData, onExit }) {
                 <div className="flex text-xl pt-4">
                   <h6 className="font-bold pr-2 mt-1">Synopsis:</h6>
                   <textarea
-                    className="w-full p-2 text-base"
+                    className="w-full p-2 text-base h-32"
                     value={synopsis}
                     placeholder="A basic description"
                     onChange={(e) => setSynopsis(e.target.value)}
