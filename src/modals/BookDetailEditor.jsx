@@ -5,73 +5,30 @@ import { useEffect, useState } from "react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 
 export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
-  const [synopsis, setSynopsis] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState("");
-  const [primaryGenre, setPrimaryGenre] = useState("");
-  const [secondaryGenres, setSecondaryGenres] = useState([]);
-  const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
-  const [audience, setAudience] = useState("");
-  const [pages, setPages] = useState("");
-  const [seriesName, setSeriesName] = useState("");
-  const [seriesNumber, setSeriesNumber] = useState("");
-  const [publishDate, setPublishDate] = useState("");
-  const [language, setLanguage] = useState("");
-  const [imgCallback, setImgCallback] = useState("");
-  const [genres, setGenres] = useState([]);
-  const [audiences, setAudiences] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [tagOptions, setTagOptions] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showMessage, setShowMessage] = useState(false);
-  const [targetTag, setTargetTag] = useState("");
-
   const allGenresList = Cookies.get("genreList");
   const allAudiencesList = Cookies.get("audienceList");
+  const allTagsList = Cookies.get("tagList");
   const jwt = Cookies.get("authToken");
 
-  const installExistingBookData = async () => {
-    setTitle(bookData.title);
-    setAuthor(bookData.author);
-    setIsbn(bookData.isbn);
-    setSynopsis(bookData.synopsis);
-    setPrimaryGenre(bookData.primaryGenre);
-    setSecondaryGenres(bookData.secondaryGenres);
-    setAudience(bookData.audience);
-    setPages(bookData.pages);
-    setSeriesName(bookData.series_name);
-    setSeriesNumber(bookData.series_number);
-    setAudience(bookData.audience);
-    setPublishDate(bookData.publishDate);
-    setTags(bookData.tag_list);
-    setLanguage(bookData.language);
-    setImgCallback(bookData.img_callback);
-  };
-
-  const installGlobalMetadata = async () => {
-    try {
-      const fetchResponse = await fetch(`http://localhost:8080/api/metadata/tag`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
-
-      if (fetchResponse.ok) {
-        const jsonData = await fetchResponse.json();
-        const allTagsList = jsonData.object.map((tagItem) => tagItem.tag_name);
-        Cookies.set("tagList", allTagsList);
-        setTagOptions(allTagsList);
-      } else {
-        console.error("Failed to fetch tags:", fetchResponse.statusText);
-      }
-    } catch (error) {
-      console.error("Error fetching tags:", error);
-    }
-
-    if (allGenresList) setGenres(allGenresList.split(","));
-    if (allAudiencesList) setAudiences(allAudiencesList.split(","));
-  };
+  const [synopsis, setSynopsis] = useState("");
+  const [title, setTitle] = useState(bookData.title);
+  const [author, setAuthor] = useState(bookData.author);
+  const [isbn, setIsbn] = useState(bookData.isbn);
+  const [primaryGenre, setPrimaryGenre] = useState(bookData.primaryGenre);
+  const [secondaryGenres, setSecondaryGenres] = useState(bookData.secondaryGenres);
+  const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
+  const [audience, setAudience] = useState(bookData.audience);
+  const [pages, setPages] = useState(bookData.pages);
+  const [seriesName, setSeriesName] = useState(bookData.series_name);
+  const [seriesNumber, setSeriesNumber] = useState(bookData.series_number);
+  const [publishDate, setPublishDate] = useState(bookData.publishDate);
+  const [language, setLanguage] = useState(bookData.language ?? "English");
+  const [genres, setGenres] = useState(allGenresList ?? ["No Genres Found"]);
+  const [audiences, setAudiences] = useState(allAudiencesList ?? ["No Audiences Found"]);
+  const [tags, setTags] = useState(bookData.tag_list ?? []);
+  const [tagOptions, setTagOptions] = useState(allTagsList ?? ["No Tags Found"]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
 
   const handleSuggestionCall = async (e) => {
     if (e) {
@@ -240,46 +197,46 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     initializeData();
   }, []);
 
-  const [tagSearchTerm, setTagSearchTerm] = useState("")
-  const [tagSearchResults, setTagSearchResults] = useState([])
+  const [tagSearchTerm, setTagSearchTerm] = useState("");
+  const [tagSearchResults, setTagSearchResults] = useState([]);
 
   useEffect(() => {
-    let results = tagOptions.filter((item) => item.toLowerCase().includes(tagSearchTerm.toLowerCase()))
-    results = results.filter((item) => !(tags.includes(item)))
-    setTagSearchResults(results)
-  }, [tagSearchTerm, tagOptions])
+    let results = tagOptions.filter((item) => item.toLowerCase().includes(tagSearchTerm.toLowerCase()));
+    results = results.filter((item) => !tags.includes(item));
+    setTagSearchResults(results);
+  }, [tagSearchTerm, tagOptions]);
 
   const handleTagSearch = (event) => {
-    setTagSearchTerm(event.target.value)
-  }
+    setTagSearchTerm(event.target.value);
+  };
 
   const handleTagAdd = () => {
     if (tagSearchTerm && !tagOptions.includes(tagSearchTerm)) {
-      fetch('http://localhost:8080/api/inventory/tag', {
+      fetch("http://localhost:8080/api/inventory/tag", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${jwt}`
+          Authorization: `Bearer ${jwt}`,
         },
         body: JSON.stringify({
           tag_name: tagSearchTerm,
-        })
+        }),
       }).then((response) => {
         if (response.ok) {
           response.json().then((data) => {
-            setShowMessage(true)
-            setTagOptions([...tagOptions, tagSearchTerm])
-            setTags([...tags, tagSearchTerm])
-            setErrorMessage(data.message)
-          })
+            setShowMessage(true);
+            setTagOptions([...tagOptions, tagSearchTerm]);
+            setTags([...tags, tagSearchTerm]);
+            setErrorMessage(data.message);
+          });
         } else {
-          setErrorMessage(`Tag Add was Unsuccessful`)
+          setErrorMessage(`Tag Add was Unsuccessful`);
         }
-      })
+      });
 
-      setTagSearchTerm("")
+      setTagSearchTerm("");
     }
-  }
+  };
 
   return (
     <AnimatePresence>
@@ -298,7 +255,9 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className={`flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-${colorScheme} rounded-t-lg`}>
+            <div
+              className={`flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-${colorScheme} rounded-t-lg`}
+            >
               <h2 className="flex-1 text-center text-black text-lg font-semibold">{title}</h2>
               <button className="text-gray-600" onClick={packageExit}>
                 Back
@@ -349,7 +308,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <h6 className="font-bold pr-2">Number In Series:</h6>
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
-                    value={seriesNumber}
+                    value={seriesNumber === 0 ? "" : seriesNumber}
                     placeHolder="e.g. 1"
                     onChange={(e) => setSeriesNumber(e.target.value)}
                   />
@@ -453,7 +412,13 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   })}
                   <div className="w-full max-w-sm space-y-2">
                     <div className="flex space-x-2">
-                      <input className="bg-[#f5f5f5] rounded-xl p-3 w-80" type="text" placeholder="Search..." value={tagSearchTerm} onChange={handleTagSearch} />
+                      <input
+                        className="bg-[#f5f5f5] rounded-xl p-3 w-80"
+                        type="text"
+                        placeholder="Search..."
+                        value={tagSearchTerm}
+                        onChange={handleTagSearch}
+                      />
                       <button onClick={handleTagAdd}>Add</button>
                     </div>
                     {tagSearchTerm && (
