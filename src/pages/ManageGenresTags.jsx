@@ -155,7 +155,7 @@ export default function ManageGenresTags() {
             <input
               className="min-w-0 border grow mr-3 p-2"
               type="text"
-              placeholder="Genre Name"
+              placeHolder="Genre Name"
               name="genre_name"
             ></input>
             <button type="submit">Add Genre</button>
@@ -177,7 +177,7 @@ export default function ManageGenresTags() {
             })}
           </ul>
           <form className="flex flex-row w-full my-3" onSubmit={(e) => handleAddTag(e)}>
-            <input className="min-w-0 border grow mr-3 p-2" type="text" placeholder="Tag Name" name="tag_name"></input>
+            <input className="min-w-0 border grow mr-3 p-2" type="text" placeHolder="Tag Name" name="tag_name"></input>
             <button type="submit">Add Tag</button>
           </form>
         </section>

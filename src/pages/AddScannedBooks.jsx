@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
-import BulkQrAndISBNDump from "../modals/BulkQrAndISBNDump";
 import ErrorModal from "../modals/ErrorModal.jsx";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 
@@ -13,7 +12,7 @@ export default function AddScannedBooks() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState(searchParams.get("isbn")); // this stores what the user types in
+  const [isbn, setIsbn] = useState(searchParams.get("isbn") ?? ""); // this stores what the user types in
   const [primary_genre, setPrimaryGenre] = useState("");
   const [audience, setAudience] = useState("");
   const [pages, setPages] = useState("");
@@ -23,8 +22,6 @@ export default function AddScannedBooks() {
   const [short_description, setShort_description] = useState("");
   const [location, setLocation] = useState("");
   const [qr, setQr] = useState("");
-  const [bulkModalShow, setBulkModalShow] = useState(false);
-  const [successType, setSuccessType] = useState("");
   const isbnInputRef = useRef(null);
   const qrInputRef = useRef(null);
   const [locations, setLocations] = useState([]);
@@ -63,7 +60,6 @@ export default function AddScannedBooks() {
   async function getBookInformationFromIsbn(e) {
     e?.preventDefault();
     setError("");
-    setSuccessType(false);
     if (!isbn) {
       setError("Please enter an ISBN number.");
       isbnInputRef.current.focus();
@@ -185,6 +181,9 @@ export default function AddScannedBooks() {
   }
 
   function onEditExit(book) {
+    if (book.exitMessage) {
+      setMessage(book.exitMessage);
+    }
     setTitle(book.book_title ?? title);
     setAuthor(book.author ?? author);
     setPages(book.pages ?? pages);
@@ -253,7 +252,7 @@ export default function AddScannedBooks() {
               <input
                 className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
                 type="text"
-                placeholder="Start Scanning Here"
+                placeHolder="Start Scanning Here"
                 ref={isbnInputRef}
                 value={isbn}
                 onChange={(e) => setIsbn(e.target.value)}
@@ -307,7 +306,7 @@ export default function AddScannedBooks() {
               <input
                 className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
                 type="text"
-                placeholder="Scan Above, Then Scan Here"
+                placeHolder="Scan Above, Then Scan Here"
                 ref={qrInputRef}
                 value={qr}
                 onChange={(e) => setQr(e.target.value)}
@@ -357,13 +356,6 @@ export default function AddScannedBooks() {
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
               <h4 className="bg-lightBlue text-center text-black text-2xl p-2">
                 Last Scanned Book:
-                {successType === "create" ? (
-                  <p className="text-green-500">Book successfully created!</p>
-                ) : successType === "update" ? (
-                  <p className="text-green-500">Book successfully updated!</p>
-                ) : successType === "unknown" ? (
-                  <p className="text-green-500">Book successfully modified!</p>
-                ) : null}
               </h4>
 
               <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
@@ -384,7 +376,7 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
-                        <p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
+                        <p key={genreString} className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
                           {genreString}
                         </p>
                       );
@@ -409,7 +401,7 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
-                        <p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
+                        <p key={tag} className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">
                           {tag}
                         </p>
                       );

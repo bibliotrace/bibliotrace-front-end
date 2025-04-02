@@ -114,7 +114,7 @@ function SuggestPage() {
                 name="suggestion"
                 style={{ color: "black" }}
                 className="p-4 w-full mb-5 flex-grow 3xl:text-3xl xl:text-lg rounded-2xl"
-                placeholder="Book info (title, author, etc.)"
+                placeHolder="Book info (title, author, etc.)"
               ></textarea>
               <button className="w-48 3xl:text-3xl xl:text-lg text-darkBlue border-3 border-darkBlue" type="submit" >
                 Submit

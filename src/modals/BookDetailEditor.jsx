@@ -10,18 +10,18 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const allTagsList = Cookies.get("tagList");
   const jwt = Cookies.get("authToken");
 
-  const [synopsis, setSynopsis] = useState(bookData.synopsis);
-  const [title, setTitle] = useState(bookData.title);
-  const [author, setAuthor] = useState(bookData.author);
-  const [isbn, setIsbn] = useState(bookData.isbn);
-  const [primaryGenre, setPrimaryGenre] = useState(bookData.primaryGenre);
-  const [secondaryGenres, setSecondaryGenres] = useState(bookData.secondaryGenres);
+  const [synopsis, setSynopsis] = useState(bookData.synopsis ?? '');
+  const [title, setTitle] = useState(bookData.title ?? '');
+  const [author, setAuthor] = useState(bookData.author ?? '');
+  const [isbn, setIsbn] = useState(bookData.isbn ?? '');
+  const [primaryGenre, setPrimaryGenre] = useState(bookData.primaryGenre ?? '');
+  const [secondaryGenres, setSecondaryGenres] = useState(bookData.secondaryGenres ?? []);
   const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
-  const [audience, setAudience] = useState(bookData.audience);
-  const [pages, setPages] = useState(bookData.pages);
-  const [seriesName, setSeriesName] = useState(bookData.series_name);
-  const [seriesNumber, setSeriesNumber] = useState(bookData.series_number);
-  const [publishDate, setPublishDate] = useState(bookData.publishDate);
+  const [audience, setAudience] = useState(bookData.audience ?? '');
+  const [pages, setPages] = useState(bookData.pages ?? '');
+  const [seriesName, setSeriesName] = useState(bookData.series_name ?? '');
+  const [seriesNumber, setSeriesNumber] = useState(bookData.series_number ?? '');
+  const [publishDate, setPublishDate] = useState(bookData.publishDate ?? '');
   const [language, setLanguage] = useState(bookData.language ?? "English");
   const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
   const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
@@ -83,7 +83,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     });
 
     if (result.ok) {
-      setExitMessage((await result.json()).message);
+      setExitMessage('Successfully Submitted Book');
       packageExit();
     }
 
@@ -325,7 +325,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       -- Choose an option --
                     </option>
                     {genres.map((genre) => {
-                      return <option value={genre}>{genre}</option>;
+                      return <option key={genre} value={genre}>{genre}</option>;
                     })}
                   </select>
                 </div>
@@ -334,6 +334,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   {secondaryGenres.map((genre, index) => {
                     return (
                       <button
+                        key={`${genre}${index}`}
                         role="button"
                         className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
                         onClick={(e) => handleRemoveSecondaryGenre(e, index)}
@@ -352,7 +353,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                         -- Choose an option --
                       </option>
                       {genres.map((genre) => {
-                        return <option value={genre}>{genre}</option>;
+                        return <option key={genre} value={genre}>{genre}</option>;
                       })}
                     </select>
                     <button

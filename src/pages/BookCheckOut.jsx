@@ -165,7 +165,7 @@ export default function Checkout() {
               className="self-center w-full mb-10 border-2 border-purple text-purple p-4 rounded-lg text-2xl"
               type="text"
               onKeyDown={(e) => scanBook(e)}
-              placeholder="Start Scanning"
+              placeHolder="Start Scanning"
               ref={inputRef}
             />
 

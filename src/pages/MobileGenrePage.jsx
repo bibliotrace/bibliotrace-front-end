@@ -64,7 +64,7 @@ const Genre = () => {
         <input
           className="m-2 px-3 w-10/12 border-2 border-purple rounded-2xl placeholder-purple placeholder:font-bold"
           type="text"
-          placeholder="Search"
+          placeHolder="Search"
           value={searchInput}
           onInput={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleKeyDown}

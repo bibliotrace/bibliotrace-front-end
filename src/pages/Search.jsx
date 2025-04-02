@@ -220,7 +220,7 @@ const Search = () => {
         <input
           className="m-2 px-3 w-10/12 border-2 border-[#110057] rounded-2xl"
           type="text"
-          placeholder="Search For Books"
+          placeHolder="Search For Books"
           value={searchInput}
           onInput={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleKeyDown}

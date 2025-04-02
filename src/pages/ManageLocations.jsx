@@ -186,7 +186,7 @@ export default function ManageLocations() {
               <input
                 type="text"
                 className="text-2xl p-4 rounded-xl flex-1"
-                placeholder="+ New Location"
+                placeHolder="+ New Location"
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 onKeyDown={(e) => {

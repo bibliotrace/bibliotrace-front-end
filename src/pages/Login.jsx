@@ -229,7 +229,7 @@ export default function Login({ loginType }) {
               <input
                 ref={inputRef1}
                 className="border-2 border-[#ff78e6] border-solid rounded-md h-14 w-full p-4 placeholder-[#ff78e6] placeholder:font-bold text-lg"
-                placeholder="Username"
+                placeHolder="Username"
                 type="text"
                 onChange={(e) => setUsername(e.target.value)}
               ></input>
@@ -239,7 +239,7 @@ export default function Login({ loginType }) {
               <input
                 ref={inputRef2}
                 className="border-2 border-[#ff78e6] border-solid rounded-md h-14 w-full p-4 placeholder-[#ff78e6] placeholder:font-bold text-lg"
-                placeholder="Password"
+                placeHolder="Password"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               ></input>

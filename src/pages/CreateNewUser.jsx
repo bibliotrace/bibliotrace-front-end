@@ -133,7 +133,7 @@ export default function CreateNewUser() {
                     ref={emailRef}
                     className={`border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg
                       ${role === "User" ? "opacity-50 cursor-not-allowed" : ""}`}
-                    placeholder="Email"
+                    placeHolder="Email"
                     type="text"
                     value={role === "User" ? "" : email} 
                     onChange={(e) => {
@@ -157,7 +157,7 @@ export default function CreateNewUser() {
                   <input
                       ref={usernameRef}
                       className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
-                      placeholder="Username"
+                      placeHolder="Username"
                       type="text"
                       onChange={(e) => setUsername(e.target.value)}
                       onKeyDown={handleKeyDown}
@@ -168,7 +168,7 @@ export default function CreateNewUser() {
                   <input
                       ref={passwordRef}
                       className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
-                      placeholder="Password"
+                      placeHolder="Password"
                       type="text"
                       onChange={(e) => setPassword(e.target.value)}
                       onKeyDown={handleKeyDown}

@@ -252,7 +252,7 @@ export default function EditBooks() {
               <input
                 className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl min-w-60"
                 type="text"
-                placeholder="Start Scanning Here"
+                placeHolder="Start Scanning Here"
                 ref={isbnInputRef}
                 value={isbn}
                 onChange={(e) => setIsbn(e.target.value)}

@@ -45,7 +45,7 @@ const AdminNavBar = ({ onMenuChange, setActiveButton, useDarkTheme, showTitle, b
         <input
           className="px-4 py-3 flex-grow border-2 border-[#ff78e6] rounded-2xl placeholder-[#ff78e6] placeholder:font-bold text-lg"
           type="text"
-          placeholder="Search"
+          placeHolder="Search"
           value={searchInput}
           onInput={(e) => setSearchInput(e.target.value)}
           onKeyDown={handleKeyDown}

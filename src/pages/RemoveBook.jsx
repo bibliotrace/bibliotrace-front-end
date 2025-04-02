@@ -130,7 +130,7 @@ export default function RemoveBook() {
             className="mb-5 p-2 border-2 border-darkBlue rounded-lg"
             type="number"
             name="quantity"
-            placeholder="Quantity"
+            placeHolder="Quantity"
           ></input>
           <button className="self-center bg-lightBlue text-white" type="submit">
             Add

@@ -109,7 +109,7 @@ export default function BulkQrANdISBNDump ({ title, onExit, operationType }) {
                     <div key={index} className="bg-[#EEEEEE] rounded-lg m-4 flex flex-nowrap items-center justify-between">
                       <input
                         type="text"
-                        placeholder="Start Scanning Here"
+                        placeHolder="Start Scanning Here"
                         className="p-4 m-2 text-xl bg-[#EEEEEE] rounded-lg"
                         ref={(el) => (inputRefs.current[index] = el)}
                         value={input}

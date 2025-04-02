@@ -230,7 +230,7 @@ export default function Audit() {
               <input
                 className="border p-2 mb-10"
                 type="text"
-                placeholder="Start Scanning"
+                placeHolder="Start Scanning"
                 onKeyDown={(e) => handleScan(e)}
               ></input>
               <div className="flex flex-col w-full">
