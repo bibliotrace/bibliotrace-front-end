@@ -10,7 +10,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const allTagsList = Cookies.get("tagList");
   const jwt = Cookies.get("authToken");
 
-  const [synopsis, setSynopsis] = useState("");
+  const [synopsis, setSynopsis] = useState(bookData.synopsis);
   const [title, setTitle] = useState(bookData.title);
   const [author, setAuthor] = useState(bookData.author);
   const [isbn, setIsbn] = useState(bookData.isbn);
@@ -23,12 +23,12 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const [seriesNumber, setSeriesNumber] = useState(bookData.series_number);
   const [publishDate, setPublishDate] = useState(bookData.publishDate);
   const [language, setLanguage] = useState(bookData.language ?? "English");
-  const [genres, setGenres] = useState(allGenresList ?? ["No Genres Found"]);
-  const [audiences, setAudiences] = useState(allAudiencesList ?? ["No Audiences Found"]);
+  const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
+  const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
   const [tags, setTags] = useState(bookData.tag_list ?? []);
-  const [tagOptions, setTagOptions] = useState(allTagsList ?? ["No Tags Found"]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showMessage, setShowMessage] = useState(false);
+  const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
+  const [messageString, setMessageString] = useState("");
+  const [exitMessage, setExitMessage] = useState("");
 
   const handleSuggestionCall = async (e) => {
     if (e) {
@@ -56,7 +56,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     }
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleBookFormSubmit = async (e) => {
     e.preventDefault();
     const fetchBody = {
       book_title: title,
@@ -83,14 +83,14 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     });
 
     if (result.ok) {
-      setErrorMessage((await result.json()).message);
-      setShowMessage(true);
+      setExitMessage((await result.json()).message);
+      packageExit();
     }
 
     console.log(result);
   };
 
-  const handleAddGenre = async (e) => {
+  const handleAddSecondaryGenre = async (e) => {
     e.preventDefault();
     const fetchBody = {
       genre: targetSecondaryGenre,
@@ -108,6 +108,8 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     if (result.ok) {
       setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
       setTargetSecondaryGenre("");
+    } else {
+      setMessageString(`Error Adding Secondary Genre: ${(await result.json()).message}`);
     }
   };
 
@@ -128,11 +130,13 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
 
     if (result.ok) {
       setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
+    } else {
+      setMessageString(`Error Removing Secondary Genre: ${(await result.json()).message}`);
     }
   };
 
   const handleAddTag = async (e, newTag) => {
-    e.preventDefault();
+    e?.preventDefault();
     const fetchBody = {
       tag: newTag,
     };
@@ -149,11 +153,13 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     if (result.ok) {
       setTags([...tags, newTag]);
       setTagSearchTerm("");
+    } else {
+      setMessageString(`Error Adding Tag: ${(await result.json()).message}`);
     }
   };
 
   const handleRemoveTag = async (e, index) => {
-    e.preventDefault();
+    e?.preventDefault();
     const fetchBody = {
       tag: tags[index],
     };
@@ -168,11 +174,15 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
 
     if (result.ok) {
       setTags(tags.filter((_, i) => i !== index));
+    } else {
+      setMessageString(`Error Removing Tag: ${(await result.json()).message}`);
     }
   };
 
   const packageExit = async (e) => {
+    e?.preventDefault();
     onExit({
+      exitMessage,
       book_title: title,
       author,
       pages,
@@ -187,16 +197,9 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     });
   };
 
-  useEffect(() => {
-    const initializeData = async () => {
-      await installGlobalMetadata();
-      await installExistingBookData();
-      console.log(tagOptions);
-    };
-
-    initializeData();
-  }, []);
-
+  // The code below is the search algorithm for the tag search bar
+  // If the searchTerm in lowercase is in any string in the tagOptions, that tagOptions is returned in the results var
+  // We also check if the result item is already in the book's tag list to remove duplication
   const [tagSearchTerm, setTagSearchTerm] = useState("");
   const [tagSearchResults, setTagSearchResults] = useState([]);
 
@@ -206,11 +209,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     setTagSearchResults(results);
   }, [tagSearchTerm, tagOptions]);
 
-  const handleTagSearch = (event) => {
-    setTagSearchTerm(event.target.value);
-  };
-
-  const handleTagAdd = () => {
+  const handleAddNewTag = () => {
     if (tagSearchTerm && !tagOptions.includes(tagSearchTerm)) {
       fetch("http://localhost:8080/api/inventory/tag", {
         method: "POST",
@@ -222,16 +221,18 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
           tag_name: tagSearchTerm,
         }),
       }).then((response) => {
-        if (response.ok) {
-          response.json().then((data) => {
-            setShowMessage(true);
+        response.json().then((data) => {
+          if (response.ok) {
+            const newTagOptions = [...tagOptions, tagSearchTerm];
+            Cookies.set("tagList", newTagOptions.join());
             setTagOptions([...tagOptions, tagSearchTerm]);
-            setTags([...tags, tagSearchTerm]);
-            setErrorMessage(data.message);
-          });
-        } else {
-          setErrorMessage(`Tag Add was Unsuccessful`);
-        }
+
+            handleAddTag(null, tagSearchTerm);
+            setMessageString(data.message);
+          } else {
+            setMessageString(`Tag Add was Unsuccessful: ${data.message}`);
+          }
+        });
       });
 
       setTagSearchTerm("");
@@ -270,7 +271,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 mr-2 p-1 bg-[#f5f5f5] rounded-xl"
                     value={isbn}
-                    placeholder="978123456789"
+                    placeHolder="978123456789"
                     onChange={(e) => setIsbn(e.target.value)}
                   />
                   <button type="button" className="text-sm" onClick={(e) => handleSuggestionCall(e)}>
@@ -282,7 +283,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={title}
-                    placeholder="e.g. The Great Gatsby"
+                    placeHolder="e.g. The Great Gatsby"
                     onChange={(e) => setTitle(e.target.value)}
                   />
                 </div>
@@ -291,7 +292,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <input
                     className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
                     value={author}
-                    placeholder="e.g. Herman Melville"
+                    placeHolder="e.g. Herman Melville"
                     onChange={(e) => setAuthor(e.target.value)}
                   />
                 </div>
@@ -341,7 +342,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       </button>
                     );
                   })}
-                  <form onSubmit={(e) => handleAddGenre(e)}>
+                  <form onSubmit={(e) => handleAddSecondaryGenre(e)}>
                     <select
                       className=" mx-2 p-2 rounded-xl"
                       value={targetSecondaryGenre}
@@ -356,7 +357,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                     </select>
                     <button
                       className="p-2 ml-2 text-nowrap text-base"
-                      onClick={(e) => handleAddGenre(e)}
+                      onClick={(e) => handleAddSecondaryGenre(e)}
                       role="button"
                     >
                       Add Genre
@@ -415,11 +416,11 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       <input
                         className="bg-[#f5f5f5] rounded-xl p-3 w-80"
                         type="text"
-                        placeholder="Search..."
+                        placeHolder="Search..."
                         value={tagSearchTerm}
-                        onChange={handleTagSearch}
+                        onChange={(event) => setTagSearchTerm(event.target.value)}
                       />
-                      <button onClick={handleTagAdd}>Add</button>
+                      <button onClick={handleAddNewTag}>Add</button>
                     </div>
                     {tagSearchTerm && (
                       <ul className="bg-[#f5f5f5] rounded-xl max-h-60 overflow-auto">
@@ -439,19 +440,17 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <textarea
                     className="w-full p-2 text-base h-32"
                     value={synopsis}
-                    placeholder="A basic description"
+                    placeHolder="A basic description"
                     onChange={(e) => setSynopsis(e.target.value)}
                   />
                 </div>
 
                 <br></br>
 
-                <button onClick={(e) => handleFormSubmit(e)}>Submit Changes</button>
+                <button onClick={(e) => handleBookFormSubmit(e)}>Submit Changes</button>
               </div>
             </div>
-            {showMessage && (
-              <ErrorModal description={errorMessage} onExit={() => setShowMessage(!showMessage)} />
-            )}
+            {messageString && <ErrorModal description={messageString} onExit={() => setMessageString("")} />}
           </motion.div>
         </motion.div>
       }
