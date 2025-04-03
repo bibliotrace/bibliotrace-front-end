@@ -1,11 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
-import NavBar from "../components/NavBar";
-import { useNavigate } from "react-router-dom";
-import tailwindConfig from "../../tailwind.config";
 import Cookies from "js-cookie";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import NavBar from "../components/NavBar";
+import AuditCompletedDialog from "../modals/AuditCompletedDialog";
 import CompleteAuditDialog from "../modals/CompleteAuditDialog";
 import CompleteLocationDialog from "../modals/CompleteLocationDialog";
-import AuditCompletedDialog from "../modals/AuditCompletedDialog";
 
 export default function Audit() {
   const completeLocationDialog = useRef(null);
@@ -28,7 +27,10 @@ export default function Audit() {
       try {
         const response = await fetch("http://localhost:8080/api/inventory/audit", {
           method: "GET",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("authToken")}`,
+          },
         });
 
         const data = await response.json();

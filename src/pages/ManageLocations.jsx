@@ -1,24 +1,23 @@
+import Cookies from "js-cookie";
+import { useState } from "react";
+import tailwindConfig from "../../tailwind.config";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
-import { useEffect, useState } from "react";
-import tailwindConfig from "../../tailwind.config";
-import Cookies from "js-cookie";
 
 export default function ManageLocations() {
+  const locationCookieData = JSON.parse(Cookies.get('locationList'))
+
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState(locationCookieData ?? []);
   const [newLocation, setNewLocation] = useState("");
   const authToken = Cookies.get("authToken");
 
-  useEffect(() => {
-    const locationCookie = Cookies.get("locationList");
-    setLocations(JSON.parse(locationCookie));
-    console.log(locations);
-  }, []);
-
   const handleAddNewLocation = () => {
-    console.log(newLocation);
+    if (newLocation == "") {
+      return;
+    }
+    setNewLocation("");
     fetch("http://localhost:8080/api/metadata/locations", {
       method: "POST",
       headers: {
@@ -26,46 +25,70 @@ export default function ManageLocations() {
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        newLocationName: newLocation,
+        locationName: newLocation,
       }),
     }).then((response) => {
       if (response.ok) {
         response.json().then((json) => {
           // Then refresh the location data
           setSuccessMessage(json.message);
-          fetch("http://localhost:8080/api/metadata/locations", {
-            headers: {
-              Authorization: `Bearer ${authToken}`,
-            },
-          }).then((response) => {
-            response.json().then((json) => {
-              if (!response.ok) {
-                setErrorMessage(`Error Fetching Metadata: ${json.message}`);
-              } else {
-                if (json.object) {
-                  Cookies.set("locationList", JSON.stringify(json.object));
-                  setLocations(json.object)
-                }
-              }
-            });
-          });
+          updateLocationList();
         });
       } else {
         console.error(response);
-        setErrorMessage("response not ok from setting metadata.");
+        setErrorMessage("Response not ok from setting location.");
       }
     });
 
-    setNewLocation(null);
+    setNewLocation("");
+  };
+
+  const updateLocationList = () => {
+    fetch("http://localhost:8080/api/metadata/locations", {
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+    }).then((response) => {
+      response.json().then((json) => {
+        if (!response.ok) {
+          setErrorMessage(`Error Fetching Metadata: ${json.message}`);
+        } else {
+          if (json.object) {
+            Cookies.set("locationList", JSON.stringify(json.object));
+            setLocations(json.object);
+          }
+        }
+      });
+    });
   };
 
   const handleUpdateExistingLocation = (existingLocation, value) => {
     console.log(existingLocation);
     console.log(value);
+    const fetchBody = {
+      locationName: value,
+    };
+    fetch(`http://localhost:8080/api/metadata/locations/${existingLocation.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetchBody),
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          // Then refresh the location data
+          setSuccessMessage(data.message);
+          updateLocationList();
+        });
+      }
+    });
   };
 
   const handleRemoveExistingLocation = (existingLocation) => {
-    alert(
+    setErrorMessage(
       `Removal is not built yet because deleting a location involves breaking inventory items' location pointer. Figure this out in a later release.`
     );
   };
@@ -108,9 +131,7 @@ export default function ManageLocations() {
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
-          Manage Locations
-        </h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Manage Locations</h1>
         {errorMessage && (
           <ErrorModal
             description={"Error Submitting Locations"}
@@ -136,7 +157,10 @@ export default function ManageLocations() {
           >
             {locations.map((location, index) => {
               return (
-                <div className="flex justify-between bg-white bg-opacity-50 items-center p-4 rounded-xl m-4">
+                <div
+                  key={index}
+                  className="flex justify-between bg-white bg-opacity-50 items-center p-4 rounded-xl m-4"
+                >
                   <input
                     type="text"
                     className="text-2xl p-4 rounded-xl flex-1"
@@ -159,8 +183,7 @@ export default function ManageLocations() {
                     <button
                       className="bg-lightBlue mx-4 text-white h-full"
                       onClick={(e) => {
-                        const inputElement =
-                          e.target.parentElement.parentElement.querySelector("input");
+                        const inputElement = e.target.parentElement.parentElement.querySelector("input");
                         if (inputElement) {
                           handleUpdateExistingLocation(location, inputElement.value);
                         }
@@ -168,10 +191,7 @@ export default function ManageLocations() {
                     >
                       Update
                     </button>
-                    <button
-                      className="bg-peachPink"
-                      onClick={(e) => handleRemoveExistingLocation(location)}
-                    >
+                    <button className="bg-peachPink" onClick={(e) => handleRemoveExistingLocation(location)}>
                       Remove
                     </button>
                   </div>
@@ -188,7 +208,7 @@ export default function ManageLocations() {
                 onKeyDown={(e) => {
                   e.stopPropagation();
                   if (e.key === "Enter") {
-                    handleAddNewLocation();
+                    e.preventDefault();
                   }
                 }}
               />

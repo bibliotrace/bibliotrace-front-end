@@ -1,8 +1,8 @@
-import React, { useRef, useState } from "react";
-import NavBar from "../components/NavBar";
+import Cookies from "js-cookie";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import tailwindConfig from "../../tailwind.config";
-import Cookies from "js-cookie";
+import NavBar from "../components/NavBar";
 
 function SuggestPage() {
   const submittedDialog = useRef(null);
@@ -30,7 +30,7 @@ function SuggestPage() {
           event.target.reset();
         } else {
           if (response.status === 401) {
-            navigate('/login')
+            navigate("/login");
           }
           console.log(res.message);
         }
@@ -70,7 +70,9 @@ function SuggestPage() {
         />
 
         <dialog className="rounded-md p-8 border-2 border-rubyRed" ref={submittedDialog}>
-          <h1 className="text-xl text-center mb-5 font-rector font-bold text-darkBlue">Thank you for your suggestion!</h1>
+          <h1 className="text-xl text-center mb-5 font-rector font-bold text-darkBlue">
+            Thank you for your suggestion!
+          </h1>
           <p className="text-center mb-5 ">Would you like to submit another book idea?</p>
 
           <div className="flex flex-row justify-center">
@@ -99,7 +101,8 @@ function SuggestPage() {
               Have a book suggestion?
             </h1>
             <p className="text-white 3xl:text-3xl xl:text-lg">
-              Please give as much detail of the book you want to suggest and we will do our best to find it! We love to hear your voice. Just remember our suggestions are checked every week.
+              Please give as much detail of the book you want to suggest and we will do our best to find it!
+              We love to hear your voice. Just remember our suggestions are checked every week.
             </p>
           </div>
           <div className="basis-1/2 flex flex-col items-center md:ml-12 mb-10 md:mb-0">
@@ -116,7 +119,10 @@ function SuggestPage() {
                 className="p-4 w-full mb-5 flex-grow 3xl:text-3xl xl:text-lg rounded-2xl"
                 placeholder="Book info (title, author, etc.)"
               ></textarea>
-              <button className="w-48 3xl:text-3xl xl:text-lg text-darkBlue border-3 border-darkBlue" type="submit" >
+              <button
+                className="w-48 3xl:text-3xl xl:text-lg text-darkBlue border-3 border-darkBlue"
+                type="submit"
+              >
                 Submit
               </button>
             </form>

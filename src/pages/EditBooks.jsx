@@ -1,13 +1,13 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
-import ErrorModal from "../modals/ErrorModal.jsx";
+import NavBar from "../components/NavBar";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
+import ErrorModal from "../modals/ErrorModal.jsx";
 
-export default function AddScannedBooks() {
+export default function EditBooks() {
   const [searchParams] = useSearchParams();
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
@@ -20,14 +20,9 @@ export default function AddScannedBooks() {
   const [series_number, setSeries_number] = useState("");
   const [publish_date, setPublish_date] = useState("");
   const [short_description, setShort_description] = useState("");
+  const isbnInputRef = useRef(null);
   const [genres, setGenres] = useState([]);
   const [tags, setTags] = useState([]);
-
-  const [location, setLocation] = useState("");
-  const [qr, setQr] = useState("");
-  const isbnInputRef = useRef(null);
-  const qrInputRef = useRef(null);
-  const [locations, setLocations] = useState([]);
 
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
@@ -43,18 +38,11 @@ export default function AddScannedBooks() {
     if (isbn) {
       getBookInformationByIsbn();
     }
-
-    async function getLocations() {
-      const locationList = await JSON.parse(Cookies.get("locationList"));
-      setLocations(locationList);
-    }
-    getLocations();
   }, []);
 
   useEffect(() => {
     if (error) {
       isbnInputRef.current.blur();
-      qrInputRef.current.blur();
     }
   }, [error]);
 
@@ -78,7 +66,7 @@ export default function AddScannedBooks() {
     setShort_description("");
     setTags([]);
     setGenres([]);
-    setThumbnail(defaultBook);
+    setThumbnail(defaultBook)
 
     const response = await fetch(`http://localhost:8080/api/bookdata/${isbn}`, {
       headers: {
@@ -102,15 +90,14 @@ export default function AddScannedBooks() {
       setGenres(book.genre_list);
       await getCoverThumbnail(isbn);
       console.log("Book successfully imported");
-      qrInputRef.current.focus();
     } else {
       console.log(response.status, "response status");
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
-        handleEditButton()
         setError("Book Not Recognized. Set it up in the editor window.");
         setTitle("Unrecognized Book");
+        setAuthor("Open the Book Editor Below");
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -159,37 +146,6 @@ export default function AddScannedBooks() {
     setOpenEditModal(!openEditModal);
   }
 
-  function onSubmit(e) {
-    console.log("hello world!", isbn, location, qr);
-    e.preventDefault();
-
-    const fetchBody = {
-      isbn,
-      location_id: location,
-      qr,
-    };
-
-    fetch("http://localhost:8080/api/inventory/add-book", {
-      method: "POST",
-      body: JSON.stringify(fetchBody),
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-    }).then((result) => {
-      result.json().then((data) => {
-        if (data.message) {
-          if (result.ok) {
-            setMessage(`${data.message} [QR: ${qr}]`);
-            setQr("");
-          } else {
-            setError(`Error Received: ${data.message}`);
-          }
-        }
-      });
-    });
-  }
-
   function onEditExit(book) {
     if (book.exitMessage) {
       setMessage(book.exitMessage);
@@ -219,7 +175,7 @@ export default function AddScannedBooks() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-lightBlue"
+          className="fill-peachPink"
           d="
             M-0.5,12
             C7,10 12,14 17,16
@@ -241,14 +197,14 @@ export default function AddScannedBooks() {
       <NavBar
         useDarkTheme={true}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.lightBlue}
+        bgColor={tailwindConfig.theme.colors.peachPink}
         textColor={tailwindConfig.theme.colors.black}
         homeNavOnClick="/admin"
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Add New Books</h1>
-        <div className="flex flex-row pb-20">
+        <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Edit Book Data</h1>
+        <div className="flex flex-row pb-20 flex-wrap justify-center">
           <section className="p-20 flex flex-col max-w-2xl">
             <h4>ISBN Number</h4>
             <form
@@ -260,7 +216,7 @@ export default function AddScannedBooks() {
               }}
             >
               <input
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
+                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl min-w-60"
                 type="text"
                 placeholder="Start Scanning Here"
                 ref={isbnInputRef}
@@ -278,95 +234,21 @@ export default function AddScannedBooks() {
             </form>
 
             <br></br>
-
-            <label>
-              Location:
-              <select
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                value={location}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setLocation(e.target.value);
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose an option --
-                </option>
-                {locations.map((location_obj) => {
-                  return (
-                    <option key={location_obj.id} value={location_obj.id}>
-                      {location_obj.location_name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
-
-            <br></br>
-
-            <h4>QR Code</h4>
-            <form
-              className="flex rounded-xl items-center"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  onSubmit(e);
-                }
-              }}
-            >
-              <input
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                type="text"
-                placeholder="Scan Above, Then Scan Here"
-                ref={qrInputRef}
-                value={qr}
-                onChange={(e) => setQr(e.target.value)}
-              />
-              <button
-                className="m-4"
-                onClick={(e) => {
-                  onSubmit(e);
-                }}
-              >
-                Add To Inventory
-              </button>
-            </form>
-
-            <br></br>
-
             <p>1. Use the scanner to scan a book's ISBN Number, usually on the back.</p>
-            <p>2. Verify the information in the details to the right, updating it as needed.</p>
-            <p>3. Select the location of this book in the location dropdown.</p>
-            <p>4. Click the QR code field above then scan a new QR code in.</p>
             <p>
-              5. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
+              2. Check the book data in the view to the right, and click the edit button to modify any data.
             </p>
             <br></br>
             <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">
               Don't have an ISBN? Get one here.
             </a>
-            {/* <button
-              className="w-fit mt-4"
-              onClick={() => {
-                setBulkModalShow(true);
-              }}
-            >
-              Scanner Data Dump
-            </button>
-            {bulkModalShow && (
-              <BulkQrAndISBNDump
-                id="bulk-add-modal"
-                title="Bulk Add Scan Dump"
-                onExit={() => {
-                  setBulkModalShow(false);
-                }}
-                operationType="add"
-              />
-            )} */}
           </section>
 
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
-              <h4 className="bg-lightBlue text-center text-black text-2xl p-2">Last Scanned Book:</h4>
+              <h4 className="bg-peachPink text-center text-black text-2xl p-2">
+                Last Scanned Book:
+              </h4>
 
               <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
                 <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
@@ -386,10 +268,7 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
-                        <p
-                          key={genreString}
-                          className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap"
-                        >
+                        <p key={genreString} className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
                           {genreString}
                         </p>
                       );
@@ -405,7 +284,7 @@ export default function AddScannedBooks() {
                     <b>Series Name:</b> {series_name}
                   </label>
                   <label>
-                    <b>Series Number:</b> {series_number === 0 ? "" : series_number}
+                    <b>Series Number:</b> {(series_number == 0) ? "" : series_number}
                   </label>
                   <label>
                     <b>Publish Date:</b> {publish_date}
@@ -414,10 +293,7 @@ export default function AddScannedBooks() {
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
-                        <p
-                          key={tag}
-                          className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap"
-                        >
+                        <p key={tag} className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
                           {tag}
                         </p>
                       );
@@ -436,7 +312,7 @@ export default function AddScannedBooks() {
             </div>
           </section>
         </div>
-        <div id="error-modal" style={{ zIndex: 100 }}>
+        <div id="error-modal">
           {error && (
             <ErrorModal
               id="error-modal"
@@ -464,7 +340,7 @@ export default function AddScannedBooks() {
           {openEditModal && (
             <BookDetailEditor
               bookData={bookData}
-              colorScheme="lightBlue"
+              colorScheme="peachPink"
               onExit={(bookData) => onEditExit(bookData)}
             />
           )}

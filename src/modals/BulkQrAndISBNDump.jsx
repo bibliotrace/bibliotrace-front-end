@@ -1,8 +1,8 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Cookies from "js-cookie";
+import { useRef, useState } from "react";
 
-export default function BulkQrANdISBNDump ({ title, onExit, operationType }) {
+export default function BulkQrANdISBNDump({ title, onExit, operationType }) {
   const [inputs, setInputs] = useState([""]);
   const [operationResults, setOperationResults] = useState(null);
   const inputRefs = useRef([]);
@@ -51,12 +51,12 @@ export default function BulkQrANdISBNDump ({ title, onExit, operationType }) {
       },
       body: JSON.stringify({ qrStrings: inputs }),
     });
-    let resultString = ''
+    let resultString = "";
     if (result.ok) {
       // Do something?
-      resultString = await result.text()
+      resultString = await result.text();
     } else {
-      resultString = `API Returned ${result.status} Status: ${await result.text()}`
+      resultString = `API Returned ${result.status} Status: ${await result.text()}`;
     }
 
     setOperationResults(resultString);
@@ -71,12 +71,12 @@ export default function BulkQrANdISBNDump ({ title, onExit, operationType }) {
       },
       body: JSON.stringify({ qrStrings: inputs }),
     });
-    let resultString = ''
+    let resultString = "";
     if (result.ok) {
       // Do something?
-      resultString = await result.text()
+      resultString = await result.text();
     } else {
-      resultString = `API Returned ${result.status} Status: ${await result.text()}`
+      resultString = `API Returned ${result.status} Status: ${await result.text()}`;
     }
 
     setOperationResults(resultString);
@@ -106,7 +106,10 @@ export default function BulkQrANdISBNDump ({ title, onExit, operationType }) {
               <div className="flex columns-1 bg-[#d6d6d6] rounded-xl min-h-72">
                 <form className="flex flex-col overflow-y-auto max-h-[60vh] w-full">
                   {inputs.map((input, index) => (
-                    <div key={index} className="bg-[#EEEEEE] rounded-lg m-4 flex flex-nowrap items-center justify-between">
+                    <div
+                      key={index}
+                      className="bg-[#EEEEEE] rounded-lg m-4 flex flex-nowrap items-center justify-between"
+                    >
                       <input
                         type="text"
                         placeholder="Start Scanning Here"
@@ -124,16 +127,10 @@ export default function BulkQrANdISBNDump ({ title, onExit, operationType }) {
                 </form>
               </div>
               <div className="flex flex-col p-6 max-w-[50vw]">
-                <button
-                  className="m-4 p-4"
-                  onClick={async () => onCheckAndValidate(inputs)}
-                >
+                <button className="m-4 p-4" onClick={async () => onCheckAndValidate(inputs)}>
                   Check and Validate
                 </button>
-                <button
-                  className="m-4 p-4"
-                  onClick={async () => onSubmitAndProcess(inputs)}
-                >
+                <button className="m-4 p-4" onClick={async () => onSubmitAndProcess(inputs)}>
                   Submit and Process
                 </button>
 

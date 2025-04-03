@@ -1,10 +1,9 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
-import { useEffect, useRef, useState } from "react";
-import defaultBook from "../assets/generic-book.png?react";
-import { useNavigate } from "react-router-dom";
-import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
 import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import tailwindConfig from "../../tailwind.config";
+import defaultBook from "../assets/generic-book.png?react";
+import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
 
 export default function SetLocation() {
@@ -91,12 +90,12 @@ export default function SetLocation() {
       const data = await response.json();
 
       if (response.ok) {
-        console.log(data)
-        console.log(data.object._object)
+        console.log(data);
+        console.log(data.object._object);
         setTitle(data.object._object.book_title);
         setAuthor(data.object._object.author);
         setSeries(data.object._object.series_name);
-        setFormerLocation(data.object._object.location_name)
+        setFormerLocation(data.object._object.location_name);
 
         const isbn = data.object._object.isbn_list.split("|")[0];
         await getCoverThumbnail(isbn);
@@ -169,9 +168,7 @@ export default function SetLocation() {
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
-          Set Book Location
-        </h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Set Book Location</h1>
         {message && (
           <ErrorModal
             description={"Error Setting Book Location"}
@@ -183,14 +180,6 @@ export default function SetLocation() {
         )}
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
-            <input
-              className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
-              type="text"
-              onKeyDown={(e) => scanBook(e)}
-              placeholder="Start Scanning"
-              ref={inputRef}
-            />
-
             <div className="text-xl mb-5">
               <label className="text-2xl">Location:</label>
               <select
@@ -203,26 +192,30 @@ export default function SetLocation() {
                   -- Choose an option --
                 </option>
                 {locations.map((location_obj) => {
-                  return (
-                    <option value={location_obj.id}>{location_obj.location_name}</option>
-                  );
+                  return <option value={location_obj.id}>{location_obj.location_name}</option>;
                 })}
               </select>
             </div>
 
-            <p>1. Get the scanner ready to scan books</p>
-            <p>2. Select the books' new location above</p>
-            <p>
-              3. Scan the QR on the book (book information will show up if the location
-              has been updated)
-            </p>
+            <label className="text-2xl mb-2">
+              QR Code:
+            </label>
+            <input
+              className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
+              type="text"
+              onKeyDown={(e) => scanBook(e)}
+              placeholder="Start Scanning"
+              ref={inputRef}
+            />
+
+            <p>1. Select the book's new location above</p>
+            <p>2. Click on the QR Code input box to set the cursor there</p>
+            <p>3. Scan the QR on the book (book information will appear if the location has been updated)</p>
           </section>
 
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
-              <h4 className="bg-darkBlue  text-center text-white text-2xl p-2">
-                Book Modified:
-              </h4>
+              <h4 className="bg-darkBlue  text-center text-white text-2xl p-2">Book Modified:</h4>
               {title != null && author != null ? (
                 <div className="flex flex-row ">
                   <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
@@ -231,7 +224,6 @@ export default function SetLocation() {
                   <div className="p-5 py-20 basis-1/2 flex-grow flex flex-col justify-evenly text-lg">
                     <p className="">Title: {title}</p>
                     <p className="">Author: {author}</p>
-                    <p className="">Series: {series}</p>
                     <p className="">Former Location: {formerLocation}</p>
                   </div>
                 </div>

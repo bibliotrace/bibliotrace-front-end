@@ -37,7 +37,7 @@ export default function ErrorModal({ description, message, onExit }) {
             >
               Back
             </button>
-            <h2 className="text-lg font-semibold text-red-600">{description}</h2>
+            <h2 className="text-lg font-semibold text-red-600 mr-16">{description}</h2>
             <p className="mt-2 text-gray-700">{message}</p>
           </motion.div>
         </motion.div>

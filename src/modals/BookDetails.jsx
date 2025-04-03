@@ -11,6 +11,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
   const [published, setPublished] = useState("");
   const [tags, setTags] = useState([]);
   const [secondaryGenres, setSecondaryGenres] = useState([]);
+  const [seriesNumber, setSeriesNumber] = useState("");
   const [synopsis, setSynopsis] = useState("");
 
   console.log(bookData);
@@ -25,6 +26,14 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
   const genre = bookData.genre;
   const isbn = bookData.isbn;
   console.log("made it here");
+
+  const handleAddBook = () => {
+    navigate(`/add-scanned?isbn=${isbn}`);
+  };
+
+  const handleEditBook = () => {
+    navigate(`/edit-book?isbn=${isbn}`);
+  };
 
   const getExtraBookData = async () => {
     const jwt = Cookies.get("authToken");
@@ -42,6 +51,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
       setPublished(bookDataReturned.publish_date);
       setSynopsis(bookDataReturned.short_description);
       setTags(bookDataReturned.tag_list);
+      setSeriesNumber(bookDataReturned.series_number);
       setSecondaryGenres(bookDataReturned.genre_list);
     }
   };
@@ -94,6 +104,10 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <p>{series}</p>
                   </div>
                   <div className="flex text-xl pt-4">
+                    <h6 className="font-bold pr-2">Number In Series:</h6>
+                    <p>{seriesNumber}</p>
+                  </div>
+                  <div className="flex text-xl pt-4">
                     <h6 className="font-bold pr-2">Genre:</h6>
                     <p className="pr-2">{genre}</p>
                     {secondaryGenres.map((genre) => {
@@ -105,7 +119,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <p>{audience}</p>
                   </div>
                   <div className="flex text-xl pt-4">
-                    <h6 className="font-bold px-2">Published:</h6>
+                    <h6 className="font-bold pr-2">Published:</h6>
                     <p>{published}</p>
                   </div>
                   <div className="flex text-xl pt-4 items-center flex-wrap">
@@ -145,10 +159,10 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                 </div>
               </div>
               <div className="flex justify-end">
-                <button className="bg-white">
+                <button className="bg-white" onClick={(e) => handleAddBook(e)}>
                   <AddIcon />
                 </button>
-                <button className="bg-white">
+                <button className="bg-white" onClick={(e) => handleEditBook(e)}>
                   <EditIcon />
                 </button>
               </div>
@@ -193,6 +207,10 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <p>{series}</p>
                   </div>
                   <div className="flex text-xl pt-4">
+                    <h6 className="font-bold pr-2">Number In Series:</h6>
+                    <p>{seriesNumber}</p>
+                  </div>
+                  <div className="flex text-xl pt-4">
                     <h6 className="font-bold pr-2">Genre:</h6>
                     <p className="pr-2">{genre}</p>
                     {secondaryGenres.map((genre) => {
@@ -204,7 +222,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <p>{audience}</p>
                   </div>
                   <div className="flex text-xl pt-4">
-                    <h6 className="font-bold px-2">Published:</h6>
+                    <h6 className="font-bold pr-2">Published:</h6>
                     <p>{published}</p>
                   </div>
                   <div className="flex text-xl pt-4 items-center flex-wrap">

@@ -1,1 +1,0 @@
-// This component will simply include buttons to navigate to the inventory management pages.

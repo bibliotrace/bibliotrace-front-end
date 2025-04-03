@@ -1,1 +1,0 @@
-// This component will house buttons and toggle sliders to modify the user experience. 

@@ -1,17 +1,16 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
+import NavBar from "../components/NavBar";
 import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
+import ErrorModal from "../modals/ErrorModal";
 
 export default function Checkout() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [series, setSeries] = useState("");
-  const [location, setLocation] = useState("");
   const [message, setMessage] = useState("");
   const [bulkModalShow, setBulkModalShow] = useState(false);
   const inputRef = useRef(null);
@@ -55,7 +54,6 @@ export default function Checkout() {
     setTitle("");
     setAuthor("");
     setThumbnail(defaultBook);
-    setSeries("");
     setMessage("");
 
     const jwtDataString = Cookies.get("jwtData");
@@ -155,10 +153,10 @@ export default function Checkout() {
         homeNavOnClick="/admin"
       />
 
+      {message && <ErrorModal description="Error" message={message} onExit={() => setMessage(null)} />}
+
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
-          Book Check Out
-        </h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Book Check Out</h1>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
             <input
@@ -194,9 +192,7 @@ export default function Checkout() {
 
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
-              <h4 className="bg-purple  text-center text-white text-2xl p-2">
-                Checked Out:{" "}
-              </h4>
+              <h4 className="bg-purple  text-center text-white text-2xl p-2">Checked Out: </h4>
               {title != null && author != null ? (
                 <div className="flex flex-row ">
                   <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
@@ -205,8 +201,6 @@ export default function Checkout() {
                   <div className="p-5 py-20 basis-1/2 flex-grow flex flex-col justify-evenly text-lg">
                     <p className="">Title: {title}</p>
                     <p className="">Author: {author}</p>
-                    <p className="">Series: {series}</p>
-                    <p className="">Location: {location}</p>
                   </div>
                 </div>
               ) : (

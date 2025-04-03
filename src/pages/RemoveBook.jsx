@@ -1,6 +1,6 @@
-import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
 import { useRef, useState } from "react";
+import tailwindConfig from "../../tailwind.config";
+import NavBar from "../components/NavBar";
 
 export default function RemoveBook() {
   const bulkAddDialog = useRef(null);
@@ -42,15 +42,15 @@ export default function RemoveBook() {
   return (
     <>
       <svg
-          className="-z-10 absolute left-0 top-0"
-          width="100vw"
-          height="100%"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-        >
-          <path
-            className="fill-rubyRed"
-            d="
+        className="-z-10 absolute left-0 top-0"
+        width="100vw"
+        height="100%"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <path
+          className="fill-rubyRed"
+          d="
               M-0.5,12
               C7,10 12,14 17,16
               C22,18 27,14 32,12
@@ -65,15 +65,26 @@ export default function RemoveBook() {
               L132,0
               L0,0
               Z"
-            transform="rotate(0, 50, 50) scale(1, 2)"
-          />
-        </svg>
-      <NavBar useDarkTheme={false} showTitle={true} bgColor={tailwindConfig.theme.colors.rubyRed} textColor={tailwindConfig.theme.colors.white} homeNavOnClick = '/admin'/>
+          transform="rotate(0, 50, 50) scale(1, 2)"
+        />
+      </svg>
+      <NavBar
+        useDarkTheme={false}
+        showTitle={true}
+        bgColor={tailwindConfig.theme.colors.rubyRed}
+        textColor={tailwindConfig.theme.colors.white}
+        homeNavOnClick="/admin"
+      />
 
-      <h1 className="text-center 5xl:my-16 3xl:my-12 lg:my-4 4xl:text-[8rem] 3xl:text-[6rem] xl:text-[3rem]  text-white font-rector">Remove Books</h1>
+      <h1 className="text-center 5xl:my-16 3xl:my-12 lg:my-4 4xl:text-[8rem] 3xl:text-[6rem] xl:text-[3rem]  text-white font-rector">
+        Remove Books
+      </h1>
       <div className="flex flex-row h-xl:mt-44 h-lg:mt-44 h-md:mt-44 h-sm:mt-36 mt-12">
         <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around 3xl:text-3xl xl:text-lg">
-          <button className="self-center w-full mb-10 border-2 border-darkBlue text-darkBlue" onClick={scanBook}>
+          <button
+            className="self-center w-full mb-10 border-2 border-darkBlue text-darkBlue"
+            onClick={scanBook}
+          >
             Scan Barcode
           </button>
           <p>1. Click the 'Scan Barcode' box</p>

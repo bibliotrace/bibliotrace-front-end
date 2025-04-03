@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import loginBackground from "../assets/login-background.png";
+import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal.jsx";
 export default function Login({ loginType }) {
   const location = useLocation();
@@ -47,13 +46,7 @@ export default function Login({ loginType }) {
   }, []);
 
   useEffect(() => {
-    if (
-      message &&
-      errorModalRef.current &&
-      inputRef1.current &&
-      inputRef2.current &&
-      loginButton.current
-    ) {
+    if (message && errorModalRef.current && inputRef1.current && inputRef2.current && loginButton.current) {
       inputRef1.current.blur();
       inputRef2.current.blur();
       loginButton.current.blur();

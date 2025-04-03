@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import NavBar from "../components/NavBar";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ExploreByAge from "../assets/ExploreByAge.jpg";
 import ExploreByGenre from "../assets/ExploreByGenre.jpg";
 import NewArrivalsIcon from "../assets/NewArrivalsIcon.jpg";
 import SuggestBook from "../assets/SuggestBook.jpg";
 import WhatsPopular from "../assets/WhatsPopular.jpg";
 import CustomButton from "../components/ButtonComponent";
+import NavBar from "../components/NavBar";
 import PopUpBar from "../modals/PopUpSideBar";
 
 const Home = () => {
@@ -51,7 +51,7 @@ const Home = () => {
   };
 
   const handleExploreByAgeMobile = () => {
-    navigate("/age")
+    navigate("/age");
   };
 
   const handleExploreByGenre = () => {
@@ -89,17 +89,8 @@ const Home = () => {
   }, []);
 
   return (
-    <div
-      className={`h-full w-full pb-5 start-bg flex flex-col items-center ${
-        isBlurred ? "blur-sm" : ""
-      }`}
-    >
-      <NavBar
-        useDarkTheme={false}
-        showTitle={false}
-        bgColor={"#110057"}
-        textColor={"#FFFFFF"}
-      />
+    <div className={`h-full w-full pb-5 start-bg flex flex-col items-center ${isBlurred ? "blur-sm" : ""}`}>
+      <NavBar useDarkTheme={false} showTitle={false} bgColor={"#110057"} textColor={"#FFFFFF"} />
       <h1 className="mt-16 text-5xl text-white">Bibliotrace 3.0</h1>
       {/* Search Bar */}
       <div className="h-16 my-6 flex md:w-7/12 w-full justify-center">
@@ -177,7 +168,7 @@ const Home = () => {
           textHeight="6rem"
           textSize="1.5rem"
         />
-        
+
         <CustomButton
           imageSrc={ExploreByGenre}
           text={"Explore By\nGenre"}
@@ -267,7 +258,7 @@ const Home = () => {
           textHeight="3rem"
           textSize="1rem"
         />
-        
+
         <CustomButton
           imageSrc={ExploreByAge}
           text={"Explore By Age"}

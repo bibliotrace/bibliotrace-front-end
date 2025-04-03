@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import NavBar from "../components/NavBar.jsx";
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Filter from "../assets/filter.svg?react";
 import Next from "../assets/next.svg?react";
 import Prev from "../assets/prev.svg?react";
-import SearchResult from "../components/SearchResult.jsx";
-import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import FilterBox from "../components/FilterBox.jsx";
+import LoadingSpinner from "../components/LoadingSpinner.jsx";
+import NavBar from "../components/NavBar.jsx";
+import SearchResult from "../components/SearchResult.jsx";
 
 const Search = () => {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const rowHeight = 160;
   const headerHeight = 450;
   const [showFilter, setShowFilter] = useState(false);
@@ -37,10 +37,7 @@ const Search = () => {
   ]);
 
   const conductSearch = () => {
-    if (
-      (searchInput == "" || searchInput == null) &&
-      (filterInput == "" || filterInput == null)
-    ) {
+    if ((searchInput == "" || searchInput == null) && (filterInput == "" || filterInput == null)) {
       return;
     }
     setLoading(true);
@@ -98,7 +95,7 @@ const Search = () => {
             });
           } else {
             if (response.status === 401) {
-              navigate('/login')
+              navigate("/login");
             }
             setSearchResults([
               {
@@ -170,7 +167,7 @@ const Search = () => {
     if (
       searchInput != "" ||
       filterInput.Audiences.length > 0 ||
-      filterInput.Genres.length > 0 || 
+      filterInput.Genres.length > 0 ||
       filterInput.Special.length > 0
     ) {
       conductSearch();
@@ -198,20 +195,17 @@ const Search = () => {
 
   const handleMobileFilterNav = () => {
     console.log("going to filter");
-    console.log("filter input: " , filterInput);
-    const filterBody = { 
-      Audiences: [...filterInput.Audiences], 
-      Genres: [...filterInput.Genres], 
-      Special: [...filterInput.Special] 
+    console.log("filter input: ", filterInput);
+    const filterBody = {
+      Audiences: [...filterInput.Audiences],
+      Genres: [...filterInput.Genres],
+      Special: [...filterInput.Special],
     };
-    navigate('/filter', { state: { initFilterCheckBox: filterBody, initSearchInput: searchInput }});
+    navigate("/filter", { state: { initFilterCheckBox: filterBody, initSearchInput: searchInput } });
   };
 
   return (
-    <div
-      className="w-screen pb-5 search-bg flex flex-col items-center"
-      style={{ minHeight: "100vh" }}
-    >
+    <div className="w-screen pb-5 search-bg flex flex-col items-center" style={{ minHeight: "100vh" }}>
       <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} />
       <h1 className="mt-16 text-5xl">Bibliotrace 3.0</h1>
       <div className="h-16 my-6 flex w-10/12 md:w-7/12 justify-center">
@@ -262,8 +256,7 @@ const Search = () => {
           <p className="flex items-center">
             {inputQuery != "" ? `Showing search results for "${inputQuery}"` : ""}
           </p>
-          <div className="w-10"></div>{" "}
-          {/* placeholder to put above p element in the center */}
+          <div className="w-10"></div> {/* placeholder to put above p element in the center */}
         </div>
         <div className="">
           {" "}
@@ -293,32 +286,21 @@ const Search = () => {
               return null;
             }
             const bookData = searchResults[index + pageOffset];
-            return bookData ? (
-              <SearchResult
-                key={bookData.id}
-                bookData={bookData}
-              />
-            ) : null;
+            return bookData ? <SearchResult key={bookData.id} bookData={bookData} /> : null;
           })}
         </div>
         <div className="flex align-middle items-center justify-center py-4">
           {" "}
           {/* Pagination Buttons */}
-          <button
-            className="bg-transparent flex flex-col items-center"
-            onClick={decrementPage}
-          >
+          <button className="bg-transparent flex flex-col items-center" onClick={decrementPage}>
             <Prev />
             <p className="">Previous</p>
           </button>
           <p className="h-12">
-            Showing {pageOffset + 1}-
-            {Math.min(pageOffset + rowCount, searchResults.length)} of {searchResults.length}
+            Showing {pageOffset + 1}-{Math.min(pageOffset + rowCount, searchResults.length)} of{" "}
+            {searchResults.length}
           </p>
-          <button
-            className="bg-transparent flex flex-col items-center"
-            onClick={incrementPage}
-          >
+          <button className="bg-transparent flex flex-col items-center" onClick={incrementPage}>
             <Next />
             <p className="">Next</p>
           </button>
