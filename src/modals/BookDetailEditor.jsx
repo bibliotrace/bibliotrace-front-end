@@ -223,7 +223,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
         response.json().then((data) => {
           if (response.ok) {
             const newTagOptions = [...tagOptions, tagSearchTerm];
-            Cookies.set("tagList", newTagOptions.join());
+            Cookies.set("tagList", newTagOptions.join(","));
             setTagOptions([...tagOptions, tagSearchTerm]);
 
             handleAddTag(null, tagSearchTerm);
