@@ -8,18 +8,11 @@ import LogoutLogo from "../assets/logout-white.svg?react";
 import LogoutLogoDark from "../assets/logout-black.svg?react";
 import Cookies from "js-cookie";
 
-const NavBar = ({
-  useDarkTheme,
-  showTitle,
-  bgColor,
-  textColor,
-  showNavButtons = true,
-  onHomeClick,
-}) => {
+const NavBar = ({ useDarkTheme, showTitle, bgColor, textColor, showNavButtons = true, onHomeClick, back = false }) => {
   const navigate = useNavigate();
 
   const jwtDataString = Cookies.get("jwtData");
-  let isAdmin = false
+  let isAdmin = false;
   if (jwtDataString != null) {
     const jwtDataObject = JSON.parse(jwtDataString);
     isAdmin = jwtDataObject.userRole.roleType === "Admin";
@@ -57,12 +50,16 @@ const NavBar = ({
   const Logout = useDarkTheme ? LogoutLogoDark : LogoutLogo;
 
   return (
-    <div
-      className="flex flex-row w-full items-center justify-between px-4"
-      style={{ color: textColor }}
-    >
+    <div className="flex flex-row w-full items-center justify-between px-4 print:hidden" style={{ color: textColor }}>
       <div className="flex items-center">
-        <Logo className="h-12 md:h-16 w-24 md:w-48" onClick={navigateHome} />
+        {back ? (
+          <div className="hover:cursor-pointer flex flex-row justify-center items-center" onClick={() => navigate(-1)}>
+            <span className="text-3xl">&#8592;</span>
+            <span className="text-lg p-2">Back</span>
+          </div>
+        ) : (
+          <Logo className="h-12 md:h-16 w-24 md:w-48" onClick={navigateHome} />
+        )}
         <span>{title}</span>
       </div>
       {showNavButtons && (
