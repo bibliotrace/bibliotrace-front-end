@@ -1,20 +1,17 @@
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import tailwindConfig from "../../tailwind.config";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
 
 export default function ManageLocations() {
+  const locationCookieData = JSON.parse(Cookies.get('locationList'))
+
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState(locationCookieData ?? []);
   const [newLocation, setNewLocation] = useState("");
   const authToken = Cookies.get("authToken");
-
-  useEffect(() => {
-    updateLocationList();
-    console.log(locations);
-  }, []);
 
   const handleAddNewLocation = () => {
     if (newLocation == "") {
