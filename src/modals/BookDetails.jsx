@@ -183,7 +183,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
               </div>
               <div className="flex flex-wrap justify-center">
                 <img src={imageSrc} alt="Cover Image" className="p-6 max-w-full w-1/3 max-h-fit min-w-60 " />
-                <div className="p-6">
+                <div className="p-6 min-w-60">
                   <div className="flex text-xl">
                     <h6 className="font-bold pr-2">Author:</h6>
                     <p>{author}</p>
@@ -192,11 +192,11 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <h6 className="font-bold pr-2">Series:</h6>
                     <p>{series}</p>
                   </div>
-                  <div className="flex text-xl pt-4">
+                  <div className="flex flex-wrap text-xl pt-4">
                     <h6 className="font-bold pr-2">Genre:</h6>
                     <p className="pr-2">{genre}</p>
                     {secondaryGenres.map((genre) => {
-                      return <p className="px-2 italic">{genre}</p>;
+                      return <p className="px-2 italic text-nowrap">{genre}</p>;
                     })}
                   </div>
                   <div className="flex text-xl pt-4">
