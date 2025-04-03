@@ -179,6 +179,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   };
 
   const packageExit = async (exitMessage) => {
+    console.log('I AM HERERERERER')
     onExit({
       exitMessage,
       book_title: title,
@@ -245,7 +246,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={packageExit}
+          onClick={() => packageExit()}
         >
           <motion.div
             className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl relative"
@@ -258,7 +259,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
               className={`flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-${colorScheme} rounded-t-lg`}
             >
               <h2 className="flex-1 text-center text-black text-lg font-semibold">{title}</h2>
-              <button className="text-gray-600" onClick={packageExit}>
+              <button className="text-gray-600" onClick={() => packageExit()}>
                 Back
               </button>
             </div>

@@ -17,7 +17,9 @@ export default function ManageLocations() {
   }, []);
 
   const handleAddNewLocation = () => {
-    console.log(newLocation);
+    if (newLocation == "") {
+      return;
+    }
     setNewLocation("");
     fetch("http://localhost:8080/api/metadata/locations", {
       method: "POST",
@@ -26,7 +28,7 @@ export default function ManageLocations() {
         Authorization: `Bearer ${authToken}`,
       },
       body: JSON.stringify({
-        newLocationName: newLocation,
+        locationName: newLocation,
       }),
     }).then((response) => {
       if (response.ok) {
@@ -41,13 +43,14 @@ export default function ManageLocations() {
       }
     });
 
-    setNewLocation(null);
+    setNewLocation("");
   };
 
   const updateLocationList = () => {
     fetch("http://localhost:8080/api/metadata/locations", {
       headers: {
         Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
       },
     }).then((response) => {
       response.json().then((json) => {
@@ -66,10 +69,29 @@ export default function ManageLocations() {
   const handleUpdateExistingLocation = (existingLocation, value) => {
     console.log(existingLocation);
     console.log(value);
+    const fetchBody = {
+      locationName: value,
+    };
+    fetch(`http://localhost:8080/api/metadata/locations/${existingLocation.id}`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(fetchBody),
+    }).then((response) => {
+      if (response.ok) {
+        response.json().then((data) => {
+          // Then refresh the location data
+          setSuccessMessage(data.message);
+          updateLocationList();
+        });
+      }
+    });
   };
 
   const handleRemoveExistingLocation = (existingLocation) => {
-    alert(
+    setErrorMessage(
       `Removal is not built yet because deleting a location involves breaking inventory items' location pointer. Figure this out in a later release.`
     );
   };
@@ -138,7 +160,10 @@ export default function ManageLocations() {
           >
             {locations.map((location, index) => {
               return (
-                <div className="flex justify-between bg-white bg-opacity-50 items-center p-4 rounded-xl m-4">
+                <div
+                  key={index}
+                  className="flex justify-between bg-white bg-opacity-50 items-center p-4 rounded-xl m-4"
+                >
                   <input
                     type="text"
                     className="text-2xl p-4 rounded-xl flex-1"

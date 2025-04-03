@@ -12,7 +12,7 @@ export default function Checkin() {
   const [author, setAuthor] = useState("");
   const [series, setSeries] = useState("");
   const [message, setMessage] = useState("");
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState("");
   const [locations, setLocations] = useState([]);
   const [bulkModalShow, setBulkModalShow] = useState(false);
   const inputRef = useRef(null);
@@ -166,6 +166,32 @@ export default function Checkin() {
         <p className="text-center text-lg text-rubyRed h-0">{message}</p>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
+            <label>
+              Location:
+              <select
+                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
+                value={location}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setLocation(e.target.value);
+                }}
+              >
+                <option value="" disabled>
+                  -- Choose an option --
+                </option>
+                {locations.map((location_obj) => {
+                  return (
+                    <option key={location_obj.id} value={location_obj.id}>
+                      {location_obj.location_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </label>
+              
+            <label className="mt-5 mb-2">
+              QR Code:
+            </label>
             <input
               className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
               type="text"
@@ -174,26 +200,9 @@ export default function Checkin() {
               ref={inputRef}
             />
 
-            <div className="text-xl mb-5">
-              <label className="text-2xl">Location:</label>
-              <select
-                className="ml-5 p-1 border border-black rounded-sm"
-                onChange={(e) => {
-                  setLocation(e.target.value);
-                }}
-              >
-                <option disabled selected value>
-                  -- Choose an option --
-                </option>
-                {locations.map((location_obj) => {
-                  return <option value={location_obj.id}>{location_obj.location_name}</option>;
-                })}
-              </select>
-            </div>
-
-            <p>1. Click the 'Scan Barcode' button</p>
-            <p>2. Scan the barcode on the book (book information will show up if scan is successful)</p>
-            <p>3. All done! The book is checked in</p>
+            <p>1. Select the Location you are scanning books back into</p>
+            <p>2. Scan the QR on the book (book information will show up if scan is successful)</p>
+            <p>3. All done! The book is Checked In</p>
             <button
               className="w-fit mt-4"
               onClick={() => {
@@ -225,7 +234,6 @@ export default function Checkin() {
                   <div className="p-5 py-20 basis-1/2 flex-grow flex flex-col justify-evenly text-lg">
                     <p className="">Title: {title}</p>
                     <p className="">Author: {author}</p>
-                    <p className="">Series: {series}</p>
                   </div>
                 </div>
               ) : (
