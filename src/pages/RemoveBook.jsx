@@ -49,7 +49,7 @@ export default function RemoveBook() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-rubyRed"
+          className="fill-darkPeach"
           d="
               M-0.5,12
               C7,10 12,14 17,16
@@ -71,7 +71,7 @@ export default function RemoveBook() {
       <NavBar
         useDarkTheme={false}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.rubyRed}
+        bgColor={tailwindConfig.theme.colors.darkPeach}
         textColor={tailwindConfig.theme.colors.white}
         homeNavOnClick="/admin"
       />
@@ -88,7 +88,9 @@ export default function RemoveBook() {
             Scan Barcode
           </button>
           <p>1. Click the 'Scan Barcode' box</p>
-          <p>2. Scan the barcode on the book (book information will appear if scan is successful)</p>
+          <p>
+            2. Scan the barcode on the book (book information will appear if scan is successful)
+          </p>
           <p>3. All done! The book is in the inventory</p>
           <p
             className="self-center mt-10 underline text-lightBlue hover:cursor-pointer hover:opacity-80 active:text-darkBlue"
@@ -99,12 +101,17 @@ export default function RemoveBook() {
         </section>
 
         <section className="2xl:p-20 xl:p-5 flex-1">
-          <div className="border-2 border-rubyRed rounded-md min-h-48 h-full">
-            <h4 className="bg-rubyRed  text-center text-white 3xl:text-3xl xl:text-lg p-2">Book Removed: </h4>
+          <div className="border-2 border-darkPeach rounded-md min-h-48 h-full">
+            <h4 className="bg-darkPeach  text-center text-white 3xl:text-3xl xl:text-lg p-2">
+              Book Removed:{" "}
+            </h4>
             {title != null && author != null ? (
               <div className="flex flex-row ">
                 <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
-                  <img className="5xl:h-[30rem] 3xl:h-60 2xl:h-54 xl:h-44 w-auto" src={thumbnail}></img>
+                  <img
+                    className="5xl:h-[30rem] 3xl:h-60 2xl:h-54 xl:h-44 w-auto"
+                    src={thumbnail}
+                  ></img>
                 </section>
                 <div className="p-5 py-20 basis-1/2 flex-grow flex flex-col justify-evenly 5xl:text-[3rem] 3xl:text-[2rem] 2xl:text-3xl xl:text-2xl lg:text-lg">
                   <p className="">Title: {title}</p>
@@ -119,8 +126,8 @@ export default function RemoveBook() {
         </section>
       </div>
 
-      <dialog className="border-2 border-darkBlue rounded-md min-h-48" ref={bulkAddDialog}>
-        <h4 className="bg-lightBlue  text-center text-darkBlue text-lg p-2">Bulk Add</h4>
+      <dialog className="border-2 border-darkPeach rounded-md min-h-48" ref={bulkAddDialog}>
+        <h4 className="bg-lightRed  text-center text-black text-lg p-2">Bulk Add</h4>
         <span
           className="top-0 right-0 z-10 absolute mx-5 my-2 hover:cursor-pointer"
           onClick={() => bulkAddDialog.current.close()}
@@ -133,17 +140,17 @@ export default function RemoveBook() {
             bulkAdd(e);
           }}
         >
-          <button className=" w-full mb-5 border-2 border-darkBlue" onClick={scanBook}>
+          <button className=" w-full mb-5 border-2 border-darkPeach" onClick={scanBook}>
             Scan Barcode
           </button>
           <input
             autofocus="true"
-            className="mb-5 p-2 border-2 border-darkBlue rounded-lg"
+            className="mb-5 p-2 border-2 border-darkPeach rounded-lg"
             type="number"
             name="quantity"
             placeholder="Quantity"
           ></input>
-          <button className="self-center bg-lightBlue text-white" type="submit">
+          <button className="self-center bg-lightRed text-white" type="submit">
             Add
           </button>
         </form>

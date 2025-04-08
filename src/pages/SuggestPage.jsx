@@ -69,7 +69,7 @@ function SuggestPage() {
           textColor={tailwindConfig.theme.colors.white}
         />
 
-        <dialog className="rounded-md p-8 border-2 border-rubyRed" ref={submittedDialog}>
+        <dialog className="rounded-md p-8 border-2 border-darkPeach" ref={submittedDialog}>
           <h1 className="text-xl text-center mb-5 font-rector font-bold text-darkBlue">
             Thank you for your suggestion!
           </h1>

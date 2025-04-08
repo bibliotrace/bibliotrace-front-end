@@ -124,8 +124,8 @@ export default function CreateNewUser() {
         <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around 3xl:text-3xl xl:text-lg">
           <p>1. Please only create a account if the location you are at has no account.</p>
           <p>
-            2. Please do not use a username or login information that will pertain to your id or health
-            information.
+            2. Please do not use a username or login information that will pertain to your id or
+            health information.
           </p>
           <p>3. You must specify the location of the clinics library.</p>
           <p
@@ -231,7 +231,7 @@ export default function CreateNewUser() {
                 Create Account
               </button>
               <p className="text-purple">{successMessage}</p>
-              <p className="text-rubyRed">{failedMessage}</p>
+              <p className="text-darkPeach">{failedMessage}</p>
             </div>
           </div>
         </section>

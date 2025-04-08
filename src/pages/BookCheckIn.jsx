@@ -163,7 +163,7 @@ export default function Checkin() {
 
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Book Check In</h1>
-        <p className="text-center text-lg text-rubyRed h-0">{message}</p>
+        <p className="text-center text-lg text-darkPeach h-0">{message}</p>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
             <label>
