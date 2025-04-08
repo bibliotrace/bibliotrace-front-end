@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
+import ErrorModal from "../modals/ErrorModal.jsx";
 
 export default function ManageGenresTags() {
   const [genres, setGenres] = useState([]);
@@ -26,13 +27,16 @@ export default function ManageGenresTags() {
 
       const response = await fetch("http://localhost:8080/api/inventory/genre", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
         body: JSON.stringify({ genre_name: genreToAdd }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        setMessage(`Error creating genre: ${genreToAdd}`);
+        setMessage(`${data.message}`);
         console.log(data.message);
       } else {
         let newGenres = [...genres, genreToAdd].sort();
@@ -52,13 +56,16 @@ export default function ManageGenresTags() {
     try {
       const response = await fetch("http://localhost:8080/api/inventory/genre", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
         body: JSON.stringify({ genre_name: genre }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        setMessage(`Error removing genre: ${genre}`);
+        setMessage(`${data.message}`);
         console.log(data.message);
       } else {
         let newGenres = genres.filter((g) => g !== genre);
@@ -85,14 +92,17 @@ export default function ManageGenresTags() {
 
       const response = await fetch("http://localhost:8080/api/inventory/tag", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
         body: JSON.stringify({ tag_name: tagToAdd }),
       });
 
       const data = await response.json();
       if (!response.ok) {
         console.log("tag: ", tagToAdd);
-        setMessage(`Error creating tag: ${tagToAdd}`);
+        setMessage(`${data.message}`);
         console.log(data.message);
       } else {
         let newTags = [...tags, tagToAdd].sort();
@@ -112,13 +122,16 @@ export default function ManageGenresTags() {
     try {
       const response = await fetch("http://localhost:8080/api/inventory/tag", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Cookies.get("authToken")}`,
+        },
         body: JSON.stringify({ tag_name: tag }),
       });
 
       const data = await response.json();
       if (!response.ok) {
-        setMessage(`Error removing tag: ${tag}`);
+        setMessage(`${data.message}`);
         console.log(data.message);
       } else {
         let newTags = tags.filter((t) => t !== tag);
@@ -135,7 +148,17 @@ export default function ManageGenresTags() {
     <>
       <NavBar useDarkTheme={true} showTitle={true} showNavButtons={true}></NavBar>
       <h1 className="text-center my-10">Edit Genres/Tags</h1>
-      <p className="text-red text-center mb-5 h-10">{message}</p>
+      {message ? (
+        <ErrorModal
+          id="error-modal"
+          tabIndex="-1"
+          description={"Error modifying genres/tags"}
+          message={message}
+          onExit={() => {
+            setMessage(null);
+          }}
+        />
+      ) : null}
       <div className="flex flex-row justify-between w-full h-[calc(100vh-200px)]">
         <section id="genres-container" className="flex-1 w-full h-full mx-[5%] ml-[10%] ">
           <ul className="border h-[70%] overflow-y-scroll">
