@@ -126,7 +126,7 @@ export default function RemoveBook() {
       });
       const data = await book.json();
       if (book.ok) {
-        console.log("bruhhhhhhhhhhh");
+        console.log("Book successfully deleted from inventory.");
         setSuccess(true);
       } else {
         setMessage(`${data.message}`);
