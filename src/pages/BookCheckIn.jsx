@@ -94,10 +94,10 @@ export default function Checkin() {
         const isbn = data.object.isbn.split("|")[0];
         await getCoverThumbnail(isbn);
       } else {
-        setMessage(`Error Occurred: ${data.message}`);
+        setMessage(`${data.message}`);
       }
     } catch (error) {
-      setMessage(`Error Occurred: ${error.message}`);
+      setMessage(`${error.message}`);
     }
     e.target.value = "";
   }
@@ -188,10 +188,8 @@ export default function Checkin() {
                 })}
               </select>
             </label>
-              
-            <label className="mt-5 mb-2">
-              QR Code:
-            </label>
+
+            <label className="mt-5 mb-2">QR Code:</label>
             <input
               className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
               type="text"
