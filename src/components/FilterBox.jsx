@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 export default function FilterBox({ onClose, prevSelectedItems = { Audiences: [], Genres: [] } }) {
   const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState({ Audiences: [], Genres: [] });
   const [audienceList, setAudienceList] = useState([]);
-  const [genreList, setGenreList] = useState([])
+  const [genreList, setGenreList] = useState([]);
 
   const handleSubmit = () => {
     console.log("on submit pressed");
@@ -16,30 +16,29 @@ export default function FilterBox({ onClose, prevSelectedItems = { Audiences: []
   const handleToggleSelection = (category, text) => {
     setSelectedItems((prevSelectedItems) => {
       const updatedCategory = prevSelectedItems[category] || [];
-  
+
       return {
         ...prevSelectedItems,
         [category]: updatedCategory.includes(text)
-          ? updatedCategory.filter(item => item !== text)
-          : [...updatedCategory, text]
+          ? updatedCategory.filter((item) => item !== text)
+          : [...updatedCategory, text],
       };
     });
-    
   };
 
   const fetchGenres = () => {
-    const genresDelimited = Cookies.get('genreList')
-    const genresListSplit = genresDelimited.split(",")
+    const genresDelimited = Cookies.get("genreList");
+    const genresListSplit = genresDelimited.split(",");
 
-    setGenreList(genresListSplit)
-  }
+    setGenreList(genresListSplit);
+  };
 
   const fetchAudiences = () => {
-    const audiencesDelimited = Cookies.get('audienceList')
-    const audiencesListSplit = audiencesDelimited.split(",")
+    const audiencesDelimited = Cookies.get("audienceList");
+    const audiencesListSplit = audiencesDelimited.split(",");
 
-    setAudienceList(audiencesListSplit)
-  }
+    setAudienceList(audiencesListSplit);
+  };
 
   const categories = [
     {
@@ -48,14 +47,14 @@ export default function FilterBox({ onClose, prevSelectedItems = { Audiences: []
     },
     {
       title: "Audiences",
-      items: audienceList
-    }
+      items: audienceList,
+    },
   ];
 
   useEffect(() => {
     setSelectedItems(prevSelectedItems); // Set initial preselected items on mount
-    fetchAudiences()
-    fetchGenres()
+    fetchAudiences();
+    fetchGenres();
   }, [prevSelectedItems]);
 
   return (
@@ -76,7 +75,6 @@ export default function FilterBox({ onClose, prevSelectedItems = { Audiences: []
               </label>
             ))}
           </div>
-
         ))}
       </div>
 
@@ -85,7 +83,7 @@ export default function FilterBox({ onClose, prevSelectedItems = { Audiences: []
         onClick={handleSubmit}
         className="absolute right-4 bottom-4 border-4 border-darkBlue text-darkBlue px-6 py-3 rounded-2xl"
       >
-        Submit
+        Apply
       </button>
     </div>
   );
