@@ -200,7 +200,7 @@ export default function Audit() {
           transform="rotate(0, 50, 50) scale(1, 2)"
         />
       </svg>
-      <NavBar useDarkTheme={true} showNavButtons={true} bgColor={tailwindConfig.theme.colors.peachPink}></NavBar>
+      <NavBar useDarkTheme={true} showNavButtons={true}></NavBar>
       <h1 className="text-center mb-2">Audit</h1>
       {isAuditOngoing ? (
         <>
