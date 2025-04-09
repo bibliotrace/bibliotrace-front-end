@@ -58,7 +58,7 @@ export default function BulkQrOnlyDump({ title, onExit }) {
     let resultString = "";
     if (result.ok) {
       const resultJson = await result.json();
-      const qrFailures = resultJson.object.report.errors.map(val => val.substring(val.length - 6));
+      const qrFailures = resultJson.object.report.errors;
       const successTitles = resultJson.object.report.successes.map(val => val.book_title);
       resultString = `${resultJson.message}\n
                       Successful Titles Checked Out: ${successTitles.join(', ')}\n
