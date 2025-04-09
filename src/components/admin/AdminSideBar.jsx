@@ -12,17 +12,16 @@ export default function Sidebar({onMenuChange, activeButton, setActiveButton}) {
     { text: "Manage Inventory", menu: "inventory" },
     { text: "Settings", menu: "settings" },
     { text: "Reports", menu: "report" },
-    { text: "Help", menu: null }
   ];
 
     return (
-      <div className="ml-auto flex flex-col pr-5">
+      <div className="h-full flex flex-col pl-[3vw] pr-5 gap-4 justify-center w-[20vw]">
       {buttons.map((button, index) => (
         <NewBarButton
           key={index}
           text={button.text}
           onClick={() => handleButtonClick(button.menu, button.text)}
-          className={`h-md:mt-12 mt-6 5xl:w-[20rem] 3xl:w-[15rem] 2xl:w-[8rem] xl:w-[8rem] w-[7rem]  5xl:h-[6rem] 3xl:h-[4rem] h-[3rem] transition-colors duration-300
+          className={`transition-colors duration-300
             ${
               activeButton === button.text
                 ? "bg-darkBlue text-white" // Active style
