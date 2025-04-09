@@ -187,7 +187,6 @@ export default function Checkout() {
                 onExit={() => {
                   setBulkModalShow(false);
                 }}
-                operationType="checkout"
               />
             )}
           </section>

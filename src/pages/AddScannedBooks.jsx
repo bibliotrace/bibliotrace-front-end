@@ -383,24 +383,6 @@ export default function AddScannedBooks() {
             <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">
               Don't have an ISBN? Get one here.
             </a>
-            {/* <button
-              className="w-fit mt-4"
-              onClick={() => {
-                setBulkModalShow(true);
-              }}
-            >
-              Scanner Data Dump
-            </button>
-            {bulkModalShow && (
-              <BulkQrAndISBNDump
-                id="bulk-add-modal"
-                title="Bulk Add Scan Dump"
-                onExit={() => {
-                  setBulkModalShow(false);
-                }}
-                operationType="add"
-              />
-            )} */}
           </section>
 
           <section className="p-20 flex-1">

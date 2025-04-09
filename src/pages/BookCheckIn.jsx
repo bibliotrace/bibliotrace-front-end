@@ -201,24 +201,6 @@ export default function Checkin() {
             <p>1. Select the Location you are scanning books back into</p>
             <p>2. Scan the QR on the book (book information will show up if scan is successful)</p>
             <p>3. All done! The book is Checked In</p>
-            <button
-              className="w-fit mt-4"
-              onClick={() => {
-                setBulkModalShow(true);
-              }}
-            >
-              Scanner Data Dump
-            </button>
-            {bulkModalShow && (
-              <BulkQrOnlyDump
-                id="bulk-checkin-modal"
-                title="Bulk Check In Scan Dump"
-                onExit={() => {
-                  setBulkModalShow(false);
-                }}
-                operationType="checkin"
-              />
-            )}
           </section>
 
           <section className="p-20 flex-1">

@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { useRef, useState } from "react";
 import ErrorModal from "./ErrorModal";
 
-export default function BulkQrOnlyDump({ title, onExit, operationType }) {
+export default function BulkQrOnlyDump({ title, onExit }) {
   const [inputs, setInputs] = useState([""]);
   const [result, setResult] = useState("");
   const inputRefs = useRef([]);
