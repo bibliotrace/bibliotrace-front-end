@@ -35,7 +35,7 @@ export default function AuditList() {
   }
 
   return (
-    <>
+    <div className="search-bg w-full h-full">
       <NavBar
         useDarkTheme={true}
         showTitle={false}
@@ -45,7 +45,7 @@ export default function AuditList() {
       <h1 className="text-center">Audit List</h1>
       <h2 className="text-lg text-center my-5">Select an audit to view report</h2>
       <div className="flex flex-column w-full justify-center">
-        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] border h-[70vh] p-10 overflow-y-scroll">
+        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] bg-white border h-[70vh] p-10 overflow-y-scroll">
           <table className="border w-full">
             <tr>
               <th className="border w-[33%]">Audit #</th>
@@ -68,6 +68,6 @@ export default function AuditList() {
           </table>
         </ul>
       </div>
-    </>
+    </div>
   );
 }

@@ -69,7 +69,7 @@ export default function ShoppingList() {
   }
 
   return (
-    <>
+    <div className="search-bg h-full w-full">
       <NavBar
         useDarkTheme={true}
         showTitle={false}
@@ -78,16 +78,18 @@ export default function ShoppingList() {
       ></NavBar>
       <h1 className="text-center">Shopping List</h1>
       <div className="flex flex-column w-full justify-center">
-        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] border mt-10 h-[70vh] p-10 overflow-y-scroll">
+        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] border bg-white mt-10 h-[70vh] p-10 overflow-y-scroll">
           {shoppingList.map((obj) => {
             return (
               <li className="flex flex-row justify-between items-center mb-5">
                 <p className="text-lg">
-                  {obj.title} by {obj.author}
+                  {obj.book_title} by {obj.author}
                 </p>
-                <div>
-                  <button onClick={() => handleMoveToRestock(obj.book_id)}>Move to Restock</button>
-                  <button className="ml-5" onClick={() => handleRemove(obj.book_id)}>
+                <div className="flex flex-row no-wrap">
+                  <button className="border-black" onClick={() => handleMoveToRestock(obj.id)}>
+                    Move to Restock
+                  </button>
+                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.id)}>
                     Remove
                   </button>
                 </div>
@@ -96,6 +98,6 @@ export default function ShoppingList() {
           })}
         </ul>
       </div>
-    </>
+    </div>
   );
 }
