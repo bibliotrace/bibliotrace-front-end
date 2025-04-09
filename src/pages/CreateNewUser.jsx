@@ -117,23 +117,26 @@ export default function CreateNewUser() {
         homeNavOnClick="/admin"
       />
 
-      <h1 className="text-center 5xl:my-16 3xl:my-8 lg:my-4 4xl:text-[6rem] 3xl:text-5xl xl:text-3xl  text-white font-rector">
+      <h1 className="text-center 5xl:my-16 3xl:my-8 lg:my-4 4xl:text-[6rem] 3xl:text-5xl xl:text-2xl  text-white font-rector">
         Create User
       </h1>
       <div className="flex flex-row">
         <section className="2xl:p-20 p-10 mt-14 flex-1 flex flex-col 3xl:text-3xl xl:text-lg">
-          <p>1. Please only create a account if the location you are at has no account.</p>
+          <p>1. Please only create an account if the location you are at has no account.</p>
           <p>
-            2. Please do not use a username or login information that will pertain to your id or
-            health information.
+            2. Please do not use a username or login information related to your id or health
+            information.
           </p>
-          <p>3. You must specify the location of the clinics library.</p>
-          <p
+          <p>3. You must specify the campus associated with the user.</p>
+          {
+            //We don't have docs yet so it doesn't make sense to have a link that goes nowhere
+            /*<p
             className="self-center mt-10 underline text-lightBlue hover:cursor-pointer hover:opacity-80 active:text-darkBlue"
             onClick={testClick}
           >
             Help
-          </p>
+          </p>*/
+          }
         </section>
 
         <section className="2xl:p-20 xl:p-5 flex-1">

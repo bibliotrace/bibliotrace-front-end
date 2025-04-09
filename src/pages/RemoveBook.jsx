@@ -14,6 +14,7 @@ export default function RemoveBook() {
   const [author, setAuthor] = useState(null);
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function scanQr(e, qr) {
     e.preventDefault();
@@ -24,34 +25,33 @@ export default function RemoveBook() {
       return;
     }
     const jwt = Cookies.get("authToken");
+    setLoading(true);
 
     // We need the book data for the book that we are about to delete
     // such that it can be displayed on a successful delete
     try {
-      const checkout = await fetch("http://localhost:8080/api/inventory/checkout", {
-        method: "POST",
+      const qrResponse = await fetch(`http://localhost:8080/api/bookdata/qr/${qr}`, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${jwt}`,
         },
-        body: JSON.stringify({
-          qr_code: qr,
-        }),
       });
-      const data = await checkout.json();
-      if (checkout.ok) {
-        // console.log(data);
-        setTitle(data.object.title);
+      const data = await qrResponse.json();
+      if (qrResponse.ok) {
+        console.log(data);
+        setTitle(data.object.book_title);
         setAuthor(data.object.author);
-        await getCoverThumbnail(data.object.isbn.split("|")[0]);
+        await getCoverThumbnail(data.object.isbn_list.split("|")[0]);
       } else {
         setMessage(`${data.message}`);
+        setLoading(false);
         setSuccess(false);
         return;
       }
     } catch (error) {
       setMessage(`${error.message}`);
-      setSuccess(false);
+      setLoading(false);
       return;
     }
 
@@ -71,12 +71,12 @@ export default function RemoveBook() {
         setSuccess(true);
       } else {
         setMessage(`${data.message}`);
-        setSuccess(false);
       }
     } catch (error) {
       setMessage(`${error.message}`);
-      setSuccess(false);
     }
+
+    setLoading(false);
   }
 
   async function scanIsbn(e, isbn) {
@@ -87,6 +87,7 @@ export default function RemoveBook() {
       return;
     }
 
+    setLoading(true);
     const jwt = Cookies.get("authToken");
     // We need the book data for the book that we are about to delete
     // such that it can be displayed on a successful delete
@@ -104,12 +105,12 @@ export default function RemoveBook() {
         await getCoverThumbnail(isbn);
       } else {
         setMessage(`${data.message}`);
-        setSuccess(false);
+        setLoading(false);
         return;
       }
     } catch (error) {
       setMessage(`${error.message}`);
-      setSuccess(false);
+      setLoading(false);
       return;
     }
 
@@ -130,12 +131,12 @@ export default function RemoveBook() {
         setSuccess(true);
       } else {
         setMessage(`${data.message}`);
-        setSuccess(false);
       }
     } catch (error) {
       setMessage(`${error.message}`);
-      setSuccess(false);
     }
+
+    setLoading(false);
   }
 
   async function getCoverThumbnail(isbn) {
@@ -286,9 +287,13 @@ export default function RemoveBook() {
                   </>
                 ) : (
                   <>
-                    <p className="">
-                      Last book deletion request was not successful. Please try again.
-                    </p>
+                    {loading ? (
+                      <p className="">Loading deletion request...</p>
+                    ) : (
+                      <p className="">
+                        Last book deletion request was not successful. Please try again.
+                      </p>
+                    )}
                     <p className="">Last successfully deleted title: {title ?? "None"}</p>
                     <p className="">Author: {author ?? "None"}</p>
                   </>
