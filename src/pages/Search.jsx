@@ -47,7 +47,7 @@ const Search = () => {
     if (filterInput.Audiences.length > 0) {
       filterString += "||Audience:";
       for (let i = 0; i < filterInput.Audiences.length; i++) {
-        filterString += filterInput.Audiences[i];
+        filterString += encodeURIComponent(filterInput.Audiences[i]);
         if (i < filterInput.Audiences.length - 1) {
           filterString += ",";
         }
@@ -57,7 +57,7 @@ const Search = () => {
     if (filterInput.Genres.length > 0) {
       filterString += "||Genre:";
       for (let i = 0; i < filterInput.Genres.length; i++) {
-        filterString += filterInput.Genres[i];
+        filterString += encodeURIComponent(filterInput.Genres[i]);
         if (i < filterInput.Genres.length - 1) {
           filterString += ",";
         }
@@ -67,7 +67,7 @@ const Search = () => {
     if (filterInput.Special.length > 0) {
       filterString += "||Special:";
       for (let i = 0; i < filterInput.Special.length; i++) {
-        filterString += filterInput.Special[i];
+        filterString += encodeURIComponent(filterInput.Special[i]);
         if (i < filterInput.Special.length - 1) {
           filterString += ",";
         }
