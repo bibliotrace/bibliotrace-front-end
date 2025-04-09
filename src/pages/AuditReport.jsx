@@ -50,14 +50,8 @@ export default function AuditReport() {
   }
 
   return (
-    <>
-      <NavBar
-        useDarkTheme={true}
-        showTitle={false}
-        bgColor={tailwindConfig.theme.colors.white}
-        showNavButtons={true}
-        back={true}
-      ></NavBar>
+    <div className="search-bg w-full h-full">
+      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true} back={true}></NavBar>
 
       <h1 className="text-center print:text-xl">Audit Report</h1>
       <p className="text-xl text-center my-2 print:text-md print:mt-0">
@@ -77,19 +71,19 @@ export default function AuditReport() {
           <p>
             Found Books: {numFound} ({((numFound / auditEntries.length) * 100).toFixed(0)}%)
           </p>
-          <button className="print:hidden" onClick={window.print}>
+          <button className="print:hidden border-black" onClick={window.print}>
             Print Report
           </button>
         </div>
-        <ul className="flex-grow w-[80%] border mt-2 h-[70vh] p-10 overflow-y-scroll print:border-none print:w-full print:p-0 print:overflow-visible">
+        <ul className="flex-grow w-[80%] border mt-2 h-[70vh] bg-white p-10 overflow-y-scroll print:border-none print:w-full print:p-0 print:overflow-visible">
           <table className="sortable border w-full print:text-xs">
             <thead>
               <tr>
-                <th className="border">Status</th>
-                <th className="border">Title</th>
-                <th className="border">Author</th>
-                <th className="border">QR Code</th>
-                <th className="border">Location</th>
+                <th className="border hover:cursor-pointer">Status</th>
+                <th className="border hover:cursor-pointer">Title</th>
+                <th className="border hover:cursor-pointer">Author</th>
+                <th className="border hover:cursor-pointer">QR Code</th>
+                <th className="border hover:cursor-pointer">Location</th>
               </tr>
             </thead>
             <tbody>
@@ -110,6 +104,6 @@ export default function AuditReport() {
           </table>
         </ul>
       </div>
-    </>
+    </div>
   );
 }

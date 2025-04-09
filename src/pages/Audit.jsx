@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import AuditCompletedDialog from "../modals/AuditCompletedDialog";
 import CompleteAuditDialog from "../modals/CompleteAuditDialog";
 import CompleteLocationDialog from "../modals/CompleteLocationDialog";
+import tailwindConfig from "../../tailwind.config";
 
 export default function Audit() {
   const completeLocationDialog = useRef(null);
@@ -170,11 +171,37 @@ export default function Audit() {
     }
   }
 
-  function goToReports() {}
   return (
     <>
-      <NavBar useDarkTheme={true} showTitle={true} bgColor={"#FFFFFF"} showNavButtons={true}></NavBar>
-      <h1 className="text-center mb-10">Audit</h1>
+      <svg
+        className="-z-10 absolute left-0 top-0"
+        width="100vw"
+        height="80%"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <path
+          className="fill-peachPink"
+          d="
+            M-0.5,12
+            C7,10 12,14 17,16
+            C22,18 27,14 32,12
+            C37,10 42,14 47,16
+            C52,18 57,14 62,12
+            C67,10 72,14 77,16
+            C82,18 87,14 92,12
+            C97,10 102,14 107,16
+            C110,17.5 114,16 117,14
+            C120,12 124,10 127,11
+            L132,11
+            L132,0
+            L0,0
+            Z"
+          transform="rotate(0, 50, 50) scale(1, 2)"
+        />
+      </svg>
+      <NavBar useDarkTheme={true} showNavButtons={true}></NavBar>
+      <h1 className="text-center mb-2">Audit</h1>
       {isAuditOngoing ? (
         <>
           <CompleteAuditDialog
@@ -189,7 +216,7 @@ export default function Audit() {
             completeLocation={completeLocation}
           />
           <AuditCompletedDialog auditCompletedDialog={auditCompletedDialog} />
-          <h2 className="text-center text-2xl mb-10">Started On: {lastAuditStartDate}</h2>
+          <h2 className="text-center text-2xl mb-20">Started On: {lastAuditStartDate}</h2>
           <p className="text-center">{message}</p>
           <div className="flex flex-row justify-around h-[60%]">
             <section className="flex flex-col w-full mx-10">
@@ -258,12 +285,12 @@ export default function Audit() {
       ) : (
         <>
           {/* <h2 className="text-center text-2xl mb-20">Last Audit Completed: {lastAuditCompletedDate}</h2> */}
-          <div className="flex flex-row justify-center items-center">
-            <button className="m-5" onClick={handleStartAudit}>
+          <div className="flex flex-row justify-center items-center mt-32">
+            <button className="m-5 border-black" onClick={handleStartAudit}>
               Start New Audit
             </button>
             <button
-              className="m-5"
+              className="m-5 border-black"
               onClick={() => {
                 navigate("/audit-list");
               }}

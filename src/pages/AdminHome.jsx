@@ -131,7 +131,7 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
-      text: "Audit",
+      text: "Audit Reports",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
@@ -230,11 +230,7 @@ export default function AdminHome({}) {
             </>
           ) : null}
         </div>
-        <AdminSideBar
-          onMenuChange={setActiveMenu}
-          activeButton={activeButton}
-          setActiveButton={setActiveButton}
-        />
+        <AdminSideBar onMenuChange={setActiveMenu} activeButton={activeButton} setActiveButton={setActiveButton} />
       </div>
     </div>
   );

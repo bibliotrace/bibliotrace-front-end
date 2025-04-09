@@ -18,10 +18,10 @@ const PullOutBarGenre = ({ onClose, buttons, side, titleText, uniformColor, butt
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-start backdrop-blur-sm" onClick={onClose}>
+    <div className={`fixed right-0 inset-0 z-5 flex items-center justify-${side === "left" ? 'start' : 'end'} backdrop-blur-sm`} onClick={onClose}>
       {/* PullOutBar Container */}
       <div
-        className={`fixed top-${side === "left" ? "30 left-0" : "30 right-0"} h-auto w-auto bg-white 
+        className={`top-${side === "left" ? "30 left-0" : "30 right-0"} h-auto md:w-1/4 bg-white 
                   ${side === "left" ? "rounded-tr-3xl rounded-br-3xl" : "rounded-tl-3xl rounded-bl-3xl"}
                   z-40 transition-transform translate-x-0`}
         style={{ borderColor: uniformColor, borderWidth: "4px" }}
@@ -45,8 +45,9 @@ const PullOutBarGenre = ({ onClose, buttons, side, titleText, uniformColor, butt
                 borderColor={uniformColor}
                 bgColor={button.bgColor || "#FFFFFF"}
                 buttonBgColor = {"#FFFFFF"}
-                width = {buttonWidth}
+                width = {'100%'}
                 height= {buttonHeight}
+                className={'m-1'}
               />
             ))}
           </ul>

@@ -21,6 +21,7 @@ export default function RestockList() {
       });
       const data = await response.json();
       if (data.object) {
+        console.log(data.object);
         setRestockList(data.object);
       }
     } catch (e) {
@@ -49,24 +50,19 @@ export default function RestockList() {
   }
 
   return (
-    <>
-      <NavBar
-        useDarkTheme={true}
-        showTitle={false}
-        bgColor={tailwindConfig.theme.colors.white}
-        showNavButtons={true}
-      ></NavBar>
+    <div className="search-bg h-full w-full">
+      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true}></NavBar>
       <h1 className="text-center">Restock List</h1>
       <div className="flex flex-column w-full justify-center">
-        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] border mt-10 h-[70vh] p-10 overflow-y-scroll">
+        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] bg-white border mt-10 h-[70vh] p-10 overflow-y-scroll">
           {restockList.map((obj) => {
             return (
               <li className="flex flex-row justify-between items-center mb-5">
                 <p className="text-lg">
-                  {obj.title} by {obj.author} - {obj.quantity > 0 ? obj.quantity : "from Shopping List"}
+                  {obj.book_title} by {obj.author} - {obj.quantity > 0 ? obj.quantity : "from Shopping List"}
                 </p>
                 <div>
-                  <button className="ml-5" onClick={() => handleRemove(obj.book_id)}>
+                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.id)}>
                     Remove
                   </button>
                 </div>
@@ -75,6 +71,6 @@ export default function RestockList() {
           })}
         </ul>
       </div>
-    </>
+    </div>
   );
 }

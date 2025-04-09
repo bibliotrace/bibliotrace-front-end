@@ -80,12 +80,15 @@ export default function Checkout() {
       });
       const data = await response.json();
       if (response.ok) {
-        console.log(data);
-        setTitle(data.object.title);
-        setAuthor(data.object.author);
+        if (data.message.includes("No inventory items were updated")) {
+          setMessage("Book has already been checked out!");
+        } else {
+          setTitle(data.object.book_title);
+          setAuthor(data.object.author);
 
-        const isbn = data.object.isbn.split("|")[0];
-        await getCoverThumbnail(isbn);
+          const isbn = data.object.isbn_list.split("|")[0];
+          await getCoverThumbnail(isbn);
+        }
       } else {
         setMessage(`${data.message}`);
       }
@@ -153,9 +156,7 @@ export default function Checkout() {
         homeNavOnClick="/admin"
       />
 
-      {message && (
-        <ErrorModal description="Error" message={message} onExit={() => setMessage(null)} />
-      )}
+      {message && <ErrorModal description="Error" message={message} onExit={() => setMessage(null)} />}
 
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Book Check Out</h1>
