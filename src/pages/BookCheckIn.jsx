@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
 import NavBar from "../components/NavBar";
-import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
+import ErrorModal from "../modals/ErrorModal";
 
 export default function Checkin() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
@@ -163,7 +163,16 @@ export default function Checkin() {
 
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Book Check In</h1>
-        <p className="text-center text-lg text-darkPeach h-0">{message}</p>
+        {/*<p className="text-center text-lg text-darkPeach h-0">{message}</p>*/}
+        {message && (
+          <ErrorModal
+            description={"Error Checking In Book"}
+            message={message}
+            onExit={() => {
+              setMessage(null);
+            }}
+          />
+        )}
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
             <label>
