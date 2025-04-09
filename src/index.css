@@ -14,8 +14,8 @@ html {
   font-weight: 400;
 
   color-scheme: light;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -67,6 +67,21 @@ button {
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+
+  button {
+    background-color: #f7f5f9;
+  }
+}
 
 .search-bg {
   background-color: #f7f5f9;
