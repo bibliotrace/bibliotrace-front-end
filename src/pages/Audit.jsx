@@ -173,7 +173,7 @@ export default function Audit() {
   function goToReports() {}
   return (
     <>
-      <NavBar></NavBar>
+      <NavBar useDarkTheme={true} showTitle={true} bgColor={"#FFFFFF"} showNavButtons={true}></NavBar>
       <h1 className="text-center mb-10">Audit</h1>
       {isAuditOngoing ? (
         <>

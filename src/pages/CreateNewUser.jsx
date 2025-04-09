@@ -106,7 +106,7 @@ export default function CreateNewUser() {
               L132,0
               L0,0
               Z"
-          transform="rotate(0, 50, 50) scale(1, 2)"
+          transform="rotate(0, 50, 50) scale(1, 1.5)"
         />
       </svg>
       <NavBar
@@ -117,11 +117,11 @@ export default function CreateNewUser() {
         homeNavOnClick="/admin"
       />
 
-      <h1 className="text-center 5xl:my-16 3xl:my-8 lg:my-4 4xl:text-[8rem] 3xl:text-[6rem] xl:text-[3rem]  text-white font-rector">
+      <h1 className="text-center 5xl:my-16 3xl:my-8 lg:my-4 4xl:text-[6rem] 3xl:text-5xl xl:text-3xl  text-white font-rector">
         Create User
       </h1>
-      <div className="flex flex-row h-xl:mt-44 h-lg:mt-44 h-md:mt-44 h-sm:mt-36 mt-12 ">
-        <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around 3xl:text-3xl xl:text-lg">
+      <div className="flex flex-row">
+        <section className="2xl:p-20 p-10 mt-14 flex-1 flex flex-col 3xl:text-3xl xl:text-lg">
           <p>1. Please only create a account if the location you are at has no account.</p>
           <p>
             2. Please do not use a username or login information that will pertain to your id or
