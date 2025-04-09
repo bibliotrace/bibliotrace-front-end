@@ -201,11 +201,16 @@ const Search = () => {
       Genres: [...filterInput.Genres],
       Special: [...filterInput.Special],
     };
-    navigate("/filter", { state: { initFilterCheckBox: filterBody, initSearchInput: searchInput } });
+    navigate("/filter", {
+      state: { initFilterCheckBox: filterBody, initSearchInput: searchInput },
+    });
   };
 
   return (
-    <div className="w-screen pb-5 search-bg flex flex-col items-center" style={{ minHeight: "100vh" }}>
+    <div
+      className="w-screen pb-5 search-bg flex flex-col items-center"
+      style={{ minHeight: "100vh" }}
+    >
       <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} />
       <h1 className="mt-16 text-5xl">Bibliotrace 3.0</h1>
       <div className="h-16 my-6 flex w-10/12 md:w-7/12 justify-center">
@@ -232,7 +237,10 @@ const Search = () => {
         <div className="w-full flex justify-between my-4">
           {" "}
           {/* Buttons Above Results */}
-          <button className="bg-transparent border-none flex xl:hidden " onClick={handleMobileFilterNav}>
+          <button
+            className="bg-transparent border-none flex xl:hidden "
+            onClick={handleMobileFilterNav}
+          >
             <Filter />
           </button>
           <button className="bg-transparent border-none hidden xl:flex" onClick={handleFilterPress}>
@@ -240,18 +248,28 @@ const Search = () => {
           </button>
           {/* Filter Box (Overlay) */}
           {showFilter && (
-            <div
-              className="fixed top-5 left-52 w-full h-full flex justify-center items-center z-50
-                          sm:w-80 md:w-96 lg:w-[30vw] xl:w-[50vw] max-w-full p-4"
-            >
-              <FilterBox
-                onClose={(selectedFilters) => {
-                  setShowFilter(false);
-                  setFilterInput(selectedFilters);
+            <>
+              {/*Overlay everything behind filter when filter box is open*/}
+              <div
+                className="fixed inset-0 bg-transparent z-40"
+                onClick={() => {
+                  setShowFilter(false); // close the filter when you click outside of it
                 }}
-                prevSelectedItems={filterInput}
-              />
-            </div>
+              ></div>
+              <div
+                className="fixed top-5 left-52 w-full h-full flex justify-center items-center z-50
+                          sm:w-80 md:w-96 lg:w-[30vw] xl:w-[50vw] max-w-full p-4"
+                style={{ pointerEvents: "all" }}
+              >
+                <FilterBox
+                  onClose={(selectedFilters) => {
+                    setShowFilter(false);
+                    setFilterInput(selectedFilters);
+                  }}
+                  prevSelectedItems={filterInput}
+                />
+              </div>
+            </>
           )}
           <p className="flex items-center">
             {inputQuery != "" ? `Showing search results for "${inputQuery}"` : ""}
