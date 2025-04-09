@@ -100,10 +100,10 @@ export default function SetLocation() {
         const isbn = data.object._object.isbn_list.split("|")[0];
         await getCoverThumbnail(isbn);
       } else {
-        setMessage(`Error Occurred: ${data.message}`);
+        setMessage(`${data.message}`);
       }
     } catch (error) {
-      setMessage(`Error Occurred: ${error.message}`);
+      setMessage(`${error.message}`);
     }
     e.target.value = "";
   }
@@ -168,7 +168,9 @@ export default function SetLocation() {
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Set Book Location</h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
+          Set Book Location
+        </h1>
         {message && (
           <ErrorModal
             description={"Error Setting Book Location"}
@@ -197,9 +199,7 @@ export default function SetLocation() {
               </select>
             </div>
 
-            <label className="text-2xl mb-2">
-              QR Code:
-            </label>
+            <label className="text-2xl mb-2">QR Code:</label>
             <input
               className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
               type="text"
@@ -210,7 +210,10 @@ export default function SetLocation() {
 
             <p>1. Select the book's new location above</p>
             <p>2. Click on the QR Code input box to set the cursor there</p>
-            <p>3. Scan the QR on the book (book information will appear if the location has been updated)</p>
+            <p>
+              3. Scan the QR on the book (book information will appear if the location has been
+              updated)
+            </p>
           </section>
 
           <section className="p-20 flex-1">
