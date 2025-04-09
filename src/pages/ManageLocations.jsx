@@ -5,7 +5,7 @@ import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
 
 export default function ManageLocations() {
-  const locationCookieData = JSON.parse(Cookies.get('locationList'))
+  const locationCookieData = JSON.parse(Cookies.get("locationList"));
 
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -13,6 +13,7 @@ export default function ManageLocations() {
   const [newLocation, setNewLocation] = useState("");
   const authToken = Cookies.get("authToken");
 
+  // TODO: refactor these functions to use async/await for readability
   const handleAddNewLocation = () => {
     if (newLocation == "") {
       return;
@@ -87,10 +88,30 @@ export default function ManageLocations() {
     });
   };
 
-  const handleRemoveExistingLocation = (existingLocation) => {
-    setErrorMessage(
-      `Removal is not built yet because deleting a location involves breaking inventory items' location pointer. Figure this out in a later release.`
-    );
+  const handleRemoveExistingLocation = async (existingLocation) => {
+    console.log(existingLocation);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/metadata/locations/${existingLocation.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setSuccessMessage(data.message);
+        updateLocationList();
+      } else {
+        setErrorMessage(`${data.message}`);
+      }
+    } catch (error) {
+      setErrorMessage(`${error}`);
+    }
   };
 
   return (
@@ -131,7 +152,9 @@ export default function ManageLocations() {
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Manage Locations</h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
+          Manage Locations
+        </h1>
         {errorMessage && (
           <ErrorModal
             description={"Error Submitting Locations"}
@@ -183,7 +206,8 @@ export default function ManageLocations() {
                     <button
                       className="bg-lightBlue mx-4 text-white h-full"
                       onClick={(e) => {
-                        const inputElement = e.target.parentElement.parentElement.querySelector("input");
+                        const inputElement =
+                          e.target.parentElement.parentElement.querySelector("input");
                         if (inputElement) {
                           handleUpdateExistingLocation(location, inputElement.value);
                         }
@@ -191,7 +215,10 @@ export default function ManageLocations() {
                     >
                       Update
                     </button>
-                    <button className="bg-peachPink" onClick={(e) => handleRemoveExistingLocation(location)}>
+                    <button
+                      className="bg-peachPink"
+                      onClick={(e) => handleRemoveExistingLocation(location)}
+                    >
                       Remove
                     </button>
                   </div>
@@ -209,6 +236,7 @@ export default function ManageLocations() {
                   e.stopPropagation();
                   if (e.key === "Enter") {
                     e.preventDefault();
+                    handleAddNewLocation();
                   }
                 }}
               />
