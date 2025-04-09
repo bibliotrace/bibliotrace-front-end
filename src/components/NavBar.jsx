@@ -75,7 +75,7 @@ const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onH
       {showNavButtons && (
         <div className="flex items-center mt-2 md:mt-0">
           <button
-            style={{ color: textColor }}
+            style={{ backgroundColor: "transparent", color: textColor }}
             className="flex flex-col justify-center items-center"
             onClick={navigateHome}
           >
@@ -84,7 +84,7 @@ const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onH
           </button>
 
           <button
-            style={{ color: textColor }}
+            style={{ backgroundColor: "transparent", color: textColor }}
             className="flex flex-col justify-center items-center"
             onClick={navigateLogOut}
           >
