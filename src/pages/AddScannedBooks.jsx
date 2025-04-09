@@ -287,7 +287,7 @@ export default function AddScannedBooks() {
 
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Add New Books</h1>
-        <div className="flex flex-row pb-20">
+        <div className="flex flex-row pb-20 flex-wrap justify-center">
           <section className="p-20 flex flex-col max-w-2xl">
             <h4>ISBN Number</h4>
             <form

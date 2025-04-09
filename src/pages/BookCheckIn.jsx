@@ -25,6 +25,7 @@ export default function Checkin() {
     setAuthor("");
     setThumbnail(defaultBook);
     setMessage("");
+    e.target.value = "";
 
     const jwtDataString = Cookies.get("jwtData");
     if (jwtDataString == null) {
@@ -63,7 +64,6 @@ export default function Checkin() {
     } catch (error) {
       setMessage(`${error.message}`);
     }
-    e.target.value = "";
   }
 
   async function getCoverThumbnail(isbn) {
