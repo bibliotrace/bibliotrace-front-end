@@ -1,70 +1,28 @@
 import Cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
 import NavBar from "../components/NavBar";
-import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
 
 export default function Checkin() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [series, setSeries] = useState("");
   const [message, setMessage] = useState("");
-  const [location, setLocation] = useState("");
-  const [locations, setLocations] = useState([]);
-  const [bulkModalShow, setBulkModalShow] = useState(false);
   const inputRef = useRef(null);
 
   const navigate = useNavigate();
-
-  useEffect(() => {
-    async function getLocations() {
-      const locationList = await JSON.parse(Cookies.get("locationList"));
-      setLocations(locationList);
-    }
-    getLocations();
-  }, []);
-
-  useEffect(() => {
-    const handleFocus = (event) => {
-      if (!bulkModalShow && inputRef.current) {
-        inputRef.current.focus();
-      }
-    };
-
-    if (bulkModalShow) {
-      // Remove event listeners when modal is open
-      document.removeEventListener("click", handleFocus);
-      document.removeEventListener("keydown", handleFocus);
-    } else {
-      // Add event listeners when modal is closed
-      // document.addEventListener("click", handleFocus);
-      document.addEventListener("keydown", handleFocus);
-    }
-
-    // Cleanup function to prevent multiple bindings
-    return () => {
-      document.removeEventListener("click", handleFocus);
-      document.removeEventListener("keydown", handleFocus);
-    };
-  }, [bulkModalShow]);
 
   async function scanBook(e) {
     if (e.key !== "Enter" || e.target.value == "") {
       return;
     }
     const qr_code = e.target.value;
-    if (!location) {
-      setMessage("Please select a location");
-      return;
-    }
 
     setTitle("");
     setAuthor("");
     setThumbnail(defaultBook);
-    setSeries("");
     setMessage("");
 
     const jwtDataString = Cookies.get("jwtData");
@@ -82,17 +40,20 @@ export default function Checkin() {
         },
         body: JSON.stringify({
           qr_code: qr_code,
-          location_id: location,
         }),
       });
       const data = await response.json();
 
       if (response.ok) {
-        setTitle(data.object.title);
-        setAuthor(data.object.author);
+        if (data.message.includes("No inventory items were updated")) {
+          setMessage("Book has already been checked in!");
+        } else {
+          setTitle(data.object.book_title);
+          setAuthor(data.object.author);
 
-        const isbn = data.object.isbn.split("|")[0];
-        await getCoverThumbnail(isbn);
+          const isbn = data.object.isbn_list.split("|")[0];
+          await getCoverThumbnail(isbn);
+        }
       } else {
         setMessage(`${data.message}`);
       }
@@ -166,29 +127,6 @@ export default function Checkin() {
         <p className="text-center text-lg text-darkPeach h-0">{message}</p>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
-            <label>
-              Location:
-              <select
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                value={location}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setLocation(e.target.value);
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose an option --
-                </option>
-                {locations.map((location_obj) => {
-                  return (
-                    <option key={location_obj.id} value={location_obj.id}>
-                      {location_obj.location_name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
-
             <label className="mt-5 mb-2">QR Code:</label>
             <input
               className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
@@ -198,9 +136,8 @@ export default function Checkin() {
               ref={inputRef}
             />
 
-            <p>1. Select the Location you are scanning books back into</p>
-            <p>2. Scan the QR on the book (book information will show up if scan is successful)</p>
-            <p>3. All done! The book is Checked In</p>
+            <p>1. Scan the QR on the book (book information will show up if scan is successful)</p>
+            <p>2. All done! The book is checked in</p>
           </section>
 
           <section className="p-20 flex-1">
