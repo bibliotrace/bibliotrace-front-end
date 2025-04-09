@@ -1,49 +1,24 @@
 //Icons
+import PeachColorIcon from "../../assets/CheckInIcon.jpg";
 import OrangeIcon from "../../assets/ExploreByAge.jpg";
 import BlueIcon from "../../assets/ExploreByGenre.jpg";
 import YellowIcon from "../../assets/NewArrivalsIcon.jpg";
 import RedIcon from "../../assets/SuggestBook.jpg";
 import PinkIcon from "../../assets/WhatsPopular.jpg";
 import PurpleIcon from "../../assets/checkoutIcon.jpg";
-import PeachColorIcon from "../../assets/CheckInIcon.jpg";
 //Libraries
-import { useNavigate } from "react-router-dom";
-import CustomButton from "../ButtonComponent";
-import React, { useState, useEffect } from "react";
-import PopUpBar from "../../modals/PopUpSideBar";
 import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PopUpBar from "../../modals/PopUpSideBar";
+import CustomButton from "../ButtonComponent";
 
 export default function MainMenu() {
   const navigate = useNavigate();
-  const [isBlurred, setIsBlurred] = useState(false);
   const [showPopupBarAge, setShowPopupBarAge] = useState(false);
   const [showPopupBarGenre, setShowPopupBarGenre] = useState(false);
   const [ages, setAges] = useState([]);
   const [genres, setGenres] = useState([]);
-
-  const handleTestClick = () => {
-    console.log("Button pressed");
-  };
-
-  const handleCheckout = () => {
-    navigate("/checkout");
-  };
-
-  const handleCheckIn = () => {
-    navigate("/checkin");
-  };
-
-  const handleSuggestBookNav = () => {
-    navigate("/suggest");
-  };
-
-  const handleExploreByAge = () => {
-    setShowPopupBarAge(!showPopupBarAge);
-  };
-
-  const handleExploreByGenre = () => {
-    setShowPopupBarGenre(!showPopupBarGenre);
-  };
 
   const handlePopular = (filterInput) => {
     navigate("/search", {
@@ -61,14 +36,14 @@ export default function MainMenu() {
     {
       label: "Check In",
       imageSrc: PeachColorIcon,
-      onclick: handleCheckIn,
+      onclick: () => navigate("/checkin"),
       borderColor: "#fbb7a4",
       textWidth: "35rem",
     },
     {
       label: "Suggest A Book",
       imageSrc: RedIcon,
-      onclick: handleSuggestBookNav,
+      onclick: () => navigate("/suggest"),
       borderColor: "#e12502",
       textWidth: "35rem",
     },
@@ -89,14 +64,14 @@ export default function MainMenu() {
     {
       label: "By Age",
       imageSrc: OrangeIcon,
-      onclick: handleExploreByAge,
+      onclick: () => setShowPopupBarAge(!showPopupBarAge),
       borderColor: "#fa8804",
       textWidth: "35rem",
     },
     {
       label: "By Genre",
       imageSrc: BlueIcon,
-      onclick: handleExploreByGenre,
+      onclick: () => setShowPopupBarGenre(!showPopupBarGenre),
       borderColor: "#669bff",
       textWidth: "35rem",
     },
@@ -125,16 +100,15 @@ export default function MainMenu() {
   }, [])
 
   return (
-    <div className="absolute left-0 top-auto z-10 w-1/2 pl-5">
+    <div className="flex-1 w-full m-auto p-2 px-[10%] justify-center flex flex-col">
       <CustomButton
         imageSrc={PurpleIcon}
         text="Check Out"
         textColor="#FFFFFF" //same
-        onClick={handleCheckout}
+        onClick={() => navigate("/checkout")}
         borderColor="#4b00e3"
         bgColor="#110057" //same
         layout="row" //same
-        textWidth="42vw"
         textSize="1.25rem"
       />
       <div className="grid grid-cols-2 justify-start">
@@ -148,7 +122,6 @@ export default function MainMenu() {
             borderColor={item.borderColor}
             bgColor="#110057"
             layout="row"
-            textWidth={item.textWidth}
             textSize="1.25rem"
           />
         ))}

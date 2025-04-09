@@ -55,6 +55,7 @@ export default function Checkout() {
     setAuthor("");
     setThumbnail(defaultBook);
     setMessage("");
+    e.target.value = "";
 
     const jwtDataString = Cookies.get("jwtData");
     if (jwtDataString == null) {
@@ -91,7 +92,6 @@ export default function Checkout() {
     } catch (error) {
       setMessage(`${error.message}`);
     }
-    e.target.value = "";
   }
 
   async function getCoverThumbnail(isbn) {
@@ -187,7 +187,6 @@ export default function Checkout() {
                 onExit={() => {
                   setBulkModalShow(false);
                 }}
-                operationType="checkout"
               />
             )}
           </section>
