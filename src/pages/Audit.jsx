@@ -5,6 +5,7 @@ import NavBar from "../components/NavBar";
 import AuditCompletedDialog from "../modals/AuditCompletedDialog";
 import CompleteAuditDialog from "../modals/CompleteAuditDialog";
 import CompleteLocationDialog from "../modals/CompleteLocationDialog";
+import tailwindConfig from "../../tailwind.config";
 
 export default function Audit() {
   const completeLocationDialog = useRef(null);
@@ -199,8 +200,8 @@ export default function Audit() {
           transform="rotate(0, 50, 50) scale(1, 2)"
         />
       </svg>
-      <NavBar useDarkTheme={true} showTitle={true} bgColor={"#FFFFFF"} showNavButtons={true}></NavBar>
-      <h1 className="text-center mb-10">Audit</h1>
+      <NavBar useDarkTheme={true} showNavButtons={true} bgColor={tailwindConfig.theme.colors.peachPink}></NavBar>
+      <h1 className="text-center mb-2">Audit</h1>
       {isAuditOngoing ? (
         <>
           <CompleteAuditDialog
