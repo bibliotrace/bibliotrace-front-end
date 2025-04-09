@@ -146,7 +146,7 @@ export default function ManageGenresTags() {
 
   return (
     <>
-      <NavBar useDarkTheme={true} showTitle={true} showNavButtons={true}></NavBar>
+      <NavBar useDarkTheme={true} showTitle={true} bgColor={"#FFFFFF"} showNavButtons={true}></NavBar>
       <h1 className="text-center my-10">Edit Genres/Tags</h1>
       {message ? (
         <ErrorModal

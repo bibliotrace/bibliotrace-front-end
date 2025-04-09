@@ -24,22 +24,22 @@ const Search = () => {
     location.state?.initFilterInput ?? { Audiences: [], Genres: [], Special: [] }
   );
   const [inputQuery, setInputQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([
-    {
-      key: "helloSearch",
-      selfLink: "none",
-      title: "",
-      author: "",
-      isbn: "none",
-      genre: "",
-      series: "",
-    },
-  ]);
+  const [searchResults, setSearchResults] = useState([]);
 
   const conductSearch = () => {
-    if ((searchInput == "" || searchInput == null) && (filterInput == "" || filterInput == null)) {
+    const emptyFilters =
+      filterInput.Audiences.length === 0 &&
+      filterInput.Genres.length === 0 &&
+      filterInput.Special.length === 0;
+
+    // Note: this check was not working correctly before, which meant that empty searches were actually processed
+    // which typically resulted in just outputting all books as empty strings match on basically everything
+    // Do we want some kind of functionality later to show all books?
+    if (searchInput.trim() === "" && emptyFilters) {
+      setSearchResults([]);
       return;
     }
+
     setLoading(true);
 
     // Generate Filter String
@@ -298,14 +298,20 @@ const Search = () => {
               <h3>Series</h3>
             </div>
           </div>
-          {Array.from({ length: rowCount }, (_, index) => {
-            const targetIndex = index + pageOffset;
-            if (targetIndex >= searchResults.length) {
-              return null;
-            }
-            const bookData = searchResults[index + pageOffset];
-            return bookData ? <SearchResult key={bookData.id} bookData={bookData} /> : null;
-          })}
+          {searchResults.length == 0 ? (
+            <div className="text-center w-full py-4">
+              <p>No results found. Please try a different query.</p>
+            </div>
+          ) : (
+            Array.from({ length: rowCount }, (_, index) => {
+              const targetIndex = index + pageOffset;
+              if (targetIndex >= searchResults.length) {
+                return <></>;
+              }
+              const bookData = searchResults[index + pageOffset];
+              return bookData ? <SearchResult key={bookData.id} bookData={bookData} /> : <></>;
+            })
+          )}
         </div>
         <div className="flex align-middle items-center justify-center py-4">
           {" "}
@@ -315,8 +321,9 @@ const Search = () => {
             <p className="">Previous</p>
           </button>
           <p className="h-12">
-            Showing {pageOffset + 1}-{Math.min(pageOffset + rowCount, searchResults.length)} of{" "}
-            {searchResults.length}
+            Showing{" "}
+            {Math.min(pageOffset + rowCount, searchResults.length) === 0 ? 0 : pageOffset + 1}-
+            {Math.min(pageOffset + rowCount, searchResults.length)} of {searchResults.length}
           </p>
           <button className="bg-transparent flex flex-col items-center" onClick={incrementPage}>
             <Next />

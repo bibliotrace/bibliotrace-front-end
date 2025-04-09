@@ -7,6 +7,7 @@ import AdminNavBar from "../components/admin/AdminNavBar.jsx";
 import AdminMainMenu from "../components/admin/AdminMainMenu.jsx";
 import AdminSideBar from "../components/admin/AdminSideBar.jsx";
 import AdminManageMenu from "../components/admin/AdminManageMenu.jsx";
+import ScreenSizeChecker from "../components/admin/ScreenSizeChecker.jsx";
 
 export default function AdminHome({}) {
   const [activeMenu, setActiveMenu] = useState("main"); //for the component
@@ -153,6 +154,7 @@ export default function AdminHome({}) {
 
   return (
     <div className="size-full pb-5 flex flex-col">
+      <ScreenSizeChecker />
       <svg
         className="-z-10 absolute left-0 top-0"
         width="100vw"
