@@ -106,7 +106,7 @@ export default function CreateNewUser() {
               L132,0
               L0,0
               Z"
-          transform="rotate(0, 50, 50) scale(1, 2)"
+          transform="rotate(0, 50, 50) scale(1, 1.5)"
         />
       </svg>
       <NavBar
@@ -116,126 +116,128 @@ export default function CreateNewUser() {
         textColor={tailwindConfig.theme.colors.white}
         homeNavOnClick="/admin"
       />
+      <div className="flex flex-col justify-between h-5/6">
+        <h1 className="text-center pb-20 4xl:text-[6rem] 3xl:text-5xl xl:text-3xl text-white font-rector">
+          Create User
+        </h1>
+        <div className="flex flex-row ">
+          <section className=" p-10 mt-20 flex-1 flex flex-col 3xl:text-2xl xl:text-lg">
+            <p>1. Please only create a account if the location you are at has no account.</p>
+            <p>
+              2. Please do not use a username or login information that will pertain to your id or health
+              information.
+            </p>
+            <p>3. You must specify the location of the clinics library.</p>
+            <p
+              className="self-center mt-10 underline text-lightBlue hover:cursor-pointer hover:opacity-80 active:text-darkBlue"
+              onClick={testClick}
+            >
+              Help
+            </p>
+          </section>
 
-      <h1 className="text-center 5xl:my-16 3xl:my-8 lg:my-4 4xl:text-[8rem] 3xl:text-[6rem] xl:text-[3rem]  text-white font-rector">
-        Create User
-      </h1>
-      <div className="flex flex-row h-xl:mt-44 h-lg:mt-44 h-md:mt-44 h-sm:mt-36 mt-12 ">
-        <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around 3xl:text-3xl xl:text-lg">
-          <p>1. Please only create a account if the location you are at has no account.</p>
-          <p>
-            2. Please do not use a username or login information that will pertain to your id or health
-            information.
-          </p>
-          <p>3. You must specify the location of the clinics library.</p>
-          <p
-            className="self-center mt-10 underline text-lightBlue hover:cursor-pointer hover:opacity-80 active:text-darkBlue"
-            onClick={testClick}
-          >
-            Help
-          </p>
-        </section>
-
-        <section className="2xl:p-20 xl:p-5 flex-1">
-          <div className="flex flex-col min-h-48 h-full 5xl:text-[3rem] 3xl:text-[1.25rem] 2xl:text-3xl xl:text-2xl lg:text-lg">
-            <div className="flex-1 items-center mb-3 mt-4">
-              <label className="text-purple">Email: </label>
-              <input
-                ref={emailRef}
-                className={`border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg
-                      ${role === "User" ? "opacity-50 cursor-not-allowed" : ""}`}
-                placeholder="Email"
-                type="text"
-                value={role === "User" ? "" : email}
-                onChange={(e) => {
-                  if (role !== "User") {
-                    setEmail(e.target.value);
-                  }
-                }}
-                onKeyDown={(e) => {
-                  if (role === "User") {
-                    e.preventDefault();
-                  } else {
-                    handleKeyDown(e);
-                  }
-                }}
-                disabled={role === "User"}
-                readOnly={role === "User"}
-              />
-            </div>
-            <div className="flex-1 items-center mb-3 mt-4">
-              <label className="text-purple">Username: </label>
-              <input
-                ref={usernameRef}
-                className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
-                placeholder="Username"
-                type="text"
-                onChange={(e) => setUsername(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
-            <div className="flex-1 items-center mb-3">
-              <label className="text-purple">Password: </label>
-              <input
-                ref={passwordRef}
-                className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
-                placeholder="Password"
-                type="text"
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
-            </div>
-            <div className="flex-1 items-center">
-              <label className="text-purple">Role: </label>
-              <select
-                value={role || ""}
-                onChange={(e) => {
-                  const selectedRole = e.target.value; // Get the selected role name
-                  setRole(selectedRole); // Store the role name directly in the state
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose a role --
-                </option>
-                {roles.map((roleName, index) => (
-                  <option key={index} value={roleName}>
-                    {roleName}
+          <section className="2xl:p-20 xl:p-5 flex-1">
+            <div className="flex flex-col min-h-48 h-full 5xl:text-[3rem] 3xl:text-[1.25rem] 2xl:text-3xl xl:text-2xl lg:text-lg">
+              <div className="flex-1 items-center mb-3 mt-4">
+                <label className="text-purple">Email: </label>
+                <input
+                  ref={emailRef}
+                  className={`border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg
+                        ${role === "User" ? "opacity-50 cursor-not-allowed" : ""}`}
+                  placeholder="Email"
+                  type="text"
+                  value={role === "User" ? "" : email}
+                  onChange={(e) => {
+                    if (role !== "User") {
+                      setEmail(e.target.value);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (role === "User") {
+                      e.preventDefault();
+                    } else {
+                      handleKeyDown(e);
+                    }
+                  }}
+                  disabled={role === "User"}
+                  readOnly={role === "User"}
+                />
+              </div>
+              <div className="flex-1 items-center mb-3 mt-4">
+                <label className="text-purple">Username: </label>
+                <input
+                  ref={usernameRef}
+                  className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
+                  placeholder="Username"
+                  type="text"
+                  onChange={(e) => setUsername(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <div className="flex-1 items-center mb-3">
+                <label className="text-purple">Password: </label>
+                <input
+                  ref={passwordRef}
+                  className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
+                  placeholder="Password"
+                  type="text"
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
+              <div className="flex-1 items-center">
+                <label className="text-purple">Role: </label>
+                <select
+                  value={role || ""}
+                  onChange={(e) => {
+                    const selectedRole = e.target.value; // Get the selected role name
+                    setRole(selectedRole); // Store the role name directly in the state
+                  }}
+                >
+                  <option value="" disabled>
+                    -- Choose a role --
                   </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex-1 items-center">
-              <label className="text-purple">Campus: </label>
-              <select
-                value={campus || ""}
-                onChange={(e) => {
-                  const selectedCampus = e.target.value; // Get the selected campus name
-                  setCampus(selectedCampus); // Store the campus name directly in the state
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose an option --
-                </option>
-                {campuses.map((campus_name, index) => (
-                  <option key={index} value={campus_name}>
-                    {campus_name}
+                  {roles.map((roleName, index) => (
+                    <option key={index} value={roleName}>
+                      {roleName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1 items-center">
+                <label className="text-purple">Campus: </label>
+                <select
+                  value={campus || ""}
+                  onChange={(e) => {
+                    const selectedCampus = e.target.value; // Get the selected campus name
+                    setCampus(selectedCampus); // Store the campus name directly in the state
+                  }}
+                >
+                  <option value="" disabled>
+                    -- Choose an option --
                   </option>
-                ))}
-              </select>
+                  {campuses.map((campus_name, index) => (
+                    <option key={index} value={campus_name}>
+                      {campus_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1 items-center pt-12">
+                <button
+                  className="self-center w-full mb-10 border-2 border-purple hover:bg-purple hover:scale-105 text-purple hover:text-white"
+                  onClick={onSubmit}
+                >
+                  Create Account
+                </button>
+                <p className="text-purple">{successMessage}</p>
+                <p className="text-rubyRed">{failedMessage}</p>
+              </div>
             </div>
-            <div className="flex-1 items-center pt-12">
-              <button
-                className="self-center w-full mb-10 border-2 border-purple hover:bg-purple hover:scale-105 text-purple hover:text-white"
-                onClick={onSubmit}
-              >
-                Create Account
-              </button>
-              <p className="text-purple">{successMessage}</p>
-              <p className="text-rubyRed">{failedMessage}</p>
-            </div>
-          </div>
-        </section>
+          </section>
+        </div>
       </div>
+      
     </>
   );
 }
