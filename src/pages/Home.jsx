@@ -110,7 +110,7 @@ const Home = () => {
         </button>
       </div>
 
-      <div className="flex md:flex-row flex-col">
+      <div className="flex md:flex-row flex-col w-full justify-center flex-wrap">
         {/* website buttons */}
         <CustomButton
           imageSrc={WhatsPopular}
@@ -119,7 +119,7 @@ const Home = () => {
           onClick={handlePopular}
           borderColor="#ff50df"
           bgColor="#110057"
-          className=" hidden md:flex"
+          className=" hidden md:flex md:w-fit"
           imageWidth="12em"
           imageHeight="12rem"
           textWidth="12rem"
@@ -134,7 +134,7 @@ const Home = () => {
           onClick={handleExploreByAge}
           borderColor="#fa8804"
           bgColor="#110057"
-          className="mt-24 hidden md:flex"
+          className="mt-24 hidden md:flex md:w-fit"
           imageWidth="12rem"
           imageHeight="12rem"
           textWidth="12rem"
@@ -161,7 +161,7 @@ const Home = () => {
           onClick={handleNewest}
           borderColor="#FFD700"
           bgColor="#110057"
-          className=" hidden md:flex"
+          className=" hidden md:flex md:w-fit"
           imageWidth="12em"
           imageHeight="12rem"
           textWidth="12rem"
@@ -176,7 +176,7 @@ const Home = () => {
           onClick={handleExploreByGenre}
           borderColor="#669bff"
           bgColor="#110057"
-          className="mt-24 hidden md:flex"
+          className="mt-24 hidden md:flex md:w-fit"
           imageWidth="12em"
           imageHeight="12rem"
           textWidth="12rem"
@@ -202,7 +202,7 @@ const Home = () => {
           onClick={handleSuggestBookNav}
           borderColor="#e12502"
           bgColor="#110057"
-          className=" hidden md:flex"
+          className=" hidden md:flex md:w-fit"
           imageWidth="12em"
           imageHeight="12rem"
           textWidth="12rem"
