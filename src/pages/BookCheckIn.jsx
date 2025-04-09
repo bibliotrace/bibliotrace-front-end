@@ -94,10 +94,10 @@ export default function Checkin() {
         const isbn = data.object.isbn.split("|")[0];
         await getCoverThumbnail(isbn);
       } else {
-        setMessage(`Error Occurred: ${data.message}`);
+        setMessage(`${data.message}`);
       }
     } catch (error) {
-      setMessage(`Error Occurred: ${error.message}`);
+      setMessage(`${error.message}`);
     }
     e.target.value = "";
   }
@@ -163,7 +163,7 @@ export default function Checkin() {
 
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Book Check In</h1>
-        <p className="text-center text-lg text-rubyRed h-0">{message}</p>
+        <p className="text-center text-lg text-darkPeach h-0">{message}</p>
         <div className="flex flex-row pb-20">
           <section className="p-20 flex-1 flex flex-col">
             <label>
@@ -188,10 +188,8 @@ export default function Checkin() {
                 })}
               </select>
             </label>
-              
-            <label className="mt-5 mb-2">
-              QR Code:
-            </label>
+
+            <label className="mt-5 mb-2">QR Code:</label>
             <input
               className="self-center w-full mb-5 border-2 border-black text-black p-4 rounded-lg text-2xl"
               type="text"
@@ -203,24 +201,6 @@ export default function Checkin() {
             <p>1. Select the Location you are scanning books back into</p>
             <p>2. Scan the QR on the book (book information will show up if scan is successful)</p>
             <p>3. All done! The book is Checked In</p>
-            <button
-              className="w-fit mt-4"
-              onClick={() => {
-                setBulkModalShow(true);
-              }}
-            >
-              Scanner Data Dump
-            </button>
-            {bulkModalShow && (
-              <BulkQrOnlyDump
-                id="bulk-checkin-modal"
-                title="Bulk Check In Scan Dump"
-                onExit={() => {
-                  setBulkModalShow(false);
-                }}
-                operationType="checkin"
-              />
-            )}
           </section>
 
           <section className="p-20 flex-1">

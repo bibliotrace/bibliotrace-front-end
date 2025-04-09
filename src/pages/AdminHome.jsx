@@ -13,62 +13,34 @@ export default function AdminHome({}) {
   const [activeMenu, setActiveMenu] = useState("main"); //for the component
   const [activeButton, setActiveButton] = useState(null); //for side bar highlighting
   const navigate = useNavigate();
-  //handle routes
-  const handleTestClick = () => {
-    console.log("Button pressed");
+
+  const [searchInput, setSearchInput] = useState("");
+
+  const handleSearch = () => {
+    console.log("HOME.jsx searchInput: ", searchInput);
+    if (searchInput != null && searchInput != "") {
+      navigate("/search", { state: { initSearchInput: searchInput } });
+    }
   };
 
-  const handleAddBookNav = () => {
-    navigate("/add-scanned");
-  };
-
-  const handleRemoveBookNav = () => {
-    navigate("/remove-book");
-  };
-
-  const handleSetLocation = () => {
-    navigate("/set-location");
-  };
-  const handleCreateUser = () => {
-    navigate("/create-user");
-  };
-
-  const handleManageLocations = () => {
-    navigate("/manage-locations");
-  };
-
-  const handleEditBookNav = () => {
-    navigate("/edit-book");
-  }
-
-  //reports
-  const handleShoppingList = () => {
-    navigate("/shopping-list");
-  };
-  const handleRestockList = () => {
-    navigate("/restock-list");
-  };
-
-
-  //buttons
   const settingButtons = [
-    {
-      text: "Manage Profile",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
-      width: "20vw",
-      height: "10vh",
-    },
+    // {
+    //   text: "Manage Profile",
+    //   textColor: "white",
+    //   bgColor: "#110057",
+    //   borderColor: "white",
+    //   buttonBgColor: "#110057",
+    //   onClick: handleTestClick,
+    //   width: "20vw",
+    //   height: "10vh",
+    // },
     {
       text: "Manage Locations",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleManageLocations,
+      onClick: () => navigate("/manage-locations"),
       width: "20vw",
       height: "10vh",
     },
@@ -78,57 +50,7 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleCreateUser,
-      width: "20vw",
-      height: "10vh",
-    },
-    {
-      text: "Feature 2",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
-      width: "20vw",
-      height: "10vh",
-    },
-    {
-      text: "Create New Database",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
-      width: "20vw",
-      height: "10vh",
-    },
-    {
-      text: "Feature 3",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
-      width: "20vw",
-      height: "10vh",
-    },
-    {
-      text: "Manage Database",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
-      width: "20vw",
-      height: "10vh",
-    },
-    {
-      text: "Feature 4",
-      textColor: "white",
-      bgColor: "#110057",
-      borderColor: "white",
-      buttonBgColor: "#110057",
-      onClick: handleTestClick,
+      onClick: () => navigate("/create-user"),
       width: "20vw",
       height: "10vh",
     },
@@ -141,7 +63,7 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleAddBookNav,
+      onClick: () => navigate("/add-scanned"),
       width: "20vw",
       height: "10vh",
     },
@@ -161,7 +83,7 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleRemoveBookNav,
+      onClick: () => navigate("/remove-book"),
       width: "20vw",
       height: "10vh",
     },
@@ -181,7 +103,7 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleEditBookNav,
+      onClick: () => navigate("/edit-book"),
       width: "20vw",
       height: "10vh",
     },
@@ -191,30 +113,10 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleSetLocation,
+      onClick: () => navigate("/set-location"),
       width: "20vw",
       height: "10vh",
     },
-    // {
-    //   text: "Add Title",
-    //   textColor: "white",
-    //   bgColor: "#110057",
-    //   borderColor: "white",
-    //   buttonBgColor: "#110057",
-    //   onClick: handleTestClick,
-    //   width: "20vw",
-    //   height: "10vh",
-    // },
-    // {
-    //   text: "Generate QR Codes",
-    //   textColor: "white",
-    //   bgColor: "#110057",
-    //   borderColor: "white",
-    //   buttonBgColor: "#110057",
-    //   onClick: handleTestClick,
-    //   width: "20vw",
-    //   height: "10vh",
-    // },
   ];
 
   const ReportButtons = [
@@ -224,7 +126,7 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleShoppingList,
+      onClick: () => navigate("/shopping-list"),
       width: "20vw",
       height: "10vh",
     },
@@ -244,14 +146,14 @@ export default function AdminHome({}) {
       bgColor: "#110057",
       borderColor: "white",
       buttonBgColor: "#110057",
-      onClick: handleRestockList,
+      onClick: () => navigate("/restock-list"),
       width: "20vw",
       height: "10vh",
     },
   ];
 
   return (
-    <div className={`size-full pb-5 flex flex-col items-center`}>
+    <div className="size-full pb-5 flex flex-col">
       <ScreenSizeChecker />
       <svg
         className="-z-10 absolute left-0 top-0"
@@ -263,10 +165,10 @@ export default function AdminHome({}) {
         <path
           className="fill-darkBlue "
           d="
-            M0,40
-            C12.5,38 25,40 37.5,42
-            C50,44 62.5,42 75,40
-            C87.5,38 93,39 100,40
+            M0,41
+            C15,40 26,41 37,42
+            C50,43 62,42 72,41
+            C84,40 96,41 100,41.5
             L100,0
             L0,0
             Z"
@@ -282,24 +184,58 @@ export default function AdminHome({}) {
         textColor={"#110057"}
         resetActiveButton={() => setActiveButton(null)}
       />
-      <div className="pt-32">
-        {activeMenu === "main" ? (
-          <AdminMainMenu />
-        ) : activeMenu === "settings" ? (
-          <>
-            <AdminManageMenu menuButtons={settingButtons} title="Settings" />
-          </>
-        ) : activeMenu === "inventory" ? (
-          <>
-            <AdminManageMenu menuButtons={inventoryButtons} title="Manage Inventory" />
-          </>
-        ) : activeMenu === "report" ? (
-          <>
-            <AdminManageMenu menuButtons={ReportButtons} title="Reports" />
-          </>
-        ) : null}
+
+      <div className="flex-1 flex gap-5 w-full justify-center mb-10">
+        <div className="flex flex-col w-full">
+          {/* Search Bar */}
+          <div className="mt-6 px-14 flex flex-col justify-start">
+            {/* Header */}
+            <h1 className="text-white text-center pb-4">Bibliotrace 3.0</h1>
+
+            {/* Search Bar & Button */}
+            <div className="flex items-center w-full m-auto px-[10%]">
+              <input
+                className="px-4 py-2 w-full border-2 rounded-2xl placeholder:font-bold text-lg"
+                type="text"
+                placeholder="Search"
+                value={searchInput}
+                onInput={(e) => setSearchInput(e.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
+              <button
+                className="ml-2 border-[#110057]  border-2 bg-white  rounded-2xl font-bold text-[#a49bc6]"
+                onClick={handleSearch}
+              >
+                Go!
+              </button>
+            </div>
+          </div>
+          {activeMenu === "main" ? (
+            <AdminMainMenu />
+          ) : activeMenu === "settings" ? (
+            <>
+              <AdminManageMenu menuButtons={settingButtons} title="Settings" />
+            </>
+          ) : activeMenu === "inventory" ? (
+            <>
+              <AdminManageMenu menuButtons={inventoryButtons} title="Manage Inventory" />
+            </>
+          ) : activeMenu === "report" ? (
+            <>
+              <AdminManageMenu menuButtons={ReportButtons} title="Reports" />
+            </>
+          ) : null}
+        </div>
+        <AdminSideBar
+          onMenuChange={setActiveMenu}
+          activeButton={activeButton}
+          setActiveButton={setActiveButton}
+        />
       </div>
-      <AdminSideBar onMenuChange={setActiveMenu} activeButton={activeButton} setActiveButton={setActiveButton} />
     </div>
   );
 }

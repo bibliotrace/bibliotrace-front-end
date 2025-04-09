@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Cookies from "js-cookie";
 import { useRef, useState } from "react";
+import ErrorModal from "./ErrorModal";
 
-export default function BulkQrOnlyDump({ title, onExit, operationType }) {
+export default function BulkQrOnlyDump({ title, onExit }) {
   const [inputs, setInputs] = useState([""]);
-  const [operationResults, setOperationResults] = useState(null);
+  const [result, setResult] = useState("");
   const inputRefs = useRef([]);
 
   const handleKeyDown = (e, index) => {
@@ -22,9 +23,12 @@ export default function BulkQrOnlyDump({ title, onExit, operationType }) {
   };
 
   const handleChange = (e, index) => {
-    const newInputs = [...inputs];
-    newInputs[index] = e.target.value;
-    setInputs(newInputs);
+    if (e.target.value.length <=6) {
+      const newInputs = [...inputs];
+      newInputs[index] = e.target.value;
+      setInputs(newInputs);
+    }
+  
   };
 
   const handleRemove = (e, index) => {
@@ -42,44 +46,31 @@ export default function BulkQrOnlyDump({ title, onExit, operationType }) {
     }
   };
 
-  const onCheckAndValidate = async () => {
-    const jwt = Cookies.get("authToken");
-    const result = await fetch(`http://localhost:8080/api/inventory/bulk/${operationType}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify({ qrStrings: inputs }),
-    });
-    let resultString = "";
-    if (result.ok) {
-      // Do something?
-      resultString = await result.text();
-    } else {
-      resultString = `API Returned ${result.status} Status: ${await result.text()}`;
-    }
-
-    setOperationResults(resultString);
-  };
-
   const onSubmitAndProcess = async () => {
+    const qr_list = inputs.filter((val) => val != "");
+
     const jwt = Cookies.get("authToken");
-    const result = await fetch(`http://localhost:8080/api/inventory/bulk/${operationType}`, {
+    const result = await fetch(`http://localhost:8080/api/inventory/checkout/bulk`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ qrStrings: inputs }),
+      body: JSON.stringify({ qr_list }),
     });
     let resultString = "";
     if (result.ok) {
-      // Do something?
-      resultString = await result.text();
+      const resultJson = await result.json();
+      const qrFailures = resultJson.object.report.errors;
+      const successTitles = resultJson.object.report.successes.map(val => val.book_title);
+      resultString = `${resultJson.message}\n
+                      Successful Titles Checked Out: ${successTitles.join(', ')}\n
+                      Failed QRs: ${qrFailures.join(', ')}`;
     } else {
-      resultString = `API Returned ${result.status} Status: ${await result.text()}`;
+      resultString = `API Returned ${await result.text()} Status: ${result.status}`;
     }
 
-    setOperationResults(resultString);
+    setResult(resultString);
   };
 
   return (
@@ -126,21 +117,13 @@ export default function BulkQrOnlyDump({ title, onExit, operationType }) {
                   ))}
                 </form>
               </div>
-              <div className="flex flex-col p-6 max-w-[50vw]">
-                <button className="m-4 p-4" onClick={async () => onCheckAndValidate(inputs)}>
-                  Check and Validate
-                </button>
-                <button className="m-4 p-4" onClick={async () => onSubmitAndProcess(inputs)}>
+              <div className="flex flex-col max-w-[50vw] justify-end">
+                <button className="p-4 mb-0 mr-0 ml-6" onClick={async () => onSubmitAndProcess(inputs)}>
                   Submit and Process
                 </button>
-
-                {operationResults && (
-                  <div className="p-6">
-                    <p>{operationResults}</p>
-                  </div>
-                )}
               </div>
             </div>
+            {result && <ErrorModal description="Bulk Result" message={result} onExit={() => setResult("")} />}
           </motion.div>
         </motion.div>
       }

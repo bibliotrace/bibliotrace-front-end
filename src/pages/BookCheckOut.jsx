@@ -55,6 +55,7 @@ export default function Checkout() {
     setAuthor("");
     setThumbnail(defaultBook);
     setMessage("");
+    e.target.value = "";
 
     const jwtDataString = Cookies.get("jwtData");
     if (jwtDataString == null) {
@@ -86,12 +87,11 @@ export default function Checkout() {
         const isbn = data.object.isbn.split("|")[0];
         await getCoverThumbnail(isbn);
       } else {
-        setMessage(`Error Occurred: ${data.message}`);
+        setMessage(`${data.message}`);
       }
     } catch (error) {
-      setMessage(`Error Occurred: ${error.message}`);
+      setMessage(`${error.message}`);
     }
-    e.target.value = "";
   }
 
   async function getCoverThumbnail(isbn) {
@@ -153,7 +153,9 @@ export default function Checkout() {
         homeNavOnClick="/admin"
       />
 
-      {message && <ErrorModal description="Error" message={message} onExit={() => setMessage(null)} />}
+      {message && (
+        <ErrorModal description="Error" message={message} onExit={() => setMessage(null)} />
+      )}
 
       <div className="flex flex-col justify-between h-5/6">
         <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Book Check Out</h1>
@@ -185,7 +187,6 @@ export default function Checkout() {
                 onExit={() => {
                   setBulkModalShow(false);
                 }}
-                operationType="checkout"
               />
             )}
           </section>

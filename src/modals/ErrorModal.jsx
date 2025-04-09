@@ -18,7 +18,7 @@ export default function ErrorModal({ description, message, onExit }) {
     <AnimatePresence>
       {
         <motion.div
-          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+          className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -38,7 +38,7 @@ export default function ErrorModal({ description, message, onExit }) {
               Back
             </button>
             <h2 className="text-lg font-semibold text-red-600 mr-16">{description}</h2>
-            <p className="mt-2 text-gray-700">{message}</p>
+            <p className="mt-2 text-gray-700 whitespace-pre-line">{message}</p>
           </motion.div>
         </motion.div>
       }

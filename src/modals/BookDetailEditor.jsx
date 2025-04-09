@@ -10,24 +10,42 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const allTagsList = Cookies.get("tagList");
   const jwt = Cookies.get("authToken");
 
-  const [synopsis, setSynopsis] = useState(bookData.synopsis ?? '');
-  const [title, setTitle] = useState(bookData.title ?? '');
-  const [author, setAuthor] = useState(bookData.author ?? '');
-  const [isbn, setIsbn] = useState(bookData.isbn ?? '');
-  const [primaryGenre, setPrimaryGenre] = useState(bookData.primaryGenre ?? '');
-  const [secondaryGenres, setSecondaryGenres] = useState(bookData.secondaryGenres ?? []);
+  const [synopsis, setSynopsis] = useState("");
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [isbn, setIsbn] = useState('');
+  const [primaryGenre, setPrimaryGenre] = useState('');
+  const [secondaryGenres, setSecondaryGenres] = useState([]);
   const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
-  const [audience, setAudience] = useState(bookData.audience ?? '');
-  const [pages, setPages] = useState(bookData.pages ?? '');
-  const [seriesName, setSeriesName] = useState(bookData.series_name ?? '');
-  const [seriesNumber, setSeriesNumber] = useState(bookData.series_number ?? '');
-  const [publishDate, setPublishDate] = useState(bookData.publishDate ?? '');
-  const [language, setLanguage] = useState(bookData.language ?? "English");
+  const [audience, setAudience] = useState('');
+  const [pages, setPages] = useState();
+  const [seriesName, setSeriesName] = useState();
+  const [seriesNumber, setSeriesNumber] = useState();
+  const [publishDate, setPublishDate] = useState();
+  const [language, setLanguage] = useState();
   const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
   const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
   const [tags, setTags] = useState(bookData.tag_list ?? []);
   const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
   const [messageString, setMessageString] = useState("");
+
+  useEffect(() => {
+    console.log("change in bookData!", bookData);
+
+    setSynopsis(bookData.synopsis ?? "");
+    setTitle(bookData.title ?? "");
+    setAuthor(bookData.author ?? "");
+    setIsbn(bookData.isbn ?? "");
+    setPrimaryGenre(bookData.primaryGenre ?? "");
+    setSecondaryGenres(bookData.secondaryGenres ?? []);
+    setTargetSecondaryGenre("");
+    setAudience(bookData.audience ?? "");
+    setPages(bookData.pages ?? "");
+    setSeriesName(bookData.series_name ?? "");
+    setSeriesNumber(bookData.series_number ?? "");
+    setPublishDate(bookData.publishDate ?? "");
+    setLanguage(bookData.language ?? "English");
+  }, [bookData]);
 
   const handleSuggestionCall = async (e) => {
     if (e) {
@@ -46,7 +64,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       const bookData = data.object;
       setTitle(bookData.book_title);
       setAuthor(bookData.author);
-      setIsbn(bookData.isbn_list);
       setLanguage(bookData.language);
       setPages(bookData.pages);
       setPublishDate(bookData.publish_date);
@@ -64,7 +81,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       audience_name: audience,
       pages,
       series_name: seriesName,
-      series_number: (seriesNumber != "") ? seriesNumber : 0,
+      series_number: seriesNumber != "" ? seriesNumber : 0,
       publish_date: publishDate,
       short_description: synopsis,
       language,
@@ -83,7 +100,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     if (result.ok) {
       packageExit((await result.json()).message);
     } else {
-      setMessageString(`Error Submitting: ${(await result.json()).message}`)
+      setMessageString(`Error Submitting: ${(await result.json()).message}`);
     }
 
     console.log(result);
@@ -179,7 +196,12 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   };
 
   const packageExit = async (exitMessage) => {
-    console.log('I AM HERERERERER')
+    setSynopsis("");
+    setTitle("");
+    setAuthor("");
+    setIsbn("");
+    setPrimaryGenre("");
+    setSecondaryGenres([]);
     onExit({
       exitMessage,
       book_title: title,
@@ -324,7 +346,11 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       -- Choose an option --
                     </option>
                     {genres.map((genre) => {
-                      return <option key={genre} value={genre}>{genre}</option>;
+                      return (
+                        <option key={genre} value={genre}>
+                          {genre}
+                        </option>
+                      );
                     })}
                   </select>
                 </div>
@@ -339,7 +365,11 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       -- Choose an option --
                     </option>
                     {audiences.map((audience) => {
-                      return <option key={audience} value={audience}>{audience}</option>;
+                      return (
+                        <option key={audience} value={audience}>
+                          {audience}
+                        </option>
+                      );
                     })}
                   </select>{" "}
                 </div>
@@ -395,7 +425,11 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                         -- Choose an option --
                       </option>
                       {genres.map((genre) => {
-                        return <option key={genre} value={genre}>{genre}</option>;
+                        return (
+                          <option key={genre} value={genre}>
+                            {genre}
+                          </option>
+                        );
                       })}
                     </select>
                     <button
@@ -430,7 +464,9 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                         value={tagSearchTerm}
                         onChange={(event) => setTagSearchTerm(event.target.value)}
                       />
-                      <button role="button" className="h-12 text-base" onClick={handleAddNewTag}>Add</button>
+                      <button role="button" className="h-12 text-base" onClick={handleAddNewTag}>
+                        Add
+                      </button>
                     </div>
                     {tagSearchTerm && (
                       <ul className="bg-[#f5f5f5] rounded-xl max-h-60 overflow-auto">
