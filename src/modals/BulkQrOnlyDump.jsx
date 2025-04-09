@@ -23,9 +23,12 @@ export default function BulkQrOnlyDump({ title, onExit }) {
   };
 
   const handleChange = (e, index) => {
-    const newInputs = [...inputs];
-    newInputs[index] = e.target.value;
-    setInputs(newInputs);
+    if (e.target.value.length <=6) {
+      const newInputs = [...inputs];
+      newInputs[index] = e.target.value;
+      setInputs(newInputs);
+    }
+  
   };
 
   const handleRemove = (e, index) => {
