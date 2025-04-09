@@ -69,7 +69,7 @@ const Age = () => {
       </div>
 
       <h1 className="text-white text-2xl">Explore by Age</h1>
-      <ul>
+      <ul className="w-full">
         {ages.map((button, index) => (
           <BarButton
             key={index}
@@ -79,7 +79,7 @@ const Age = () => {
             borderColor={"#fa8804"}
             bgColor={"#110057"}
             buttonBgColor={"#110057"}
-            width={"20rem"}
+            width={"100%"}
             height={"3rem"}
             className={"mt-12"}
           />

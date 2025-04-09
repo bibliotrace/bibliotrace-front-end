@@ -70,7 +70,7 @@ const Genre = () => {
       </div>
 
       <h1 className="text-white text-2xl">Explore by Genre</h1>
-      <ul>
+      <ul className="w-full">
         {genres.map((button, index) => (
           <BarButton
             key={index}
@@ -80,7 +80,7 @@ const Genre = () => {
             borderColor={"#669bff"}
             bgColor={"#110057"}
             buttonBgColor={"#110057"}
-            width={"20rem"}
+            width={"100%"}
             height={"3rem"}
             className={"mt-12"}
           />
