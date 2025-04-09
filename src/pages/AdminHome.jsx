@@ -163,7 +163,7 @@ export default function AdminHome({}) {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-darkBlue "
+          className="fill-darkBlue"
           d="
             M0,41
             C15,40 26,41 37,42

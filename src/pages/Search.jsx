@@ -238,12 +238,12 @@ const Search = () => {
           {" "}
           {/* Buttons Above Results */}
           <button
-            className="bg-transparent border-none flex xl:hidden "
+            className="bg-[transparent] border-none flex xl:hidden "
             onClick={handleMobileFilterNav}
           >
             <Filter />
           </button>
-          <button className="bg-transparent border-none hidden xl:flex" onClick={handleFilterPress}>
+          <button className="bg-[transparent] border-none hidden xl:flex" onClick={handleFilterPress}>
             <Filter />
           </button>
           {/* Filter Box (Overlay) */}
@@ -251,7 +251,7 @@ const Search = () => {
             <>
               {/*Overlay everything behind filter when filter box is open*/}
               <div
-                className="fixed inset-0 bg-transparent z-40"
+                className="fixed inset-0 bg-[transparent] z-40"
                 onClick={() => {
                   setShowFilter(false); // close the filter when you click outside of it
                 }}
@@ -316,7 +316,7 @@ const Search = () => {
         <div className="flex align-middle items-center justify-center py-4">
           {" "}
           {/* Pagination Buttons */}
-          <button className="bg-transparent flex flex-col items-center" onClick={decrementPage}>
+          <button className="bg-[transparent] flex flex-col items-center" onClick={decrementPage}>
             <Prev />
             <p className="">Previous</p>
           </button>
@@ -325,7 +325,7 @@ const Search = () => {
             {Math.min(pageOffset + rowCount, searchResults.length) === 0 ? 0 : pageOffset + 1}-
             {Math.min(pageOffset + rowCount, searchResults.length)} of {searchResults.length}
           </p>
-          <button className="bg-transparent flex flex-col items-center" onClick={incrementPage}>
+          <button className="bg-[transparent] flex flex-col items-center" onClick={incrementPage}>
             <Next />
             <p className="">Next</p>
           </button>
