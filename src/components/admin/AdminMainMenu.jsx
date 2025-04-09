@@ -100,7 +100,7 @@ export default function MainMenu() {
   }, [])
 
   return (
-    <div className="flex-1 w-full m-auto p-2 px-[10%] max-w-6xl justify-center flex flex-col">
+    <div className="flex-1 w-full m-auto p-2 px-[10%] justify-center flex flex-col">
       <CustomButton
         imageSrc={PurpleIcon}
         text="Check Out"
