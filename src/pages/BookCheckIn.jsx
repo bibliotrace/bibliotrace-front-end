@@ -47,7 +47,9 @@ export default function Checkin() {
 
       if (response.ok) {
         if (data.message.includes("No inventory items were updated")) {
-          setMessage("Book has already been checked in!");
+          setMessage(
+            "The book you attempted to check in has already been checked in. Please check out the book first or scan a different book."
+          );
         } else {
           setTitle(data.object.book_title);
           setAuthor(data.object.author);
