@@ -86,10 +86,10 @@ export default function ShoppingList() {
                   {obj.book_title} by {obj.author}
                 </p>
                 <div className="flex flex-row no-wrap">
-                  <button className="border-black" onClick={() => handleMoveToRestock(obj.book_id)}>
+                  <button className="border-black" onClick={() => handleMoveToRestock(obj.id)}>
                     Move to Restock
                   </button>
-                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.book_id)}>
+                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.id)}>
                     Remove
                   </button>
                 </div>

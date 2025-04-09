@@ -67,7 +67,7 @@ export default function RestockList() {
                   {obj.book_title} by {obj.author} - {obj.quantity > 0 ? obj.quantity : "from Shopping List"}
                 </p>
                 <div>
-                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.book_id)}>
+                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.id)}>
                     Remove
                   </button>
                 </div>
