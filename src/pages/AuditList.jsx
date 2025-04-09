@@ -36,12 +36,7 @@ export default function AuditList() {
 
   return (
     <div className="search-bg w-full h-full">
-      <NavBar
-        useDarkTheme={true}
-        showTitle={false}
-        bgColor={tailwindConfig.theme.colors.white}
-        showNavButtons={true}
-      ></NavBar>
+      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true}></NavBar>
       <h1 className="text-center">Audit List</h1>
       <h2 className="text-lg text-center my-5">Select an audit to view report</h2>
       <div className="flex flex-column w-full justify-center">

@@ -8,15 +8,7 @@ import LogoutLogo from "../assets/logout-white.svg?react";
 import LogoutLogoDark from "../assets/logout-black.svg?react";
 import Cookies from "js-cookie";
 
-const NavBar = ({
-  useDarkTheme,
-  showTitle,
-  bgColor,
-  textColor,
-  showNavButtons = true,
-  onHomeClick,
-  back = false,
-}) => {
+const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onHomeClick, back = false }) => {
   const navigate = useNavigate();
 
   const jwtDataString = Cookies.get("jwtData");
@@ -58,16 +50,10 @@ const NavBar = ({
   const Logout = useDarkTheme ? LogoutLogoDark : LogoutLogo;
 
   return (
-    <div
-      className="flex flex-row w-full items-center justify-between px-4 print:hidden"
-      style={{ color: textColor }}
-    >
+    <div className="flex flex-row w-full items-center justify-between px-4 print:hidden" style={{ color: textColor }}>
       <div className="flex items-center">
         {back ? (
-          <div
-            className="hover:cursor-pointer flex flex-row justify-center items-center"
-            onClick={() => navigate(-1)}
-          >
+          <div className="hover:cursor-pointer flex flex-row justify-center items-center" onClick={() => navigate(-1)}>
             <span
               className="text-3xl relative font-bold"
               style={{
@@ -82,14 +68,14 @@ const NavBar = ({
             <span className="text-lg p-2">Back</span>
           </div>
         ) : (
-          <Logo className="h-12 md:h-16 w-24 md:w-48" onClick={navigateHome} />
+          <Logo className="h-12 md:h-16 w-24 md:w-48 bg-transparent" onClick={navigateHome} />
         )}
         <span>{title}</span>
       </div>
       {showNavButtons && (
         <div className="flex items-center mt-2 md:mt-0">
           <button
-            style={{ background: bgColor, color: textColor }}
+            style={{ color: textColor }}
             className="flex flex-col justify-center items-center"
             onClick={navigateHome}
           >
@@ -98,7 +84,7 @@ const NavBar = ({
           </button>
 
           <button
-            style={{ background: bgColor, color: textColor }}
+            style={{ color: textColor }}
             className="flex flex-col justify-center items-center"
             onClick={navigateLogOut}
           >

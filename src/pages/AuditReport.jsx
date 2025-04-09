@@ -51,13 +51,7 @@ export default function AuditReport() {
 
   return (
     <div className="search-bg w-full h-full">
-      <NavBar
-        useDarkTheme={true}
-        showTitle={false}
-        bgColor={tailwindConfig.theme.colors.white}
-        showNavButtons={true}
-        back={true}
-      ></NavBar>
+      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true} back={true}></NavBar>
 
       <h1 className="text-center print:text-xl">Audit Report</h1>
       <p className="text-xl text-center my-2 print:text-md print:mt-0">

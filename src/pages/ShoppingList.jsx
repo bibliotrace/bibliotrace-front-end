@@ -70,12 +70,7 @@ export default function ShoppingList() {
 
   return (
     <div className="search-bg h-full w-full">
-      <NavBar
-        useDarkTheme={true}
-        showTitle={false}
-        bgColor={tailwindConfig.theme.colors.white}
-        showNavButtons={true}
-      ></NavBar>
+      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true}></NavBar>
       <h1 className="text-center">Shopping List</h1>
       <div className="flex flex-column w-full justify-center">
         <ul className="flex-grow max-w-[80%] lg:max-w-[900px] border bg-white mt-10 h-[70vh] p-10 overflow-y-scroll">
