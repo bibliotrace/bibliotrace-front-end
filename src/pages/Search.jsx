@@ -57,7 +57,7 @@ const Search = () => {
     if (filterInput.Genres.length > 0) {
       filterString += "||Genre:";
       for (let i = 0; i < filterInput.Genres.length; i++) {
-        filterString += filterInput.Genres[i];
+        filterString += encodeURIComponent(filterInput.Genres[i]);
         if (i < filterInput.Genres.length - 1) {
           filterString += ",";
         }
