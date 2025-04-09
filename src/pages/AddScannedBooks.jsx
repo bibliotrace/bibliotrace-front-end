@@ -60,6 +60,7 @@ export default function AddScannedBooks() {
 
   async function getBookInformationByIsbn(e) {
     e?.preventDefault();
+
     setError("");
     if (!isbn) {
       setError("Please enter an ISBN number.");
@@ -100,6 +101,24 @@ export default function AddScannedBooks() {
       setSeries_number(book.series_number);
       setTags(book.tag_list);
       setGenres(book.genre_list);
+      const newBookData = {
+        title: book.book_title,
+        author: book.author,
+        isbn,
+        primaryGenre: book.primary_genre_name,
+        synopsis: book.short_description,
+        secondaryGenres: book.genre_list,
+        audience: book.audience_name,
+        pages: book.pages,
+        publishDate: book.publish_date,
+        tag_list: book.tag_list,
+        series_name: book.series_name,
+        series_number: book.series_number,
+        language: "English",
+        imgCallback: null,
+      }
+      setBookData(newBookData)
+
       await getCoverThumbnail(isbn);
       console.log("Book successfully imported");
       qrInputRef.current.focus();
@@ -108,9 +127,7 @@ export default function AddScannedBooks() {
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
-        handleEditButton()
-        setError("Book Not Recognized. Set it up in the editor window.");
-        setTitle("Unrecognized Book");
+        handleEditButton(true)
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -138,29 +155,51 @@ export default function AddScannedBooks() {
     }
   }
 
-  function handleEditButton() {
-    setBookData({
-      title,
-      author,
-      isbn,
-      primaryGenre: primary_genre,
-      synopsis: short_description,
-      secondaryGenres: genres,
-      audience,
-      pages,
-      publishDate: publish_date,
-      tag_list: tags,
-      series_name,
-      series_number,
-      language: "English",
-      imgCallback: null,
-    });
-
+  function handleEditButton(isNew) {
+    if (!isNew) {
+      const newBookData = {
+        title,
+        author,
+        isbn,
+        primaryGenre: primary_genre,
+        synopsis: short_description,
+        secondaryGenres: genres,
+        audience,
+        pages,
+        publishDate: publish_date,
+        tag_list: tags,
+        series_name,
+        series_number,
+        language: "English",
+        imgCallback: null,
+      }
+      console.log('NEW BOOK DATA', newBookData);
+      setBookData(newBookData);
+    } else {
+      const newBookData = {
+        title: '',
+        author: '',
+        isbn,
+        primaryGenre: '',
+        synopsis: '',
+        secondaryGenres: [],
+        audience: '',
+        pages: '',
+        publishDate: '',
+        tag_list: [],
+        series_name: '',
+        series_number: '',
+        language: "English",
+        imgCallback: null,
+      }
+      console.log('NEW BOOK DATA', newBookData);
+      setBookData(newBookData);
+    }
+    
     setOpenEditModal(!openEditModal);
   }
 
-  function onSubmit(e) {
-    console.log("hello world!", isbn, location, qr);
+  function onSubmitNewQr(e) {
     e.preventDefault();
 
     const fetchBody = {
@@ -309,7 +348,7 @@ export default function AddScannedBooks() {
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  onSubmit(e);
+                  onSubmitNewQr(e);
                 }
               }}
             >
@@ -324,7 +363,7 @@ export default function AddScannedBooks() {
               <button
                 className="m-4"
                 onClick={(e) => {
-                  onSubmit(e);
+                  onSubmitNewQr(e);
                 }}
               >
                 Add To Inventory
@@ -427,7 +466,7 @@ export default function AddScannedBooks() {
                     <b>Synopsis:</b> {short_description}
                   </label>
                   {author && (
-                    <button className="mt-2 text-nowrap" onClick={(e) => handleEditButton(e)}>
+                    <button className="mt-2 text-nowrap" onClick={() => handleEditButton(false)}>
                       Edit {title}
                     </button>
                   )}
@@ -463,6 +502,7 @@ export default function AddScannedBooks() {
         <div id="detail-editor-modal">
           {openEditModal && (
             <BookDetailEditor
+              key={bookData.isbn || 'hello'}
               bookData={bookData}
               colorScheme="lightBlue"
               onExit={(bookData) => onEditExit(bookData)}

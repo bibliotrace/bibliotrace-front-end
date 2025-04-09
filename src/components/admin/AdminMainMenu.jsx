@@ -1,17 +1,17 @@
 //Icons
+import PeachColorIcon from "../../assets/CheckInIcon.jpg";
 import OrangeIcon from "../../assets/ExploreByAge.jpg";
 import BlueIcon from "../../assets/ExploreByGenre.jpg";
 import YellowIcon from "../../assets/NewArrivalsIcon.jpg";
 import RedIcon from "../../assets/SuggestBook.jpg";
 import PinkIcon from "../../assets/WhatsPopular.jpg";
 import PurpleIcon from "../../assets/checkoutIcon.jpg";
-import PeachColorIcon from "../../assets/CheckInIcon.jpg";
 //Libraries
-import { useNavigate } from "react-router-dom";
-import CustomButton from "../ButtonComponent";
-import React, { useState, useEffect } from "react";
-import PopUpBar from "../../modals/PopUpSideBar";
 import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import PopUpBar from "../../modals/PopUpSideBar";
+import CustomButton from "../ButtonComponent";
 
 export default function MainMenu() {
   const navigate = useNavigate();
