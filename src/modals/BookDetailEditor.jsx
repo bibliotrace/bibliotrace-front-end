@@ -24,6 +24,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const [publishDate, setPublishDate] = useState();
   const [language, setLanguage] = useState();
   const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
+  const [availableGenres, setAvailableGenres] = useState([])
   const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
   const [tags, setTags] = useState(bookData.tag_list ?? []);
   const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
@@ -37,6 +38,8 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     setAuthor(bookData.author ?? "");
     setIsbn(bookData.isbn ?? "");
     setPrimaryGenre(bookData.primaryGenre ?? "");
+    const newAvailableGenresList = genres.filter(val => val != bookData.primaryGenre);
+    setAvailableGenres(newAvailableGenresList);
     setSecondaryGenres(bookData.secondaryGenres ?? []);
     setTargetSecondaryGenre("");
     setAudience(bookData.audience ?? "");
@@ -45,15 +48,27 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     setSeriesNumber(bookData.series_number ?? "");
     setPublishDate(bookData.publishDate ?? "");
     setLanguage(bookData.language ?? "English");
+
+    if (!bookData.title) {
+      handleSuggestionCall(null, bookData.isbn);
+    }
   }, [bookData]);
 
-  const handleSuggestionCall = async (e) => {
+  const handlePrimaryGenreChange = (e) => {
+    setPrimaryGenre(e.target.value)
+    const newAvailableGenresList = genres.filter(val => val != e.target.value)
+    console.log(newAvailableGenresList)
+    setAvailableGenres(newAvailableGenresList);
+  }
+
+  const handleSuggestionCall = async (e, isbnSeed) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     const jwt = Cookies.get("authToken");
-    const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbn.split("||")[0]}`, {
+    const isbnValue = isbnSeed ?? isbn.split("||")[0];
+    const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbnValue}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -340,7 +355,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <select
                     className=" mx-2 p-2 rounded-xl"
                     value={primaryGenre}
-                    onChange={(e) => setPrimaryGenre(e.target.value)}
+                    onChange={(e) => handlePrimaryGenreChange(e)}
                   >
                     <option value="" disabled>
                       -- Choose an option --
@@ -424,7 +439,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       <option value="" disabled>
                         -- Choose an option --
                       </option>
-                      {genres.map((genre) => {
+                      {availableGenres.map((genre) => {
                         return (
                           <option key={genre} value={genre}>
                             {genre}

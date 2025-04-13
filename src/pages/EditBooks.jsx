@@ -88,6 +88,7 @@ export default function EditBooks() {
       setSeries_number(book.series_number);
       setTags(book.tag_list);
       setGenres(book.genre_list);
+      handleEditButton(book);
       await getCoverThumbnail(isbn);
       console.log("Book successfully imported");
     } else {
@@ -95,9 +96,7 @@ export default function EditBooks() {
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
-        setError("Book Not Recognized. Set it up in the editor window.");
-        setTitle("Unrecognized Book");
-        setAuthor("Open the Book Editor Below");
+        navigate(`/add-scanned?isbn=${isbn}`)
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -125,23 +124,43 @@ export default function EditBooks() {
     }
   }
 
-  function handleEditButton() {
-    setBookData({
-      title,
-      author,
-      isbn,
-      primaryGenre: primary_genre,
-      synopsis: short_description,
-      secondaryGenres: genres,
-      audience,
-      pages,
-      publishDate: publish_date,
-      tag_list: tags,
-      series_name,
-      series_number,
-      language: "English",
-      imgCallback: null,
-    });
+  function handleEditButton(inputData) {
+    if (inputData) {
+      setBookData({
+        title: inputData.book_title,
+        author: inputData.author,
+        isbn: inputData.isbn_list,
+        primaryGenre: inputData.primary_genre_name,
+        synopsis: inputData.short_description,
+        secondaryGenres: inputData.genre_list,
+        audience: inputData.audience_name,
+        pages: inputData.pages,
+        publishDate: inputData.publish_date,
+        tag_list: inputData.tag_list,
+        series_name: inputData.series_name,
+        series_number: inputData.series_number,
+        language: "English",
+        imgCallback: null,
+      });
+    } else {
+      setBookData({
+        title,
+        author,
+        isbn,
+        primaryGenre: primary_genre,
+        synopsis: short_description,
+        secondaryGenres: genres,
+        audience,
+        pages,
+        publishDate: publish_date,
+        tag_list: tags,
+        series_name,
+        series_number,
+        language: "English",
+        imgCallback: null,
+      });
+    }
+    
 
     setOpenEditModal(!openEditModal);
   }
@@ -247,7 +266,7 @@ export default function EditBooks() {
           <section className="p-20 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
               <h4 className="bg-peachPink text-center text-black text-2xl p-2">
-                Last Scanned Book:
+                {message ? `${message}` : 'Book Details'}
               </h4>
 
               <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
@@ -303,7 +322,7 @@ export default function EditBooks() {
                     <b>Synopsis:</b> {short_description}
                   </label>
                   {author && (
-                    <button className="mt-2 text-nowrap" onClick={(e) => handleEditButton(e)}>
+                    <button className="mt-2 text-nowrap" onClick={(e) => handleEditButton()}>
                       Edit {title}
                     </button>
                   )}
@@ -321,17 +340,6 @@ export default function EditBooks() {
               message={error}
               onExit={() => {
                 setError("");
-              }}
-            />
-          )}
-          {message && (
-            <ErrorModal
-              id="message-modal"
-              tabIndex="-1"
-              description={"Message"}
-              message={message}
-              onExit={() => {
-                setMessage("");
               }}
             />
           )}
