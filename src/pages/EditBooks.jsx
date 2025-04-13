@@ -261,8 +261,8 @@ export default function EditBooks() {
                   <label>
                     <b>Author:</b> {author}
                   </label>
-                  <label>
-                    <b>Primary Genre: </b> {primary_genre}
+                  <label className="flex items-center">
+                    <b>Primary Genre: </b> <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">{primary_genre}</p>
                   </label>
                   <label className="flex items-center">
                     <b className="pr-2">Secondary Genres: </b>
