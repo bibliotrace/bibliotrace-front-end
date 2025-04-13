@@ -143,6 +143,10 @@ export default function EditBooks() {
         imgCallback: null,
       });
     } else {
+      if (!title && isbn) {
+        navigate(`/add-scanned?isbn=${isbn}`)
+      }
+
       setBookData({
         title,
         author,
@@ -161,7 +165,6 @@ export default function EditBooks() {
       });
     }
     
-
     setOpenEditModal(!openEditModal);
   }
 
@@ -321,11 +324,9 @@ export default function EditBooks() {
                   <label>
                     <b>Synopsis:</b> {short_description}
                   </label>
-                  {author && (
                     <button className="mt-2 text-nowrap" onClick={(e) => handleEditButton()}>
                       Edit {title}
                     </button>
-                  )}
                 </div>
               </div>
             </div>
