@@ -1,0 +1,521 @@
+// This is the modal that shows all of the details for a particular book. The details shown will differ depending on if we're in an Admin page or not.
+import { motion, AnimatePresence } from "framer-motion";
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import ErrorModal from "../modals/ErrorModal.jsx";
+
+export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
+  const allGenresList = Cookies.get("genreList");
+  const allAudiencesList = Cookies.get("audienceList");
+  const allTagsList = Cookies.get("tagList");
+  const jwt = Cookies.get("authToken");
+
+  const [synopsis, setSynopsis] = useState("");
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [isbn, setIsbn] = useState('');
+  const [primaryGenre, setPrimaryGenre] = useState('');
+  const [secondaryGenres, setSecondaryGenres] = useState([]);
+  const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
+  const [audience, setAudience] = useState('');
+  const [pages, setPages] = useState();
+  const [seriesName, setSeriesName] = useState();
+  const [seriesNumber, setSeriesNumber] = useState();
+  const [publishDate, setPublishDate] = useState();
+  const [language, setLanguage] = useState();
+  const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
+  const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
+  const [tags, setTags] = useState(bookData.tag_list ?? []);
+  const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
+  const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState([]);
+  const [messageString, setMessageString] = useState("");
+
+  useEffect(() => {
+    setSynopsis(bookData.synopsis ?? "");
+    setTitle(bookData.title ?? "");
+    setAuthor(bookData.author ?? "");
+    setIsbn(bookData.isbn ?? "");
+    setPrimaryGenre(bookData.primaryGenre ?? "");
+    setSecondaryGenres(bookData.secondaryGenres ?? []);
+    setTargetSecondaryGenre("");
+    setAudience(bookData.audience ?? "");
+    setPages(bookData.pages ?? "");
+    setSeriesName(bookData.series_name ?? "");
+    setSeriesNumber(bookData.series_number ?? "");
+    setPublishDate(bookData.publishDate ?? "");
+    setLanguage(bookData.language ?? "English");
+    setLocation("");
+    async function getLocations() {
+      const locationList = await JSON.parse(Cookies.get("locationList"));
+      setLocations(locationList);
+    }
+    getLocations();
+  }, [bookData]);
+
+  const handleSuggestionCall = async (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    const jwt = Cookies.get("authToken");
+    const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbn.split("||")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const bookData = data.object;
+      setTitle(bookData.book_title);
+      setAuthor(bookData.author);
+      setLanguage(bookData.language);
+      setPages(bookData.pages);
+      setPublishDate(bookData.publish_date);
+      setSynopsis(bookData.short_description);
+    }
+  };
+
+  const handleBookFormSubmit = async (e) => {
+    e.preventDefault();
+    const fetchBody = {
+      book_id : bookData.book_id,
+      book_qrs: bookData.qrs,
+      book_title: title,
+      isbn_list: isbn,
+      author: author,
+      primary_genre_name: primaryGenre,
+      audience_name: audience,
+      pages,
+      series_name: seriesName,
+      series_number: seriesNumber != "" ? seriesNumber : 0,
+      publish_date: publishDate,
+      short_description: synopsis,
+      language,
+      location : location,
+    };
+    const jwt = Cookies.get("authToken");
+    const result = await fetch(`http://localhost:8080/api/bookdata/backlog`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(fetchBody),
+    });
+
+    if (result.ok) {
+      packageExit((await result.json()).message);
+    } else {
+      setMessageString(`Error Submitting: ${(await result.json()).message}`);
+    }
+  };
+
+  const handleAddSecondaryGenre = async (e) => {
+    e.preventDefault();
+    const fetchBody = {
+      genre: targetSecondaryGenre,
+    };
+    const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(fetchBody),
+    });
+
+    if (result.ok) {
+      setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
+      setTargetSecondaryGenre("");
+    } else {
+      setMessageString(`Error Adding Secondary Genre: ${(await result.json()).message}`);
+    }
+  };
+
+  const handleRemoveSecondaryGenre = async (e, index) => {
+    e.preventDefault();
+    const fetchBody = {
+      genre: secondaryGenres[index],
+    };
+    const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+      body: JSON.stringify(fetchBody),
+    });
+
+    if (result.ok) {
+      setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
+    } else {
+      setMessageString(`Error Removing Secondary Genre: ${(await result.json()).message}`);
+    }
+  };
+
+  const handleAddTag = async (e, newTag) => {
+    e?.preventDefault();
+    const fetchBody = {
+      tag: newTag,
+    };
+    const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "PUT",
+      body: JSON.stringify(fetchBody),
+    });
+
+    if (result.ok) {
+      setTags([...tags, newTag]);
+      setTagSearchTerm("");
+    } else {
+      setMessageString(`Error Adding Tag: ${(await result.json()).message}`);
+    }
+  };
+
+  const handleRemoveTag = async (e, index) => {
+    e?.preventDefault();
+    const fetchBody = {
+      tag: tags[index],
+    };
+    const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        "Content-Type": "application/json",
+      },
+      method: "DELETE",
+      body: JSON.stringify(fetchBody),
+    });
+
+    if (result.ok) {
+      setTags(tags.filter((_, i) => i !== index));
+    } else {
+      setMessageString(`Error Removing Tag: ${(await result.json()).message}`);
+    }
+  };
+
+  const packageExit = async (exitMessage) => {
+    setSynopsis("");
+    setTitle("");
+    setAuthor("");
+    setIsbn("");
+    setPrimaryGenre("");
+    setSecondaryGenres([]);
+    onExit({
+      exitMessage,
+      book_id : bookData.book_id,
+      book_title: title,
+      author,
+      pages,
+      publish_date: publishDate,
+      short_description: synopsis,
+      audience_name: audience,
+      primary_genre_name: primaryGenre,
+      series_name: seriesName,
+      series_number: seriesNumber,
+      tag_list: tags,
+      genre_list: secondaryGenres,
+      location: location,
+    });
+  };
+
+  // The code below is the search algorithm for the tag search bar
+  // If the searchTerm in lowercase is in any string in the tagOptions, that tagOptions is returned in the results var
+  // We also check if the result item is already in the book's tag list to remove duplication
+  const [tagSearchTerm, setTagSearchTerm] = useState("");
+  const [tagSearchResults, setTagSearchResults] = useState([]);
+
+  useEffect(() => {
+    let results = tagOptions.filter((item) => item.toLowerCase().includes(tagSearchTerm.toLowerCase()));
+    results = results.filter((item) => !tags.includes(item));
+    setTagSearchResults(results);
+  }, [tagSearchTerm, tagOptions]);
+
+  const handleAddNewTag = () => {
+    if (tagSearchTerm && !tagOptions.includes(tagSearchTerm)) {
+      fetch("http://localhost:8080/api/inventory/tag", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwt}`,
+        },
+        body: JSON.stringify({
+          tag_name: tagSearchTerm,
+        }),
+      }).then((response) => {
+        response.json().then((data) => {
+          if (response.ok) {
+            const newTagOptions = [...tagOptions, tagSearchTerm];
+            Cookies.set("tagList", newTagOptions.join(","));
+            setTagOptions([...tagOptions, tagSearchTerm]);
+
+            handleAddTag(null, tagSearchTerm);
+            setMessageString(data.message);
+          } else {
+            setMessageString(`Tag Add was Unsuccessful: ${data.message}`);
+          }
+        });
+      });
+
+      setTagSearchTerm("");
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {
+        <motion.div
+          className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => packageExit()}
+        >
+          <motion.div
+            className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl relative"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className={`flex justify-end items-center pl-4 pr-4 pt-2 pb-2 bg-${colorScheme} rounded-t-lg`}
+            >
+              <h2 className="flex-1 text-center text-black text-lg font-semibold">{title}</h2>
+              <button className="text-gray-600" onClick={() => packageExit()}>
+                Back
+              </button>
+            </div>
+            <div className="flex flex-wrap justify-between">
+              <div className="p-6 flex-1 flex-col flex max-h-[90vh] overflow-y-auto">
+                <div className="flex text-xl items-center">
+                  <h6 className="font-bold pr-2">ISBN: </h6>
+                  <input
+                    className="flex-1 mr-2 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={isbn}
+                    placeholder="978123456789"
+                    onChange={(e) => setIsbn(e.target.value)}
+                  />
+                  <button type="button" className="text-sm" onClick={(e) => handleSuggestionCall(e)}>
+                    Pull Data From ISBNdb
+                  </button>
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Title: </h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={title}
+                    placeholder="e.g. The Great Gatsby"
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Author:</h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={author}
+                    placeholder="e.g. Herman Melville"
+                    onChange={(e) => setAuthor(e.target.value)}
+                  />
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Series Name:</h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={seriesName}
+                    placeholder="e.g. Harry Potter"
+                    onChange={(e) => setSeriesName(e.target.value)}
+                  />
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Number In Series:</h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={seriesNumber === 0 ? "" : seriesNumber}
+                    placeholder="e.g. 1"
+                    onChange={(e) => setSeriesNumber(e.target.value)}
+                  />
+                </div>
+                <div className="flex items-center text-xl pt-4">
+                  <h6 className="font-bold pr-2">Primary Genre:</h6>
+                  <select
+                    className=" mx-2 p-2 rounded-xl"
+                    value={primaryGenre}
+                    onChange={(e) => setPrimaryGenre(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      -- Choose an option --
+                    </option>
+                    {genres.map((genre) => {
+                      return (
+                        <option key={genre} value={genre}>
+                          {genre}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Audience:</h6>
+                  <select
+                    className=" mx-2 p-2 rounded-xl"
+                    value={audience}
+                    onChange={(e) => setAudience(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      -- Choose an option --
+                    </option>
+                    {audiences.map((audience) => {
+                      return (
+                        <option key={audience} value={audience}>
+                          {audience}
+                        </option>
+                      );
+                    })}
+                  </select>{" "}
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Page Count:</h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={pages}
+                    placeholder="e.g. 1"
+                    onChange={(e) => setPages(e.target.value)}
+                  />
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Published:</h6>
+                  <input
+                    className="flex-1 p-1 bg-[#f5f5f5] rounded-xl"
+                    value={publishDate}
+                    placeholder="e.g. 1975"
+                    onChange={(e) => setPublishDate(e.target.value)}
+                    onSubmit={(e) => e.preventDefault()}
+                  />
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2 mt-1">Synopsis:</h6>
+                  <textarea
+                    className="w-full p-2 text-base h-32"
+                    value={synopsis}
+                    placeholder="A basic description"
+                    onChange={(e) => setSynopsis(e.target.value)}
+                  />
+                </div>
+                <div className="flex items-center text-xl pt-4 flex-wrap gap-2">
+                  <h6 className="font-bold pr-2">Secondary Genres:</h6>
+                  {secondaryGenres.map((genre, index) => {
+                    return (
+                      <button
+                        key={`${genre}${index}`}
+                        role="button"
+                        className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
+                        onClick={(e) => handleRemoveSecondaryGenre(e, index)}
+                      >
+                        {genre}
+                      </button>
+                    );
+                  })}
+                  <form onSubmit={(e) => handleAddSecondaryGenre(e)}>
+                    <select
+                      className=" mx-2 p-2 rounded-xl h-12"
+                      value={targetSecondaryGenre}
+                      onChange={(e) => setTargetSecondaryGenre(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        -- Choose an option --
+                      </option>
+                      {genres.map((genre) => {
+                        return (
+                          <option key={genre} value={genre}>
+                            {genre}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button
+                      className="p-2 ml-2 h-12 text-nowrap text-base"
+                      onClick={(e) => handleAddSecondaryGenre(e)}
+                      role="button"
+                    >
+                      Add Genre
+                    </button>
+                  </form>
+                </div>
+                <div className="flex text-xl pt-4 items-center flex-wrap gap-1">
+                  <h6 className="font-bold pr-2">Tags:</h6>
+                  {tags.map((tag, index) => {
+                    return (
+                      <button
+                        key={`${tag}${index}`}
+                        role="button"
+                        className={`bg-${colorScheme} px-4 py-1 m-2 rounded-3xl text-black font-normal text-center text-nowrap`}
+                        onClick={(e) => handleRemoveTag(e, index)}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
+                  <div className="w-full max-w-sm space-y-2">
+                    <div className="flex space-x-2">
+                      <input
+                        className="bg-[#f5f5f5] rounded-xl p-3 w-80 h-12"
+                        type="text"
+                        placeholder="Search..."
+                        value={tagSearchTerm}
+                        onChange={(event) => setTagSearchTerm(event.target.value)}
+                      />
+                      <button role="button" className="h-12 text-base" onClick={handleAddNewTag}>
+                        Add
+                      </button>
+                    </div>
+                    {tagSearchTerm && (
+                      <ul className="bg-[#f5f5f5] rounded-xl max-h-60 overflow-auto">
+                        {tagSearchResults.map((item, index) => (
+                          <li key={index} className="px-4 py-2 hover:bg-gray-100">
+                            <button className="bg-white w-full" onClick={(e) => handleAddTag(e, item)}>
+                              {item}
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+                </div>
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Location:</h6>
+                  <select
+                    className="mx-2 p-2 rounded-xl"
+                    value={location}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                    }}
+                  >
+                    <option value="" disabled>
+                      -- Choose an option --
+                    </option>
+                    {locations.map((location_obj) => {
+                      return (
+                        <option key={location_obj.id} value={location_obj.id}>
+                          {location_obj.location_name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <br></br>
+
+                <button onClick={(e) => handleBookFormSubmit(e)}>Submit Changes</button>
+              </div>
+            </div>
+            {messageString && <ErrorModal description={messageString} onExit={() => setMessageString("")} />}
+          </motion.div>
+        </motion.div>
+      }
+    </AnimatePresence>
+  );
+}

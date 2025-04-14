@@ -117,6 +117,16 @@ export default function AdminHome({}) {
       width: "20vw",
       height: "10vh",
     },
+    {
+      text: "Update Back Log Books",
+      textColor: "white",
+      bgColor: "#110057",
+      borderColor: "white",
+      buttonBgColor: "#110057",
+      onClick: () => navigate("/backlog-update-book"),
+      width: "20vw",
+      height: "10vh",
+    },
   ];
 
   const ReportButtons = [

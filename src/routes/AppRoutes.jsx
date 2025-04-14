@@ -24,6 +24,7 @@ import ManageGenresTags from "../pages/ManageGenresTags.jsx";
 import Audit from "../pages/Audit.jsx";
 import AuditList from "../pages/AuditList.jsx";
 import AuditReport from "../pages/AuditReport.jsx";
+import BacklogUpdateBook from "../pages/BacklogUpdateBook.jsx"
 
 const AppRoutes = () => {
   const getToken = () => {
@@ -98,6 +99,7 @@ const AppRoutes = () => {
           <Route path="/set-location" element={<SetLocation />} />
           <Route path="/manage-locations" element={<ManageLocations />} />
           <Route path="/create-user" element={<CreateUser />} />
+          <Route path="/backlog-update-book" element={<BacklogUpdateBook />} />
         </Route>
         <Route path="*" element={<NotFound />} /> {/* Catch-all route for 404 */}
       </Routes>
