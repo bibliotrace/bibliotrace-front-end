@@ -85,6 +85,7 @@ export default function PopularReport() {
               <tr>
                 <th className="border hover:cursor-pointer">Title</th>
                 <th className="border hover:cursor-pointer">Author</th>
+                <th className="border hover:cursor-pointer">Genre</th>
                 <th className="border hover:cursor-pointer"># of Checkouts</th>
               </tr>
             </thead>
@@ -95,6 +96,7 @@ export default function PopularReport() {
                     <tr className="hover:bg-gray">
                       <td className="border p-5 text-center print:p-2">{entry.book_title}</td>
                       <td className="border p-5 text-center print:p-2">{entry.author}</td>
+                      <td className="border p-5 text-center print:p-2">{entry.genre_name}</td>
                       <td className="border p-5 text-center print:p-2">{entry.num_checkouts}</td>
                     </tr>
                   </>
