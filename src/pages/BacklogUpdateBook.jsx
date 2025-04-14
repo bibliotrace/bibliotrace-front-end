@@ -1,18 +1,17 @@
 import NavBar from "../components/NavBar";
 import tailwindConfig from "../../tailwind.config";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 // import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 import BackLogDetailEditor from "../modals/BackLogDetailEditor.jsx";
 export default function BacklogUpdateBook() {
-  const [searchParams] = useSearchParams();
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
-  const [isbn, setIsbn] = useState(searchParams.get("isbn") ?? ""); // this stores what the user types in
+  const [isbn, setIsbn] = useState(""); // this stores what the user types in
   const [primary_genre, setPrimaryGenre] = useState("");
   const [audience, setAudience] = useState("");
   const [pages, setPages] = useState("");
