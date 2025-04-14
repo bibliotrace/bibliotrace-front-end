@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Cookies from "js-cookie";
+import useSorttable from "../components/useSorttable";
 
 export default function StockReport() {
   const [stock, setStock] = useState([]);
 
+  useSorttable();
   useEffect(() => {
-    //adds sorttable script
     getStock();
-    const scriptEl = document.createElement("script");
-    scriptEl.src = "../sorttable.js";
-    scriptEl.async = true;
-    document.body.appendChild(scriptEl);
-    return () => {
-      document.body.removeChild(scriptEl);
-    };
   }, []);
 
   async function getStock() {
@@ -54,6 +48,7 @@ export default function StockReport() {
               <tr>
                 <th className="border hover:cursor-pointer">Title</th>
                 <th className="border hover:cursor-pointer">Author</th>
+                <th className="border hover:cursor-pointer">Genre</th>
                 <th className="border hover:cursor-pointer">Quantity</th>
               </tr>
             </thead>
@@ -64,6 +59,7 @@ export default function StockReport() {
                     <tr className="hover:bg-gray">
                       <td className="border p-5 text-center print:p-2">{entry.book_title}</td>
                       <td className="border p-5 text-center print:p-2">{entry.author}</td>
+                      <td className="border p-5 text-center print:p-2">{entry.genre_name}</td>
                       <td className="border p-5 text-center print:p-2">{entry.quantity}</td>
                     </tr>
                   </>
