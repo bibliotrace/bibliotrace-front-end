@@ -38,7 +38,7 @@ export default function ErrorModal({ description, message, onExit }) {
               Back
             </button>
             <h2 className="text-lg font-semibold text-red-600 mr-16">{description}</h2>
-            <p className="mt-2 text-gray-700 whitespace-pre-line">{message}</p>
+            <p className="mt-2 text-gray-700 whitespace-pre-line">{ (message?.includes('Failed to fetch')) ? 'Back-End Server Unreachable. Please try again in a few moments or contact the site administrator.' : message }</p>
           </motion.div>
         </motion.div>
       }
