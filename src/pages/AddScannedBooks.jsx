@@ -238,6 +238,7 @@ export default function AddScannedBooks() {
   function onEditExit(book) {
     if (book.exitMessage) {
       setMessage(book.exitMessage);
+      setTimeout(() => { setMessage('') }, 4000)
     }
     setTitle(book.book_title ?? title);
     setAuthor(book.author ?? author);
@@ -393,7 +394,7 @@ export default function AddScannedBooks() {
 
           <section className="p-20 pl-10 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
-              <h4 className={` text-center ${(message != '') ? 'bg-lightGreen' : 'bg-lightBlue' } text-black text-2xl p-2`}>
+              <h4 className={` text-center ${(message != '') ? 'bg-lightGreen' : 'bg-lightBlue' } text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
                 {message ? `${message}` : "Book Details"}
               </h4>
 
@@ -408,8 +409,8 @@ export default function AddScannedBooks() {
                   <label>
                     <b>Author:</b> {author}
                   </label>
-                  <label>
-                    <b>Primary Genre: </b> {primary_genre}
+                  <label className="flex items-center flex-wrap">
+                    <b>Primary Genre: </b> {primary_genre && (<p className="bg-lightBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">{primary_genre}</p>)}
                   </label>
                   <label className="flex items-center flex-wrap">
                     <b className="pr-2">Secondary Genres: </b>

@@ -171,7 +171,7 @@ export default function EditBooks() {
   function onEditExit(book) {
     if (book.exitMessage) {
       setMessage(book.exitMessage);
-      setTimeout(() => { setMessage('') }, 5000)
+      setTimeout(() => { setMessage('') }, 4000)
     }
     setTitle(book.book_title ?? title);
     setAuthor(book.author ?? author);
@@ -269,7 +269,7 @@ export default function EditBooks() {
 
           <section className="p-20 pl-10 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
-              <h4 className={`${(message != '') ? 'bg-lightGreen' : 'bg-peachPink' } text-center text-black text-2xl p-2`}>
+              <h4 className={`${(message != '') ? 'bg-lightGreen' : 'bg-peachPink' } text-center text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
                 {message ? `${message}` : "Book Details"}
               </h4>
 
