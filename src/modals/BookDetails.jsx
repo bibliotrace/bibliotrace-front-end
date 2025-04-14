@@ -89,14 +89,14 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
       <AnimatePresence>
         {
           <motion.div
-            className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm"
+            className="fixed overflow-auto inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onExit}
           >
             <motion.div
-              className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl relative"
+              className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl max-h-[90vh] overflow-y-auto relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -153,7 +153,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
               <div className="flex justify-center flex-wrap">
                 <div className="p-6 pt-0 flex-1 min-w-72">
                   <h4 className="font-bold pr-2 text-xl">Synopsis:</h4>
-                  <p>{synopsis}</p>
+                  <p className="overflow-x-scroll no-scrollbar">{synopsis}</p>
                 </div>
                 <div className="flex-1 p-4 pt-0">
                   <table className="table-auto w-full border-collapse rounded-lg">
@@ -203,7 +203,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
             onClick={onExit}
           >
             <motion.div
-              className="bg-white rounded-lg shadow-lg w-5/6 max-w-3xl max-h-[80vh] overflow-y-auto relative"
+              className="bg-white rounded-lg shadow-lg w-5/6 max-w-3xl max-h-[90vh] relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -215,7 +215,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                   Back
                 </button>
               </div>
-              <div className="flex flex-wrap justify-center">
+              <div className="flex flex-wrap justify-center overflow-y-auto">
                 <img src={imageSrc} alt="Cover Image" className="p-6 max-w-full w-1/3 max-h-fit min-w-60 " />
                 <div className="p-6 min-w-60">
                   <div className="flex text-xl">
@@ -259,8 +259,8 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
               </div>
               <div className="p-6 pt-0">
                 <h4 className="font-bold pr-2 text-xl">Synopsis:</h4>
-                <p>{synopsis}</p>
-              </div>
+                <p className="overflow-x-scroll no-scrollar">{synopsis}</p>
+                </div>
             </motion.div>
           </motion.div>
         }
