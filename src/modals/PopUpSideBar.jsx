@@ -34,7 +34,7 @@ const PullOutBarGenre = ({ onClose, buttons, side, titleText, uniformColor, butt
           <h2 className="text-xl font-bold" style={{ color: uniformColor}}>{titleText}</h2>
           
         </div>
-        <div className="overflow-y-auto max-h-[calc(80vh-50px)] p-2">
+        <div className="overflow-y-auto max-h-[calc(80vh-50px)] p-2 no-scrollbar">
           <ul>
           {buttons.map((button, index) => (
               <BarButton
