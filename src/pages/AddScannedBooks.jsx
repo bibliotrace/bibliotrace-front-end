@@ -116,8 +116,8 @@ export default function AddScannedBooks() {
         series_number: book.series_number,
         language: "English",
         imgCallback: null,
-      }
-      setBookData(newBookData)
+      };
+      setBookData(newBookData);
 
       await getCoverThumbnail(isbn);
       console.log("Book successfully imported");
@@ -127,7 +127,7 @@ export default function AddScannedBooks() {
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
-        handleEditButton(true)
+        handleEditButton(true);
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -172,30 +172,30 @@ export default function AddScannedBooks() {
         series_number,
         language: "English",
         imgCallback: null,
-      }
-      console.log('NEW BOOK DATA', newBookData);
+      };
+      console.log("NEW BOOK DATA", newBookData);
       setBookData(newBookData);
     } else {
       const newBookData = {
-        title: '',
-        author: '',
+        title: "",
+        author: "",
         isbn,
-        primaryGenre: '',
-        synopsis: '',
+        primaryGenre: "",
+        synopsis: "",
         secondaryGenres: [],
-        audience: '',
-        pages: '',
-        publishDate: '',
+        audience: "",
+        pages: "",
+        publishDate: "",
         tag_list: [],
-        series_name: '',
-        series_number: '',
+        series_name: "",
+        series_number: "",
         language: "English",
         imgCallback: null,
-      }
-      console.log('NEW BOOK DATA', newBookData);
+      };
+      console.log("NEW BOOK DATA", newBookData);
       setBookData(newBookData);
     }
-    
+
     setOpenEditModal(!openEditModal);
   }
 
@@ -285,10 +285,10 @@ export default function AddScannedBooks() {
         homeNavOnClick="/admin"
       />
 
-      <div className="flex flex-col justify-between h-5/6">
+      <div className="flex flex-col justify-between">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Add New Books</h1>
-        <div className="flex flex-row pb-20 flex-wrap justify-center">
-          <section className="p-20 flex flex-col max-w-2xl">
+        <div className="flex flex-row pb-20 justify-center overflow-x-auto">
+          <section className="p-20 pr-10 flex flex-col min-w-[32rem] max-w-[40rem]">
             <h4>ISBN Number</h4>
             <form
               className="flex rounded-xl items-center"
@@ -385,15 +385,15 @@ export default function AddScannedBooks() {
             </a>
           </section>
 
-          <section className="p-20 flex-1">
-            <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
+          <section className="p-20 pl-10 flex-1 max-w-[76rem]">
+            <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
               <h4 className="bg-lightBlue text-center text-black text-2xl p-2">Last Scanned Book:</h4>
 
-              <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
-                <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
-                  <img className="max-h-72 w-auto" src={thumbnail}></img>
+              <div className="flex flex-row">
+                <section className="p-5 flex justify-center items-center">
+                  <img className="max-h-72 w-auto min-w-16" src={thumbnail}></img>
                 </section>
-                <div className="p-5 py-10 basis-1/2 flex-grow flex flex-col justify-evenly text-lg">
+                <div className="p-5 py-10 flex flex-col justify-evenly text-lg">
                   <label>
                     <b>Title:</b> {title === "" ? "Not Yet Scanned" : title}
                   </label>
@@ -403,7 +403,7 @@ export default function AddScannedBooks() {
                   <label>
                     <b>Primary Genre: </b> {primary_genre}
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center flex-wrap">
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
@@ -431,7 +431,7 @@ export default function AddScannedBooks() {
                   <label>
                     <b>Publish Date:</b> {publish_date}
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center flex-wrap">
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
@@ -448,7 +448,7 @@ export default function AddScannedBooks() {
                     <b>Synopsis:</b> {short_description}
                   </label>
                   {author && (
-                    <button className="mt-2 text-nowrap" onClick={() => handleEditButton(false)}>
+                    <button className="mt-2 text-wrap" onClick={() => handleEditButton(false)}>
                       Edit {title}
                     </button>
                   )}
@@ -484,7 +484,7 @@ export default function AddScannedBooks() {
         <div id="detail-editor-modal">
           {openEditModal && (
             <BookDetailEditor
-              key={bookData.isbn || 'hello'}
+              key={bookData.isbn || "hello"}
               bookData={bookData}
               colorScheme="lightBlue"
               onExit={(bookData) => onEditExit(bookData)}

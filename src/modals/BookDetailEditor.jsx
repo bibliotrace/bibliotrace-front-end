@@ -286,7 +286,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
           onClick={() => packageExit()}
         >
           <motion.div
-            className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl relative"
+            className="bg-white rounded-lg shadow-lg md:w-5/6 lg:w-4/6 max-w-5xl relative"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}

@@ -66,7 +66,7 @@ export default function EditBooks() {
     setShort_description("");
     setTags([]);
     setGenres([]);
-    setThumbnail(defaultBook)
+    setThumbnail(defaultBook);
 
     const response = await fetch(`http://localhost:8080/api/bookdata/${isbn}`, {
       headers: {
@@ -96,7 +96,7 @@ export default function EditBooks() {
       if (response.status === 401) {
         navigate("/login");
       } else if (response.status === 404) {
-        navigate(`/add-scanned?isbn=${isbn}`)
+        navigate(`/add-scanned?isbn=${isbn}`);
       } else {
         setError(`${JSON.parse(await response.text()).message}`);
       }
@@ -144,7 +144,7 @@ export default function EditBooks() {
       });
     } else {
       if (!title && isbn) {
-        navigate(`/add-scanned?isbn=${isbn}`)
+        navigate(`/add-scanned?isbn=${isbn}`);
       }
 
       setBookData({
@@ -164,7 +164,7 @@ export default function EditBooks() {
         imgCallback: null,
       });
     }
-    
+
     setOpenEditModal(!openEditModal);
   }
 
@@ -224,10 +224,10 @@ export default function EditBooks() {
         homeNavOnClick="/admin"
       />
 
-      <div className="flex flex-col justify-between h-5/6">
+      <div className="flex flex-col justify-between">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Edit Book Data</h1>
-        <div className="flex flex-row pb-20 flex-wrap justify-center">
-          <section className="p-20 flex flex-col max-w-2xl">
+        <div className="flex flex-row pb-20 justify-center overflow-x-auto">
+          <section className="p-20 pr-10 flex flex-col min-w-[32rem] max-w-[40rem]">
             <h4>ISBN Number</h4>
             <form
               className="flex rounded-xl items-center"
@@ -266,31 +266,39 @@ export default function EditBooks() {
             </a>
           </section>
 
-          <section className="p-20 flex-1">
-            <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
+          <section className="p-20 pl-10 flex-1 max-w-[76rem]">
+            <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
               <h4 className="bg-peachPink text-center text-black text-2xl p-2">
-                {message ? `${message}` : 'Book Details'}
+                {message ? `${message}` : "Book Details"}
               </h4>
 
-              <div className="flex flex-row" style={{ height: "calc(100% - 3rem)" }}>
-                <section className="p-5 basis-1/2 flex-grow flex justify-center items-center">
-                  <img className="max-h-72 w-auto" src={thumbnail}></img>
+              <div className="flex flex-row">
+                <section className="p-5 flex justify-center items-center">
+                  <img className="max-h-72 min-w-16 w-auto" src={thumbnail}></img>
                 </section>
-                <div className="p-5 py-10 basis-1/2 flex-grow flex flex-col justify-evenly text-lg">
+                <div className="p-5 py-10 flex flex-col justify-evenly text-lg">
                   <label>
                     <b>Title:</b> {title === "" ? "Not Yet Scanned" : title}
                   </label>
                   <label>
                     <b>Author:</b> {author}
                   </label>
-                  <label className="flex items-center">
-                    <b>Primary Genre: </b> <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">{primary_genre}</p>
+                  <label className="flex items-center flex-wrap">
+                    <b>Primary Genre: </b>
+                    {primary_genre && (
+                      <p className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
+                        {primary_genre}
+                      </p>
+                    )}
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center flex-wrap">
                     <b className="pr-2">Secondary Genres: </b>
                     {genres.map((genreString) => {
                       return (
-                        <p key={genreString} className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
+                        <p
+                          key={genreString}
+                          className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap"
+                        >
                           {genreString}
                         </p>
                       );
@@ -306,16 +314,19 @@ export default function EditBooks() {
                     <b>Series Name:</b> {series_name}
                   </label>
                   <label>
-                    <b>Series Number:</b> {(series_number == 0) ? "" : series_number}
+                    <b>Series Number:</b> {series_number == 0 ? "" : series_number}
                   </label>
                   <label>
                     <b>Publish Date:</b> {publish_date}
                   </label>
-                  <label className="flex items-center">
+                  <label className="flex items-center flex-wrap">
                     <b className="pr-2">Tags: </b>
                     {tags.map((tag) => {
                       return (
-                        <p key={tag} className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap">
+                        <p
+                          key={tag}
+                          className="bg-peachPink px-4 py-1 m-2 rounded-3xl text-black text-center text-nowrap"
+                        >
                           {tag}
                         </p>
                       );
@@ -324,9 +335,9 @@ export default function EditBooks() {
                   <label>
                     <b>Synopsis:</b> {short_description}
                   </label>
-                    <button className="mt-2 text-nowrap" onClick={(e) => handleEditButton()}>
-                      Edit {title}
-                    </button>
+                  <button className="mt-2 text-wrap" onClick={(e) => handleEditButton()}>
+                    Edit {title}
+                  </button>
                 </div>
               </div>
             </div>
