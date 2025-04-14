@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
@@ -14,6 +14,23 @@ export default function Checkin() {
   const inputRef = useRef(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleFocus = () => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    };
+    // Add event listeners when modal is closed
+    document.addEventListener("click", handleFocus);
+    document.addEventListener("keydown", handleFocus);
+
+    // Cleanup function to prevent multiple bindings
+    return () => {
+      document.removeEventListener("click", handleFocus);
+      document.removeEventListener("keydown", handleFocus);
+    };
+  });
 
   async function scanBook(e) {
     if (e.key !== "Enter" || e.target.value == "") {

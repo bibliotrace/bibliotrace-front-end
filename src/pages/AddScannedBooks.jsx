@@ -380,7 +380,7 @@ export default function AddScannedBooks() {
               5. Scanning the new code should add the book, click the Add to Inventory button if it doesn't.
             </p>
             <br></br>
-            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">
+            <a href="https://isbndb.com/" className="text-2xl" target="_blank">
               Don't have an ISBN? Get one here.
             </a>
           </section>

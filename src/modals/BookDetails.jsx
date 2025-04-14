@@ -13,6 +13,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
   const [secondaryGenres, setSecondaryGenres] = useState([]);
   const [seriesNumber, setSeriesNumber] = useState("");
   const [synopsis, setSynopsis] = useState("");
+  const [quantities, setQuantities] = useState([]);
 
   console.log(bookData);
   const navigate = useNavigate();
@@ -53,7 +54,22 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
       setTags(bookDataReturned.tag_list);
       setSeriesNumber(bookDataReturned.series_number);
       setSecondaryGenres(bookDataReturned.genre_list);
+      
+      result = await fetch (`http://localhost:8080/api/inventory/quantities/${bookDataReturned.id}`, {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        }
+      })
+
+      if (result.ok) {
+        const quantityResponse = await result.json();
+        const quantityData = quantityResponse.object;
+
+        setQuantities(quantityData);
+      }
     }
+
+    
   };
 
   useEffect(() => {
@@ -107,11 +123,11 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                     <h6 className="font-bold pr-2">Number In Series:</h6>
                     <p>{seriesNumber}</p>
                   </div>
-                  <div className="flex text-xl pt-4">
+                  <div className="flex text-xl pt-4 items-center flex-wrap">
                     <h6 className="font-bold pr-2">Genre:</h6>
-                    <p className="pr-2">{genre}</p>
+                    <p className="bg-darkBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">{genre}</p>
                     {secondaryGenres.map((genre) => {
-                      return <p className="px-2 italic">{genre}</p>;
+                      return <p className="bg-darkBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap italic">{genre}</p>;
                     })}
                   </div>
                   <div className="flex text-xl pt-4">
@@ -149,11 +165,15 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                       </tr>
                     </thead>
                     <tbody className="text-center">
-                      <tr>
-                        <td className="px-4 py-2">2</td>
-                        <td className="px-4 py-2">Salt Lake City</td>
-                        <td className="px-4 py-2">Main Shelves</td>
-                      </tr>
+                      {quantities.map((quantity, index) => {
+                        return (
+                          <tr key={`${quantity.campus}${quantity.location}${index}`}>
+                            <td className="px-4 py-2">{quantity.count}</td>
+                            <td className="px-4 py-2">{quantity.campus}</td>
+                            <td className="px-4 py-2">{quantity.location}</td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
                 </div>
