@@ -141,6 +141,16 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
+      text: "Popular Report",
+      textColor: "white",
+      bgColor: "#110057",
+      borderColor: "white",
+      buttonBgColor: "#110057",
+      onClick: () => navigate("/popular"),
+      width: "20vw",
+      height: "10vh",
+    },
+    {
       text: "Restock List",
       textColor: "white",
       bgColor: "#110057",
