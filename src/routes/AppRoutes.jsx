@@ -26,6 +26,7 @@ import AuditList from "../pages/AuditList.jsx";
 import AuditReport from "../pages/AuditReport.jsx";
 import BacklogUpdateBook from "../pages/BacklogUpdateBook.jsx"
 import PopularReport from "../pages/PopularReport.jsx";
+import StockReport from "../pages/StockReport.jsx";
 
 const AppRoutes = () => {
   const getToken = () => {
@@ -98,6 +99,7 @@ const AppRoutes = () => {
           <Route path="/shopping-list" element={<ShoppingList />} />
           <Route path="/restock-list" element={<RestockList />} />
           <Route path="/popular" element={<PopularReport />} />
+          <Route path="/stock" element={<StockReport />} />
           <Route path="/set-location" element={<SetLocation />} />
           <Route path="/manage-locations" element={<ManageLocations />} />
           <Route path="/create-user" element={<CreateUser />} />
