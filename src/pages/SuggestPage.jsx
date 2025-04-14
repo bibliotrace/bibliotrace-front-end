@@ -1,10 +1,12 @@
 import Cookies from "js-cookie";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import tailwindConfig from "../../tailwind.config";
 import NavBar from "../components/NavBar";
+import ErrorModal from "../modals/ErrorModal";
 
 function SuggestPage() {
+  const [message, setMessage] = useState("");
   const submittedDialog = useRef(null);
   const navigate = useNavigate();
 
@@ -15,7 +17,10 @@ function SuggestPage() {
     try {
       for (const pair of data.entries()) {
         //delete later
-        console.log("suggestion: ", pair[1]);
+        if (!pair[1].trim()) {
+          setMessage("Enter a suggestion to submit");
+          return;
+        }
         const campus = "Lehi";
 
         const jwt = Cookies.get("authToken");
@@ -40,6 +45,17 @@ function SuggestPage() {
 
   return (
     <>
+      {message ? (
+        <ErrorModal
+          description={"Suggestion is Blank"}
+          message={message}
+          onExit={() => {
+            setMessage(null);
+          }}
+        />
+      ) : (
+        <></>
+      )}
       <div className="bg-darkBlue md:bg-lightBlue w-full h-full relative z-10">
         <svg
           className="-z-10 absolute left-0 top-0 hidden md:flex"
@@ -101,29 +117,22 @@ function SuggestPage() {
               Have a book suggestion?
             </h1>
             <p className="text-white 3xl:text-3xl xl:text-lg">
-              Please give as much detail of the book you want to suggest and we will do our best to
-              find it! We love to hear your voice. Just remember our suggestions are checked every
-              week.
+              Please enter any suggestions for books you'd like to see at our library and we will do our best to find
+              them! We check these suggestions regularly and would love to hear your voice.
             </p>
           </div>
           <div className="basis-1/2 flex flex-col items-center md:ml-12 mb-10 md:mb-0">
             <h1 className="mb-10 text-white 4xl:text-[6rem] 3xl:text-[4rem] xl:text-[2rem] text-center md:text-right mx-auto md:mx-0">
               Tell us about it!
             </h1>
-            <form
-              className="flex flex-col items-center w-full flex-grow"
-              onSubmit={(e) => submitSuggestion(e)}
-            >
+            <form className="flex flex-col items-center w-full flex-grow" onSubmit={(e) => submitSuggestion(e)}>
               <textarea
                 name="suggestion"
                 style={{ color: "black" }}
                 className="p-4 w-full mb-5 flex-grow 3xl:text-3xl xl:text-lg rounded-2xl"
                 placeholder="Book info (title, author, etc.)"
               ></textarea>
-              <button
-                className="w-48 3xl:text-3xl xl:text-lg text-darkBlue border-3 border-darkBlue"
-                type="submit"
-              >
+              <button className="w-48 3xl:text-3xl xl:text-lg text-darkBlue border-3 border-darkBlue" type="submit">
                 Submit
               </button>
             </form>
