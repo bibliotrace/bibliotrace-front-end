@@ -171,6 +171,7 @@ export default function EditBooks() {
   function onEditExit(book) {
     if (book.exitMessage) {
       setMessage(book.exitMessage);
+      setTimeout(() => { setMessage('') }, 5000)
     }
     setTitle(book.book_title ?? title);
     setAuthor(book.author ?? author);
@@ -261,14 +262,14 @@ export default function EditBooks() {
               2. Check the book data in the view to the right, and click the edit button to modify any data.
             </p>
             <br></br>
-            <a href="https://isbnsearch.org/" className="text-2xl" target="_blank">
+            <a href="https://isbndb.com/" className="text-2xl" target="_blank">
               Don't have an ISBN? Get one here.
             </a>
           </section>
 
           <section className="p-20 pl-10 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
-              <h4 className="bg-peachPink text-center text-black text-2xl p-2">
+              <h4 className={`${(message != '') ? 'bg-lightGreen' : 'bg-peachPink' } text-center text-black text-2xl p-2`}>
                 {message ? `${message}` : "Book Details"}
               </h4>
 

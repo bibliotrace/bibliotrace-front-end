@@ -221,6 +221,12 @@ export default function AddScannedBooks() {
           if (result.ok) {
             setMessage(`${data.message} [QR: ${qr}]`);
             setQr("");
+            setTimeout(() => { setMessage('') }, 4000)
+
+            if (isbnInputRef.current) {
+              isbnInputRef.current.focus();
+              isbnInputRef.current.select();
+            }
           } else {
             setError(`Error Received: ${data.message}`);
           }
@@ -387,7 +393,9 @@ export default function AddScannedBooks() {
 
           <section className="p-20 pl-10 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
-              <h4 className="bg-lightBlue text-center text-black text-2xl p-2">Last Scanned Book:</h4>
+              <h4 className={` text-center ${(message != '') ? 'bg-lightGreen' : 'bg-lightBlue' } text-black text-2xl p-2`}>
+                {message ? `${message}` : "Book Details"}
+              </h4>
 
               <div className="flex flex-row">
                 <section className="p-5 flex justify-center items-center">
@@ -469,17 +477,7 @@ export default function AddScannedBooks() {
               }}
             />
           )}
-          {message && (
-            <ErrorModal
-              id="message-modal"
-              tabIndex="-1"
-              description={"Message"}
-              message={message}
-              onExit={() => {
-                setMessage("");
-              }}
-            />
-          )}
+
         </div>
         <div id="detail-editor-modal">
           {openEditModal && (
