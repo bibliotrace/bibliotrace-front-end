@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
 import Cookies from "js-cookie";
+import useSorttable from "../components/useSorttable";
 
 export default function PopularReport() {
   const [popular, setPopular] = useState([]);
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    //adds sorttable script
-    const scriptEl = document.createElement("script");
-    scriptEl.src = "../sorttable.js";
-    scriptEl.async = true;
-    document.body.appendChild(scriptEl);
-    return () => {
-      document.body.removeChild(scriptEl);
-    };
-  }, []);
+  useSorttable();
 
   async function getPopular(e) {
     e.preventDefault();

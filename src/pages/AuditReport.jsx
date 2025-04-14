@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
+import useSorttable from "../components/useSorttable";
 
 export default function AuditReport() {
   const [auditEntries, setAuditEntries] = useState([]);
@@ -11,20 +12,12 @@ export default function AuditReport() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  useSorttable();
   useEffect(() => {
     if (!location.state?.audit) {
       navigate(-1);
     }
     getAuditEntries(location.state?.audit);
-
-    //adds sorttable script
-    const scriptEl = document.createElement("script");
-    scriptEl.src = "../sorttable.js";
-    scriptEl.async = true;
-    document.body.appendChild(scriptEl);
-    return () => {
-      document.body.removeChild(scriptEl);
-    };
   }, []);
 
   async function getAuditEntries(audit) {

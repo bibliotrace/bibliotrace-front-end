@@ -54,17 +54,7 @@ const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onH
       <div className="flex items-center">
         {back ? (
           <div className="hover:cursor-pointer flex flex-row justify-center items-center" onClick={() => navigate(-1)}>
-            <span
-              className="text-3xl relative font-bold"
-              style={{
-                top: "-2.5px",
-                left: "3px",
-                // Uncomment this to make the back arrow look thicker
-                // textShadow: "0.5px 0 currentColor, -0.5px 0 currentColor, 0 0.5px currentColor, 0 -0.5px currentColor",
-              }}
-            >
-              &#8592;
-            </span>
+            <span className="text-3xl relative font-bold">&#8592;</span>
             <span className="text-lg p-2">Back</span>
           </div>
         ) : (
