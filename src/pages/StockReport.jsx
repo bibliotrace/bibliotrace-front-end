@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Cookies from "js-cookie";
+import useSorttable from "../components/useSorttable";
 
 export default function StockReport() {
   const [stock, setStock] = useState([]);
 
+  useSorttable();
   useEffect(() => {
-    //adds sorttable script
     getStock();
-    const scriptEl = document.createElement("script");
-    scriptEl.src = "../sorttable.js";
-    scriptEl.async = true;
-    document.body.appendChild(scriptEl);
-    return () => {
-      document.body.removeChild(scriptEl);
-    };
   }, []);
 
   async function getStock() {
