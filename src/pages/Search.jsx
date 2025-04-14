@@ -2,8 +2,8 @@ import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Filter from "../assets/filter.svg?react";
-import Next from "../assets/next.svg?react";
-import Prev from "../assets/prev.svg?react";
+import NextIcon from "../components/NextIcon.jsx";
+import PrevIcon from "../components/PrevIcon.jsx";
 import FilterBox from "../components/FilterBox.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import NavBar from "../components/NavBar.jsx";
@@ -243,7 +243,10 @@ const Search = () => {
           >
             <Filter />
           </button>
-          <button className="bg-[transparent] border-none hidden xl:flex" onClick={handleFilterPress}>
+          <button
+            className="bg-[transparent] border-none hidden xl:flex"
+            onClick={handleFilterPress}
+          >
             <Filter />
           </button>
           {/* Filter Box (Overlay) */}
@@ -317,16 +320,19 @@ const Search = () => {
           {" "}
           {/* Pagination Buttons */}
           <button className="bg-[transparent] flex flex-col items-center" onClick={decrementPage}>
-            <Prev />
+            {pageOffset === 0 ? <PrevIcon color="#A9A9A9" /> : <PrevIcon />}
             <p className="">Previous</p>
           </button>
           <p className="h-12">
-            Showing{" "}
-            {Math.min(pageOffset + rowCount, searchResults.length) === 0 ? 0 : pageOffset + 1}-
+            Showing {searchResults.length === 0 ? 0 : pageOffset + 1}-
             {Math.min(pageOffset + rowCount, searchResults.length)} of {searchResults.length}
           </p>
           <button className="bg-[transparent] flex flex-col items-center" onClick={incrementPage}>
-            <Next />
+            {pageOffset + rowCount >= searchResults.length ? (
+              <NextIcon color="#A9A9A9" />
+            ) : (
+              <NextIcon />
+            )}
             <p className="">Next</p>
           </button>
         </div>

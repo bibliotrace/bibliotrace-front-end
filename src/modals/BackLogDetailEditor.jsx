@@ -24,22 +24,19 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const [publishDate, setPublishDate] = useState();
   const [language, setLanguage] = useState();
   const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
-  const [availableGenres, setAvailableGenres] = useState([])
   const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
   const [tags, setTags] = useState(bookData.tag_list ?? []);
   const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
+  const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState([]);
   const [messageString, setMessageString] = useState("");
 
   useEffect(() => {
-    console.log("change in bookData!", bookData);
-
     setSynopsis(bookData.synopsis ?? "");
     setTitle(bookData.title ?? "");
     setAuthor(bookData.author ?? "");
     setIsbn(bookData.isbn ?? "");
     setPrimaryGenre(bookData.primaryGenre ?? "");
-    const newAvailableGenresList = genres.filter(val => val != bookData.primaryGenre);
-    setAvailableGenres(newAvailableGenresList);
     setSecondaryGenres(bookData.secondaryGenres ?? []);
     setTargetSecondaryGenre("");
     setAudience(bookData.audience ?? "");
@@ -48,27 +45,21 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     setSeriesNumber(bookData.series_number ?? "");
     setPublishDate(bookData.publishDate ?? "");
     setLanguage(bookData.language ?? "English");
-
-    if (!bookData.title) {
-      handleSuggestionCall(null, bookData.isbn);
+    setLocation("");
+    async function getLocations() {
+      const locationList = await JSON.parse(Cookies.get("locationList"));
+      setLocations(locationList);
     }
+    getLocations();
   }, [bookData]);
 
-  const handlePrimaryGenreChange = (e) => {
-    setPrimaryGenre(e.target.value)
-    const newAvailableGenresList = genres.filter(val => val != e.target.value)
-    console.log(newAvailableGenresList)
-    setAvailableGenres(newAvailableGenresList);
-  }
-
-  const handleSuggestionCall = async (e, isbnSeed) => {
+  const handleSuggestionCall = async (e) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
     const jwt = Cookies.get("authToken");
-    const isbnValue = isbnSeed ?? isbn.split("||")[0];
-    const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbnValue}`, {
+    const response = await fetch(`http://localhost:8080/api/bookdata/suggest/${isbn.split("||")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
@@ -89,6 +80,8 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const handleBookFormSubmit = async (e) => {
     e.preventDefault();
     const fetchBody = {
+      book_id : bookData.book_id,
+      book_qrs: bookData.qrs,
       book_title: title,
       isbn_list: isbn,
       author: author,
@@ -100,10 +93,10 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       publish_date: publishDate,
       short_description: synopsis,
       language,
+      location : location,
     };
-    console.log(fetchBody);
     const jwt = Cookies.get("authToken");
-    const result = await fetch(`http://localhost:8080/api/bookdata/${isbn.split("|")[0]}`, {
+    const result = await fetch(`http://localhost:8080/api/bookdata/backlog`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
         "Content-Type": "application/json",
@@ -117,8 +110,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     } else {
       setMessageString(`Error Submitting: ${(await result.json()).message}`);
     }
-
-    console.log(result);
   };
 
   const handleAddSecondaryGenre = async (e) => {
@@ -126,7 +117,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     const fetchBody = {
       genre: targetSecondaryGenre,
     };
-    console.log(fetchBody);
     const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -149,7 +139,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     const fetchBody = {
       genre: secondaryGenres[index],
     };
-    console.log(fetchBody);
     const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -171,7 +160,6 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     const fetchBody = {
       tag: newTag,
     };
-    console.log(fetchBody);
     const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -219,6 +207,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     setSecondaryGenres([]);
     onExit({
       exitMessage,
+      book_id : bookData.book_id,
       book_title: title,
       author,
       pages,
@@ -230,6 +219,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       series_number: seriesNumber,
       tag_list: tags,
       genre_list: secondaryGenres,
+      location: location,
     });
   };
 
@@ -355,7 +345,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                   <select
                     className=" mx-2 p-2 rounded-xl"
                     value={primaryGenre}
-                    onChange={(e) => handlePrimaryGenreChange(e)}
+                    onChange={(e) => setPrimaryGenre(e.target.value)}
                   >
                     <option value="" disabled>
                       -- Choose an option --
@@ -439,7 +429,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       <option value="" disabled>
                         -- Choose an option --
                       </option>
-                      {availableGenres.map((genre) => {
+                      {genres.map((genre) => {
                         return (
                           <option key={genre} value={genre}>
                             {genre}
@@ -496,7 +486,27 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                     )}
                   </div>
                 </div>
-
+                <div className="flex text-xl pt-4">
+                  <h6 className="font-bold pr-2">Location:</h6>
+                  <select
+                    className="mx-2 p-2 rounded-xl"
+                    value={location}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                    }}
+                  >
+                    <option value="" disabled>
+                      -- Choose an option --
+                    </option>
+                    {locations.map((location_obj) => {
+                      return (
+                        <option key={location_obj.id} value={location_obj.id}>
+                          {location_obj.location_name}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
                 <br></br>
 
                 <button onClick={(e) => handleBookFormSubmit(e)}>Submit Changes</button>
