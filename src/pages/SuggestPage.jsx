@@ -117,8 +117,8 @@ function SuggestPage() {
               Have a book suggestion?
             </h1>
             <p className="text-white 3xl:text-3xl xl:text-lg">
-              Please give as much detail of the book you want to suggest and we will do our best to find it! We love to
-              hear your voice. Just remember our suggestions are checked every week.
+              Please enter any suggestions for books you'd like to see at our library and we will do our best to find
+              them! We check these suggestions regularly and would love to hear your voice.
             </p>
           </div>
           <div className="basis-1/2 flex flex-col items-center md:ml-12 mb-10 md:mb-0">
