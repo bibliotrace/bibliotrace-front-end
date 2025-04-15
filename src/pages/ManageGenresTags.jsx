@@ -64,8 +64,8 @@ export default function ManageGenresTags() {
       });
 
       const data = await response.json();
+      setMessage(`${data.message}`);
       if (!response.ok) {
-        setMessage(`${data.message}`);
         console.log(data.message);
       } else {
         let newGenres = genres.filter((g) => g !== genre);
@@ -130,8 +130,8 @@ export default function ManageGenresTags() {
       });
 
       const data = await response.json();
+      setMessage(`${data.message}`);
       if (!response.ok) {
-        setMessage(`${data.message}`);
         console.log(data.message);
       } else {
         let newTags = tags.filter((t) => t !== tag);
@@ -157,7 +157,7 @@ export default function ManageGenresTags() {
         <ErrorModal
           id="error-modal"
           tabIndex="-1"
-          description={"Error modifying genres/tags"}
+          description={message.includes("successfully") ? "Success" : "Error modifying genres/tags"}
           message={message}
           onExit={() => {
             setMessage(null);
