@@ -146,7 +146,12 @@ export default function ManageGenresTags() {
 
   return (
     <>
-      <NavBar useDarkTheme={true} showTitle={true} bgColor={"#FFFFFF"} showNavButtons={true}></NavBar>
+      <NavBar
+        useDarkTheme={true}
+        showTitle={true}
+        bgColor={"#FFFFFF"}
+        showNavButtons={true}
+      ></NavBar>
       <h1 className="text-center my-10">Edit Genres/Tags</h1>
       {message ? (
         <ErrorModal
@@ -161,7 +166,14 @@ export default function ManageGenresTags() {
       ) : null}
       <div className="flex flex-row justify-between w-full h-[calc(100vh-200px)]">
         <section id="genres-container" className="flex-1 w-full h-full mx-[5%] ml-[10%] ">
-          <ul className="border h-[70%] overflow-y-scroll">
+          <ul
+            className="border h-[70%] overflow-y-scroll"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleAddGenre(e);
+              }
+            }}
+          >
             {genres.map((genre) => {
               return (
                 <>
@@ -189,7 +201,14 @@ export default function ManageGenresTags() {
         </section>
 
         <section id="tags-container" className="flex-1 w-full h-full mx-[5%] mr-[10%]">
-          <ul className="border h-[70%] overflow-y-scroll">
+          <ul
+            className="border h-[70%] overflow-y-scroll"
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleAddTag(e);
+              }
+            }}
+          >
             {tags.map((tag) => {
               return (
                 <>
