@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
-import tailwindConfig from "../../tailwind.config";
 import Cookies from "js-cookie";
 import { useLocation, useNavigate } from "react-router-dom";
 

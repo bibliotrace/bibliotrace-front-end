@@ -1,22 +1,21 @@
 import NewBarButton from "../NewBarButtons.jsx";
-export default function Sidebar({onMenuChange, activeButton, setActiveButton}) {
+export default function Sidebar({ onMenuChange, activeButton, setActiveButton }) {
   //handle routes
-  const handleButtonClick = (menu, buttonText) =>{
+  const handleButtonClick = (menu, buttonText) => {
     setActiveButton(buttonText);
-    if(menu){
+    if (menu) {
       onMenuChange(menu);
     }
-  }
-  
+  };
+
   const buttons = [
     { text: "Manage Inventory", menu: "inventory" },
-    { text: "Settings", menu: "settings" },
     { text: "Reports", menu: "report" },
+    { text: "Settings", menu: "settings" },
   ];
 
   return (
-    <div className="flex flex-col justify-center pl-[3vw] pr-5 gap-4  w-[20vw]">
-
+    <div className="h-full flex flex-col pl-[3vw] pr-5 gap-4 justify-center w-[20vw]">
       {buttons.map((button, index) => (
         <NewBarButton
           key={index}
