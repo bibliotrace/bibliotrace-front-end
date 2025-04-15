@@ -150,7 +150,7 @@ const Home = () => {
             uniformColor={"#fa8804"}
             titleText={"Explore By Age"}
             buttonWidth={"14vw"}
-            buttonHeight={"10vh"}
+            buttonHeight={"4rem"}
           />
         )}
 
@@ -191,7 +191,7 @@ const Home = () => {
             uniformColor={"#669bff"}
             titleText={"Explore By Genre"}
             buttonWidth={"14vw"}
-            buttonHeight={"8vh"}
+            buttonHeight={"4rem"}
           />
         )}
 
