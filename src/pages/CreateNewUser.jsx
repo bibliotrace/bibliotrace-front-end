@@ -117,11 +117,11 @@ export default function CreateNewUser() {
         homeNavOnClick="/admin"
       />
 
-      <h1 className="text-center 5xl:my-16 3xl:my-8 lg:my-4 4xl:text-[6rem] 3xl:text-5xl xl:text-2xl  text-white font-rector">
+      <h1 className="text-center 5xl:my-16 lg:my-10 4xl:text-[6rem] 3xl:text-5xl xl:text-2xl  text-white font-rector">
         Create User
       </h1>
       <div className="flex flex-row">
-        <section className="2xl:p-20 p-10 mt-14 flex-1 flex flex-col 3xl:text-3xl xl:text-lg">
+        <section className="2xl:p-20 p-10 mt-14 flex-1 flex flex-col text-lg">
           <p>1. Please only create an account if the location you are at has no account.</p>
           <p>
             2. Please do not use a username or login information related to your id or health
@@ -140,12 +140,12 @@ export default function CreateNewUser() {
         </section>
 
         <section className="2xl:p-20 xl:p-5 flex-1">
-          <div className="flex flex-col min-h-48 h-full 5xl:text-[3rem] 3xl:text-[1.25rem] 2xl:text-3xl xl:text-2xl lg:text-lg">
+          <div className="flex flex-col min-h-48 h-full text-lg">
             <div className="flex-1 items-center mb-3 mt-4">
               <label className="text-purple">Email: </label>
               <input
                 ref={emailRef}
-                className={`border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg
+                className={`border-2 border-purple border-solid rounded-md h-12 w-full p-4 placeholder-purple placeholder:font-bold text-lg
                       ${role === "User" ? "opacity-50 cursor-not-allowed" : ""}`}
                 placeholder="Email"
                 type="text"
@@ -170,7 +170,7 @@ export default function CreateNewUser() {
               <label className="text-purple">Username: </label>
               <input
                 ref={usernameRef}
-                className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
+                className="border-2 border-purple border-solid rounded-md h-12 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
                 placeholder="Username"
                 type="text"
                 onChange={(e) => setUsername(e.target.value)}
@@ -181,7 +181,7 @@ export default function CreateNewUser() {
               <label className="text-purple">Password: </label>
               <input
                 ref={passwordRef}
-                className="border-2 border-purple border-solid rounded-md h-14 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
+                className="border-2 border-purple border-solid rounded-md h-12 w-full p-4 placeholder-purple placeholder:font-bold text-lg"
                 placeholder="Password"
                 type="text"
                 onChange={(e) => setPassword(e.target.value)}
