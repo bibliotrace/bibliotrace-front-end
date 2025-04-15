@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import tailwindConfig from "../../tailwind.config";
 import NavBar from "../components/NavBar";
+import ErrorModal from "../modals/ErrorModal";
 
 export default function CreateNewUser() {
   const roles = ["Admin", "User"];
@@ -14,9 +15,8 @@ export default function CreateNewUser() {
   let [role, setRole] = useState("");
   let [campus, setCampus] = useState("");
   const [campuses, setCampusList] = useState([]);
+  const [message, setMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [failedMessage, setFailedMessage] = useState("");
-
   async function createAccount(jwt, accountData) {
     try {
       const response = await fetch("http://localhost:8080/api/auth/user", {
@@ -29,11 +29,10 @@ export default function CreateNewUser() {
       });
 
       const data = await response.json();
-
       if (response.ok) {
         setSuccessMessage(data.message);
       } else {
-        setFailedMessage("*" + data.message);
+        setMessage(data.message);
       }
       return data;
     } catch (error) {
@@ -55,13 +54,9 @@ export default function CreateNewUser() {
     getCampuses();
   }, []);
 
-  const testClick = () => {
-    console.log("clicked");
-  };
-
   const onSubmit = () => {
+    setMessage(null);
     setSuccessMessage(null);
-    setFailedMessage(null);
     const jwt = Cookies.get("authToken");
     if (username === "") username = null;
     if (password == "") password = null;
@@ -121,6 +116,15 @@ export default function CreateNewUser() {
         Create User
       </h1>
       <div className="flex flex-row">
+        {message && (
+          <ErrorModal
+            description={"Error Creating Account"}
+            message={message}
+            onExit={() => {
+              setMessage(null);
+            }}
+          />
+        )}
         <section className="2xl:p-20 p-10 mt-14 flex-1 flex flex-col text-lg">
           <p>1. Please only create an account if the location you are at has no account.</p>
           <p>
@@ -234,7 +238,6 @@ export default function CreateNewUser() {
                 Create Account
               </button>
               <p className="text-purple">{successMessage}</p>
-              <p className="text-darkPeach">{failedMessage}</p>
             </div>
           </div>
         </section>
