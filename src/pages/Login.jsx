@@ -124,8 +124,8 @@ export default function Login({ loginType }) {
       setMessage(`Error Fetching Metadata: ${responseText}`);
     } else {
       const jsonResult = await response.json();
-      if (jsonResult != null && jsonResult.results != null) {
-        const audiences = jsonResult.results;
+      if (jsonResult != null && jsonResult.object != null) {
+        const audiences = jsonResult.object;
         Cookies.set("audienceList", audiences);
       }
     }
