@@ -24,6 +24,8 @@ import ManageGenresTags from "../pages/ManageGenresTags.jsx";
 import Audit from "../pages/Audit.jsx";
 import AuditList from "../pages/AuditList.jsx";
 import AuditReport from "../pages/AuditReport.jsx";
+import PopularReport from "../pages/PopularReport.jsx";
+import StockReport from "../pages/StockReport.jsx";
 import BacklogUpdateBook from "../pages/BacklogUpdateBook.jsx"
 import PopularReport from "../pages/PopularReport.jsx";
 import StockReport from "../pages/StockReport.jsx";
