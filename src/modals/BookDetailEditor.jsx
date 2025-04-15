@@ -11,20 +11,20 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const jwt = Cookies.get("authToken");
 
   const [synopsis, setSynopsis] = useState("");
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [isbn, setIsbn] = useState('');
-  const [primaryGenre, setPrimaryGenre] = useState('');
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [primaryGenre, setPrimaryGenre] = useState("");
   const [secondaryGenres, setSecondaryGenres] = useState([]);
   const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
-  const [audience, setAudience] = useState('');
+  const [audience, setAudience] = useState("");
   const [pages, setPages] = useState();
   const [seriesName, setSeriesName] = useState();
   const [seriesNumber, setSeriesNumber] = useState();
   const [publishDate, setPublishDate] = useState();
   const [language, setLanguage] = useState();
   const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
-  const [availableGenres, setAvailableGenres] = useState([])
+  const [availableGenres, setAvailableGenres] = useState([]);
   const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);
   const [tags, setTags] = useState(bookData.tag_list ?? []);
   const [tagOptions, setTagOptions] = useState(allTagsList.split(",") ?? ["No Tags Found"]);
@@ -38,7 +38,7 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     setAuthor(bookData.author ?? "");
     setIsbn(bookData.isbn ?? "");
     setPrimaryGenre(bookData.primaryGenre ?? "");
-    const newAvailableGenresList = genres.filter(val => val != bookData.primaryGenre);
+    const newAvailableGenresList = genres.filter((val) => val != bookData.primaryGenre);
     setAvailableGenres(newAvailableGenresList);
     setSecondaryGenres(bookData.secondaryGenres ?? []);
     setTargetSecondaryGenre("");
@@ -55,11 +55,11 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   }, [bookData]);
 
   const handlePrimaryGenreChange = (e) => {
-    setPrimaryGenre(e.target.value)
-    const newAvailableGenresList = genres.filter(val => val != e.target.value)
-    console.log(newAvailableGenresList)
+    setPrimaryGenre(e.target.value);
+    const newAvailableGenresList = genres.filter((val) => val != e.target.value);
+    console.log(newAvailableGenresList);
     setAvailableGenres(newAvailableGenresList);
-  }
+  };
 
   const handleSuggestionCall = async (e, isbnSeed) => {
     if (e) {
@@ -127,14 +127,17 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       genre: targetSecondaryGenre,
     };
     console.log(fetchBody);
-    const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify(fetchBody),
-    });
+    const result = await fetch(
+      `http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(fetchBody),
+      }
+    );
 
     if (result.ok) {
       setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
@@ -150,14 +153,17 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       genre: secondaryGenres[index],
     };
     console.log(fetchBody);
-    const result = await fetch(`http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-      body: JSON.stringify(fetchBody),
-    });
+    const result = await fetch(
+      `http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+        body: JSON.stringify(fetchBody),
+      }
+    );
 
     if (result.ok) {
       setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
@@ -172,14 +178,17 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       tag: newTag,
     };
     console.log(fetchBody);
-    const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify(fetchBody),
-    });
+    const result = await fetch(
+      `http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(fetchBody),
+      }
+    );
 
     if (result.ok) {
       setTags([...tags, newTag]);
@@ -194,14 +203,17 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
     const fetchBody = {
       tag: tags[index],
     };
-    const result = await fetch(`http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`, {
-      headers: {
-        Authorization: `Bearer ${jwt}`,
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-      body: JSON.stringify(fetchBody),
-    });
+    const result = await fetch(
+      `http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`,
+      {
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+          "Content-Type": "application/json",
+        },
+        method: "DELETE",
+        body: JSON.stringify(fetchBody),
+      }
+    );
 
     if (result.ok) {
       setTags(tags.filter((_, i) => i !== index));
@@ -240,7 +252,9 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
   const [tagSearchResults, setTagSearchResults] = useState([]);
 
   useEffect(() => {
-    let results = tagOptions.filter((item) => item.toLowerCase().includes(tagSearchTerm.toLowerCase()));
+    let results = tagOptions.filter((item) =>
+      item.toLowerCase().includes(tagSearchTerm.toLowerCase())
+    );
     results = results.filter((item) => !tags.includes(item));
     setTagSearchResults(results);
   }, [tagSearchTerm, tagOptions]);
@@ -310,7 +324,11 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                     placeholder="978123456789"
                     onChange={(e) => setIsbn(e.target.value)}
                   />
-                  <button type="button" className="text-sm" onClick={(e) => handleSuggestionCall(e)}>
+                  <button
+                    type="button"
+                    className="text-sm"
+                    onClick={(e) => handleSuggestionCall(e)}
+                  >
                     Pull Data From ISBNdb
                   </button>
                 </div>
@@ -478,6 +496,15 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                         placeholder="Search..."
                         value={tagSearchTerm}
                         onChange={(event) => setTagSearchTerm(event.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            if (tagSearchResults.includes(tagSearchTerm)) {
+                              handleAddTag(e, tagSearchTerm);
+                            } else {
+                              handleAddNewTag(e, tagSearchTerm);
+                            }
+                          }
+                        }}
                       />
                       <button role="button" className="h-12 text-base" onClick={handleAddNewTag}>
                         Add
@@ -487,7 +514,10 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                       <ul className="bg-[#f5f5f5] rounded-xl max-h-60 overflow-auto">
                         {tagSearchResults.map((item, index) => (
                           <li key={index} className="px-4 py-2 hover:bg-gray-100">
-                            <button className="bg-white w-full" onClick={(e) => handleAddTag(e, item)}>
+                            <button
+                              className="bg-white w-full"
+                              onClick={(e) => handleAddTag(e, item)}
+                            >
                               {item}
                             </button>
                           </li>
@@ -502,7 +532,9 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
                 <button onClick={(e) => handleBookFormSubmit(e)}>Submit Changes</button>
               </div>
             </div>
-            {messageString && <ErrorModal description={messageString} onExit={() => setMessageString("")} />}
+            {messageString && (
+              <ErrorModal description={messageString} onExit={() => setMessageString("")} />
+            )}
           </motion.div>
         </motion.div>
       }
