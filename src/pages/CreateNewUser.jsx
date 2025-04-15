@@ -101,7 +101,7 @@ export default function CreateNewUser() {
               L132,0
               L0,0
               Z"
-          transform="rotate(0, 50, 50) scale(1, 1.5)"
+          transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
       <NavBar

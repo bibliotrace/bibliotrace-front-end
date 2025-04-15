@@ -156,7 +156,7 @@ export default function SetLocation() {
             L132,0
             L0,0
             Z"
-          transform="rotate(0, 50, 50) scale(1, 2)"
+          transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
       <NavBar
