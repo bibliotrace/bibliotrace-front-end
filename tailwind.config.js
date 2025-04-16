@@ -16,6 +16,7 @@ export default {
       lightRed: "#d97766",
       peachPink: "#fcb7a4",
       gray: "#f5f5f5",
+      lightGreen: "#82e9af",
     },
     extend: {
       fontFamily: {
