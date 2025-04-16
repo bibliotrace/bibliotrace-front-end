@@ -16,7 +16,7 @@ export default function CreateNewUser() {
   let [campus, setCampus] = useState("");
   const [campuses, setCampusList] = useState([]);
   const [message, setMessage] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [title, setTitle] = useState("");
   async function createAccount(jwt, accountData) {
     try {
       const response = await fetch("http://localhost:8080/api/auth/user", {
@@ -29,10 +29,11 @@ export default function CreateNewUser() {
       });
 
       const data = await response.json();
+      setMessage(data.message);
       if (response.ok) {
-        setSuccessMessage(data.message);
+        setTitle("Account Creation success!");
       } else {
-        setMessage(data.message);
+        setTitle("Error Creating Account");
       }
       return data;
     } catch (error) {
@@ -56,7 +57,7 @@ export default function CreateNewUser() {
 
   const onSubmit = () => {
     setMessage(null);
-    setSuccessMessage(null);
+    setTitle(null);
     const jwt = Cookies.get("authToken");
     if (username === "") username = null;
     if (password == "") password = null;
@@ -118,7 +119,7 @@ export default function CreateNewUser() {
       <div className="flex flex-row">
         {message && (
           <ErrorModal
-            description={"Error Creating Account"}
+            description={title}
             message={message}
             onExit={() => {
               setMessage(null);
@@ -237,7 +238,6 @@ export default function CreateNewUser() {
               >
                 Create Account
               </button>
-              <p className="text-purple">{successMessage}</p>
             </div>
           </div>
         </section>
