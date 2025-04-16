@@ -80,13 +80,11 @@ export default function Checkout() {
       });
       const data = await response.json();
       if (response.ok) {
-        if (data.message.includes("No inventory items were updated")) {
-          setMessage("Book has already been checked out!");
-        } else {
-          setTitle(data.object.book_title);
-          setAuthor(data.object.author);
+        setTitle(data.object.book_title);
+        setAuthor(data.object.author);
 
-          const isbn = data.object.isbn_list.split("|")[0];
+        const isbn = data.object.isbn_list.split("|")[0];
+        if (isbn) {
           await getCoverThumbnail(isbn);
         }
       } else {
