@@ -187,7 +187,7 @@ export default function RemoveBook() {
               L132,0
               L0,0
               Z"
-          transform="rotate(0, 50, 50) scale(1, 2)"
+          transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
       <NavBar
@@ -198,7 +198,7 @@ export default function RemoveBook() {
         homeNavOnClick="/admin"
       />
 
-      <h1 className="text-center 5xl:my-16 3xl:my-12 lg:my-4 4xl:text-[8rem] 3xl:text-[6rem] xl:text-[3rem]  text-white font-rector">
+      <h1 className="text-center 5xl:my-16 3xl:my-12 lg:my-4 3xl:text-5xl   text-white font-rector">
         Remove Books
       </h1>
       {message && (
@@ -210,8 +210,8 @@ export default function RemoveBook() {
           }}
         />
       )}
-      <div className="flex flex-row h-xl:mt-44 h-lg:mt-44 h-md:mt-44 h-sm:mt-36 mt-12">
-        <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around 3xl:text-3xl xl:text-lg">
+      <div className="flex flex-row mt-32">
+        <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around text-lg">
           <div className="mb-5 flex items-center w-full">
             <input
               id="qr"

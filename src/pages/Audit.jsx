@@ -197,11 +197,11 @@ export default function Audit() {
             L132,0
             L0,0
             Z"
-          transform="rotate(0, 50, 50) scale(1, 2)"
+          transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
       <NavBar useDarkTheme={true} showNavButtons={true}></NavBar>
-      <h1 className="text-center mb-2">Audit</h1>
+      <h1 className="text-center mb-2 text-5xl text-white font-rector">Audit</h1>
       {isAuditOngoing ? (
         <>
           <CompleteAuditDialog

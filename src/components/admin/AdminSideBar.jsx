@@ -15,7 +15,7 @@ export default function Sidebar({ onMenuChange, activeButton, setActiveButton })
   ];
 
   return (
-    <div className="h-full flex flex-col pl-[3vw] pr-5 gap-4 justify-center w-[20vw]">
+    <div className="flex flex-col pl-[3vw] pr-5 gap-4 justify-center w-[20vw]">
       {buttons.map((button, index) => (
         <NewBarButton
           key={index}

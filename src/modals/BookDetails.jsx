@@ -89,14 +89,14 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
       <AnimatePresence>
         {
           <motion.div
-            className="fixed overflow-auto inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm"
+            className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50 backdrop-blur-sm p-2 z-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onExit}
           >
             <motion.div
-              className="bg-white rounded-lg shadow-lg w-4/6 max-w-5xl max-h-[90vh] overflow-y-auto relative"
+              className="bg-white rounded-lg shadow-lg w-5/6 max-w-3xl max-h-[80vh] overflow-y-auto relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
@@ -203,7 +203,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
             onClick={onExit}
           >
             <motion.div
-              className="bg-white rounded-lg shadow-lg w-5/6 max-w-3xl max-h-[90vh] relative"
+              className="bg-white rounded-lg shadow-lg w-5/6 max-w-3xl max-h-[80vh] overflow-y-auto relative"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}

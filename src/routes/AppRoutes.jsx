@@ -26,7 +26,7 @@ import AuditList from "../pages/AuditList.jsx";
 import AuditReport from "../pages/AuditReport.jsx";
 import PopularReport from "../pages/PopularReport.jsx";
 import StockReport from "../pages/StockReport.jsx";
-import BacklogUpdateBook from "../pages/BacklogUpdateBook.jsx"
+import BacklogUpdateBook from "../pages/BacklogUpdateBook.jsx";
 
 const AppRoutes = () => {
   const getToken = () => {

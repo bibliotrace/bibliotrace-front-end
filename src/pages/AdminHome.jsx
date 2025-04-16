@@ -183,7 +183,7 @@ export default function AdminHome({}) {
   ];
 
   return (
-    <div className="size-full pb-5 flex flex-col">
+    <div className="min-h-screen w-screen pb-5 flex flex-col relative overflow-hidden">
       <ScreenSizeChecker />
       <svg
         className="-z-10 absolute left-0 top-0"

@@ -95,7 +95,10 @@ const SearchResult = ({ bookData }) => {
   return (
     <div>
       <div
-        className="hidden md:flex justify-between h-fit border-x-2 border-x-[#110057] border-b-2 border-b-[#110057] bg-[#FFFFFF] bg-opacity-90 text-xl"
+        className="hidden md:flex justify-between cursor-pointer h-fit 
+        border-x-2 border-x-[#110057] border-b-2 border-b-[#110057] 
+        bg-[#FFFFFF] bg-opacity-90 text-xl 
+        transition-transform duration-200 ease-in-out hover:scale-105 "
         onClick={toggleModal}
       >
         <div className="h-40 flex items-center justify-center px-3 border-r-slate-50 border-r-2 w-28 text-transparent">
