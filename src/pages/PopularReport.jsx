@@ -43,6 +43,11 @@ export default function PopularReport() {
     }
   }
 
+  async function printReport(e) {
+    e.preventDefault();
+    window.print();
+  }
+
   return (
     <div className="search-bg w-full h-full">
       {message ? <ErrorModal description={"Error"} message={message} onExit={() => setMessage("")} /> : <></>}
@@ -59,23 +64,22 @@ export default function PopularReport() {
             getPopular(e);
           }}
         >
-          <label className="print:hidden" for="start">
+          <label className="mr-1 whitespace-nowrap print:hidden" htmlFor="start">
             Start date:{" "}
           </label>
-          <input className="mr-5 border" type="date" id="start" name="popular-start" min="2025-01-01" />
-
-          <label className="print:hidden" for="start">
+          <input className="mr-5 border rounded" type="date" id="start" name="popular-start" min="2025-01-01" />
+          <label className="mr-1 whitespace-nowrap print:hidden" htmlFor="start">
             End date:{" "}
           </label>
-          <input className="border" type="date" id="end" name="popular-end" min="2025-01-01" />
-          <button className="border-black py-1 rounded-none ml-5 print:hidden" type="submit">
+          <input className="border rounded" type="date" id="end" name="popular-end" min="2025-01-01" />
+          <button className="border-black py-1 rounded ml-5 print:hidden" type="submit">
             Apply
           </button>
+          <button className="whitespace-nowrap border-black py-1 rounded ml-5 print:hidden" onClick={(e) => { printReport(e)}}>
+            <i className="fa-solid fa-print mr-2"></i>
+            Print Report
+          </button>
         </form>
-
-        <button className="col-span-1 print:hidden border-black ml-auto" onClick={window.print}>
-          Print Report
-        </button>
       </div>
 
       <div className="flex flex-col w-full items-center">

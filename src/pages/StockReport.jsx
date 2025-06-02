@@ -36,6 +36,7 @@ export default function StockReport() {
       <h1 className="text-center print:text-xl">Stock Report</h1>
 
       <div className="w-[80%] mx-auto">
+        &nbsp;
         <button className="print:hidden border-black float-right" onClick={window.print}>
           Print Report
         </button>

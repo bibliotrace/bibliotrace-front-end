@@ -140,7 +140,7 @@ export default function SetLocation() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-darkBlue"
+          className="fill-lightBlue"
           d="
             M-0.5,12
             C7,10 12,14 17,16
@@ -159,12 +159,14 @@ export default function SetLocation() {
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
+
       <NavBar
-        useDarkTheme={false}
+        useDarkTheme={true}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.darkBlue}
-        textColor={tailwindConfig.theme.colors.white}
-        homeNavOnClick="/admin"
+        bgColor={tailwindConfig.theme.colors.lightBlue}
+        textColor={tailwindConfig.theme.colors.black}
+        showNavButtons={true}
+        back={true}
       />
 
       <div className="flex flex-col justify-between h-5/6">
@@ -181,7 +183,7 @@ export default function SetLocation() {
           />
         )}
         <div className="flex flex-row pb-20">
-          <section className="p-20 flex-1 flex flex-col">
+          <section className="2xl:p-20 xl:p-10 p-5 flex-1 flex flex-col">
             <div className="text-xl mb-5">
               <label className="text-2xl">Location:</label>
               <select
@@ -216,7 +218,7 @@ export default function SetLocation() {
             </p>
           </section>
 
-          <section className="p-20 flex-1">
+          <section className="2xl:p-20 xl:p-10 p-5 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
               <h4 className="bg-darkBlue  text-center text-white text-2xl p-2">Book Modified:</h4>
               {title != null && author != null ? (

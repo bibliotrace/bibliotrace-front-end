@@ -1,25 +1,24 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function CompleteAuditDialog({
-  completeAuditDialog,
-  currentLocation,
-  completeLocation,
-  completeAudit,
-}) {
+export default function RemoveAuditDialog({ removeAuditDialog, onConfirm, onCancel }) {
+  const navigate = useNavigate();
+
   return (
-    <dialog className="rounded-md p-8 border-2 border-darkPeach" ref={completeAuditDialog}>
+    <dialog className="rounded-md p-8 border-2 border-darkPeach" ref={removeAuditDialog}>
       <h1 className="text-xl text-center mb-5 font-rector font-bold text-darkBlue">
-        Complete Audit
+        Remove Audit
       </h1>
       <p className="text-center mb-5 ">
-        {currentLocation.location_name} is the last location to be audited. The entire audit will be
-        marked complete and cannot be undone.
+        Are you sure you want to remove this audit? Removing it will permanently erase 
+        all information about the audit and cannot be undone.
       </p>
       <div className="flex flex-row justify-center">
         <button
           className="mx-2 bg-darkBlue text-white"
           onClick={() => {
-            completeAuditDialog.current.close();
+            removeAuditDialog.current.close();
+            onCancel();
           }}
         >
           Cancel
@@ -27,9 +26,8 @@ export default function CompleteAuditDialog({
         <button
           className="mx-2 bg-darkBlue text-white"
           onClick={() => {
-            completeAuditDialog.current.close();
-            completeLocation(currentLocation);
-            completeAudit();
+            removeAuditDialog.current.close();
+            onConfirm();
           }}
         >
           Confirm

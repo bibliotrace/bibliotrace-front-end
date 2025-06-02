@@ -6,10 +6,13 @@ import AuditCompletedDialog from "../modals/AuditCompletedDialog";
 import CompleteAuditDialog from "../modals/CompleteAuditDialog";
 import CompleteLocationDialog from "../modals/CompleteLocationDialog";
 import tailwindConfig from "../../tailwind.config";
+import SyncAuditDialog from "../modals/SyncAuditDialog";
+import { sync } from "motion";
 
 export default function Audit() {
   const completeLocationDialog = useRef(null);
   const completeAuditDialog = useRef(null);
+  const syncAuditDialog = useRef(null);
   const auditCompletedDialog = useRef(null);
   const [isAuditOngoing, setIsAuditOngoing] = useState(null);
   const [auditID, setAuditID] = useState(null);
@@ -149,12 +152,12 @@ export default function Audit() {
     }
   }
 
-  async function completeAudit() {
+  async function completeAudit(syncInventory) {
     try {
       const response = await fetch("http://localhost:8080/api/inventory/audit/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
-        body: JSON.stringify({ audit_id: auditID }),
+        body: JSON.stringify({ audit_id: auditID, sync_inventory: syncInventory }),
       });
 
       const data = await response.json();
@@ -162,8 +165,6 @@ export default function Audit() {
         setMessage(data.message);
       } else {
         setIsAuditOngoing(false);
-        // setLastAuditCompletedDate(data.)
-        completeAuditDialog.current.close();
         auditCompletedDialog.current.showModal();
       }
     } catch (error) {
@@ -171,17 +172,21 @@ export default function Audit() {
     }
   }
 
+  async function confirmSyncAudit() {
+    syncAuditDialog.current.showModal();
+  }
+  
   return (
     <>
       <svg
         className="-z-10 absolute left-0 top-0"
         width="100vw"
-        height="80%"
+        height="100%"
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
         <path
-          className="fill-peachPink"
+          className="fill-lightBlue"
           d="
             M-0.5,12
             C7,10 12,14 17,16
@@ -200,15 +205,25 @@ export default function Audit() {
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
-      <NavBar useDarkTheme={true} showNavButtons={true}></NavBar>
+
+      <NavBar
+        useDarkTheme={true}
+        showTitle={true}
+        bgColor={tailwindConfig.theme.colors.lightBlue}
+        textColor={tailwindConfig.theme.colors.black}
+        showNavButtons={true}
+        back={true}
+      />
+
       <h1 className="text-center mb-2 text-5xl text-white font-rector">Audit</h1>
+
       {isAuditOngoing ? (
         <>
           <CompleteAuditDialog
             completeAuditDialog={completeAuditDialog}
             currentLocation={currentLocation}
             completeLocation={completeLocation}
-            completeAudit={completeAudit}
+            completeAudit={confirmSyncAudit}
           />
           <CompleteLocationDialog
             completeLocationDialog={completeLocationDialog}
@@ -216,6 +231,7 @@ export default function Audit() {
             completeLocation={completeLocation}
           />
           <AuditCompletedDialog auditCompletedDialog={auditCompletedDialog} />
+          <SyncAuditDialog syncAuditDialog={syncAuditDialog} onYes={() => completeAudit(true)} onNo={() => completeAudit(false)}/>
           <h2 className="text-center text-2xl mb-20">Started On: {lastAuditStartDate}</h2>
           <p className="text-center">{message}</p>
           <div className="flex flex-row justify-around h-[60%]">
@@ -227,7 +243,7 @@ export default function Audit() {
                     <li className="flex flex-row flex-nowrap justify-between items-center mb-7">
                       <label
                         className={"w-full" + (location.in_audit ? "" : " line-through")}
-                        for={`${location.location_name}-radio`}
+                        htmlFor={`${location.location_name}-radio`}
                       >
                         <input
                           id={`${location.location_name}-radio`}
@@ -291,9 +307,7 @@ export default function Audit() {
             </button>
             <button
               className="m-5 border-black"
-              onClick={() => {
-                navigate("/audit-list");
-              }}
+              onClick={() => { navigate("/audit-list");}}
             >
               View Audit Reports
             </button>

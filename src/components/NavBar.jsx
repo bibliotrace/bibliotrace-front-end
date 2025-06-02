@@ -22,7 +22,7 @@ const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onH
     if (onHomeClick) {
       onHomeClick();
     }
-    console.log("Home Button was pressed");
+    //console.log("Home Button was pressed");
     if (isAdmin) {
       navigate("/admin");
     } else {
@@ -49,11 +49,13 @@ const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onH
   const Home = useDarkTheme ? HomeLogoDark : HomeLogo;
   const Logout = useDarkTheme ? LogoutLogoDark : LogoutLogo;
 
+  let onBack = () => navigate(-1);
+
   return (
     <div className="flex flex-row w-full items-center justify-between px-4 print:hidden" style={{ color: textColor }}>
       <div className="flex items-center">
         {back ? (
-          <div className="hover:cursor-pointer flex flex-row justify-center items-center" onClick={() => navigate(-1)}>
+          <div className="hover:cursor-pointer flex flex-row justify-center items-center" onClick={onBack}>
             <span className="text-3xl relative font-bold">&#8592;</span>
             <span className="text-lg p-2">Back</span>
           </div>
