@@ -124,37 +124,37 @@ export default function ManageLocations() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-darkBlue"
+          className="fill-purple"
           d="
-            M-0.5,12
-            C7,10 12,14 17,16
-            C22,18 27,14 32,12
-            C37,10 42,14 47,16
-            C52,18 57,14 62,12
-            C67,10 72,14 77,16
-            C82,18 87,14 92,12
-            C97,10 102,14 107,16
-            C110,17.5 114,16 117,14
-            C120,12 124,10 127,11
-            L132,11
-            L132,0
-            L0,0
-            Z"
+              M-0.5,12
+              C7,10 12,14 17,16
+              C22,18 27,14 32,12
+              C37,10 42,14 47,16
+              C52,18 57,14 62,12
+              C67,10 72,14 77,16
+              C82,18 87,14 92,12
+              C97,10 102,14 107,16
+              C110,17.5 114,16 117,14
+              C120,12 124,10 127,11
+              L132,11
+              L132,0
+              L0,0
+              Z"
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
+
       <NavBar
         useDarkTheme={false}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.darkBlue}
         textColor={tailwindConfig.theme.colors.white}
-        homeNavOnClick="/admin"
+        showNavButtons={true}
+        back={true}
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">
-          Manage Locations
-        </h1>
+        <h1 className="text-center my-10 text-white font-rector pb-20 text-5xl">Manage Locations</h1>
+
         {errorMessage && (
           <ErrorModal
             description={"Error Submitting Locations"}

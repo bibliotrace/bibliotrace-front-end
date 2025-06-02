@@ -170,18 +170,18 @@ export default function Audit() {
       console.log(error.message);
     }
   }
-
+  
   return (
     <>
       <svg
         className="-z-10 absolute left-0 top-0"
         width="100vw"
-        height="80%"
+        height="100%"
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >
         <path
-          className="fill-peachPink"
+          className="fill-lightBlue"
           d="
             M-0.5,12
             C7,10 12,14 17,16
@@ -200,8 +200,18 @@ export default function Audit() {
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
-      <NavBar useDarkTheme={true} showNavButtons={true}></NavBar>
+
+      <NavBar
+        useDarkTheme={true}
+        showTitle={true}
+        bgColor={tailwindConfig.theme.colors.lightBlue}
+        textColor={tailwindConfig.theme.colors.black}
+        showNavButtons={true}
+        back={true}
+      />
+
       <h1 className="text-center mb-2 text-5xl text-white font-rector">Audit</h1>
+
       {isAuditOngoing ? (
         <>
           <CompleteAuditDialog
@@ -291,9 +301,7 @@ export default function Audit() {
             </button>
             <button
               className="m-5 border-black"
-              onClick={() => {
-                navigate("/audit-list");
-              }}
+              onClick={() => { navigate("/audit-list");}}
             >
               View Audit Reports
             </button>

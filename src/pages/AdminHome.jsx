@@ -2,7 +2,7 @@
 // and navigation buttons on the right hand side. The inner portion will be filled by the following list of components:
 // Home, ManageInventory, Settings, Help, and Reports. These components are stored in the ../components/admin folder.
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AdminNavBar from "../components/admin/AdminNavBar.jsx";
 import AdminMainMenu from "../components/admin/AdminMainMenu.jsx";
 import AdminSideBar from "../components/admin/AdminSideBar.jsx";
@@ -10,14 +10,28 @@ import AdminManageMenu from "../components/admin/AdminManageMenu.jsx";
 import ScreenSizeChecker from "../components/admin/ScreenSizeChecker.jsx";
 
 export default function AdminHome({}) {
-  const [activeMenu, setActiveMenu] = useState("main"); //for the component
-  const [activeButton, setActiveButton] = useState(null); //for side bar highlighting
+  const location = useLocation();
   const navigate = useNavigate();
 
+  let localStorageActiveMenu = localStorage.getItem("activeMenu");
+  let localStorageActiveButton = localStorage.getItem("activeButton");
+
+  const [activeMenu, realSetActiveMenu] = useState(localStorageActiveMenu ?? "main"); //for the component
+  const [activeButton, realSetActiveButton] = useState(localStorageActiveButton ?? null); //for side bar highlighting
   const [searchInput, setSearchInput] = useState("");
 
+  let setActiveMenu = (menu) => {
+    realSetActiveMenu(menu);
+    localStorage.setItem("activeMenu", menu);
+  };
+
+  let setActiveButton = (button) => {
+    realSetActiveButton(button);
+    localStorage.setItem("activeButton", button);
+  };
+
   const handleSearch = () => {
-    console.log("HOME.jsx searchInput: ", searchInput);
+    //console.log("HOME.jsx searchInput: ", searchInput);
     if (searchInput != null && searchInput != "") {
       navigate("/search", { state: { initSearchInput: searchInput } });
     }
@@ -45,7 +59,7 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
-      text: "Create New Profile",
+      text: "Create New User",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
@@ -118,7 +132,7 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
-      text: "Update Back Log Books",
+      text: "Update Backlog Books",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
@@ -129,7 +143,7 @@ export default function AdminHome({}) {
     },
   ];
 
-  const ReportButtons = [
+  const reportButtons = [
     {
       text: "Shopping List",
       textColor: "white",
@@ -171,7 +185,7 @@ export default function AdminHome({}) {
       height: "10vh",
     },
     {
-      text: "Check Stock",
+      text: "Stock Report",
       textColor: "white",
       bgColor: "#110057",
       borderColor: "white",
@@ -184,7 +198,7 @@ export default function AdminHome({}) {
 
   return (
     <div className="min-h-screen w-screen pb-5 flex flex-col relative overflow-hidden">
-      <ScreenSizeChecker />
+      {/* <ScreenSizeChecker /> */}
       <svg
         className="-z-10 absolute left-0 top-0"
         width="100vw"
@@ -256,7 +270,7 @@ export default function AdminHome({}) {
             </>
           ) : activeMenu === "report" ? (
             <>
-              <AdminManageMenu menuButtons={ReportButtons} title="Reports" />
+              <AdminManageMenu menuButtons={reportButtons} title="Reports" />
             </>
           ) : null}
         </div>

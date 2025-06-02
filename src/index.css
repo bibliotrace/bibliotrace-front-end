@@ -68,6 +68,13 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 } */
 
+@media (print) {
+  .print-report {
+    overflow-y: visible !important;
+    border: none !important;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

@@ -171,36 +171,39 @@ export default function RemoveBook() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-darkPeach"
+          className="fill-lightBlue"
           d="
-              M-0.5,12
-              C7,10 12,14 17,16
-              C22,18 27,14 32,12
-              C37,10 42,14 47,16
-              C52,18 57,14 62,12
-              C67,10 72,14 77,16
-              C82,18 87,14 92,12
-              C97,10 102,14 107,16
-              C110,17.5 114,16 117,14
-              C120,12 124,10 127,11
-              L132,11
-              L132,0
-              L0,0
-              Z"
+            M-0.5,12
+            C7,10 12,14 17,16
+            C22,18 27,14 32,12
+            C37,10 42,14 47,16
+            C52,18 57,14 62,12
+            C67,10 72,14 77,16
+            C82,18 87,14 92,12
+            C97,10 102,14 107,16
+            C110,17.5 114,16 117,14
+            C120,12 124,10 127,11
+            L132,11
+            L132,0
+            L0,0
+            Z"
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
+
       <NavBar
-        useDarkTheme={false}
+        useDarkTheme={true}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.darkPeach}
-        textColor={tailwindConfig.theme.colors.white}
-        homeNavOnClick="/admin"
+        bgColor={tailwindConfig.theme.colors.lightBlue}
+        textColor={tailwindConfig.theme.colors.black}
+        showNavButtons={true}
+        back={true}
       />
 
-      <h1 className="text-center 5xl:my-16 3xl:my-12 lg:my-4 3xl:text-5xl   text-white font-rector">
+      <h1 className="text-center 5xl:my-16 3xl:my-12 lg:my-4 3xl:text-5xl text-black font-rector">
         Remove Books
       </h1>
+
       {message && (
         <ErrorModal
           description={"Error Removing Book"}
@@ -210,8 +213,9 @@ export default function RemoveBook() {
           }}
         />
       )}
-      <div className="flex flex-row mt-32">
-        <section className="2xl:p-20 p-10 flex-1 flex flex-col justify-around text-lg">
+      
+      <div className="flex flex-row mt-40">
+        <section className="2xl:p-20 xl:p-10 p-5 flex-1 flex flex-col justify-around text-lg">
           <div className="mb-5 flex items-center w-full">
             <input
               id="qr"
@@ -262,7 +266,7 @@ export default function RemoveBook() {
           </p>
         </section>
 
-        <section className="2xl:p-20 xl:p-5 flex-1">
+        <section className="2xl:p-20 xl:p-10 p-5 flex-1">
           <div className="border-2 border-darkPeach rounded-md min-h-48 h-full">
             <h4 className="bg-darkPeach  text-center text-white 3xl:text-3xl xl:text-lg p-2">
               Book Removed:{" "}

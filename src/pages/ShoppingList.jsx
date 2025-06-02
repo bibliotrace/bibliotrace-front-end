@@ -68,12 +68,26 @@ export default function ShoppingList() {
     }
   }
 
+  async function printReport(e) {
+    e.preventDefault();
+    window.print();
+  }
+
   return (
     <div className="search-bg h-full w-full">
-      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true}></NavBar>
-      <h1 className="text-center">Shopping List</h1>
-      <div className="flex flex-column w-full justify-center">
-        <ul className="flex-grow max-w-[80%] lg:max-w-[900px] border bg-white mt-10 h-[70vh] p-10 overflow-y-scroll">
+      <NavBar useDarkTheme={true} showTitle={false} showNavButtons={true} back={true}></NavBar>
+
+      <h1 className="text-center print:text-xl">Shopping List</h1>
+
+      <div className="w-[80%] mx-auto">
+        &nbsp;
+        <button className="print:hidden border-black rounded float-right" onClick={(e) => { printReport(e) }}>
+          Print Report
+        </button>
+      </div>
+
+      <div className="flex flex-col w-full items-center">
+        <ul className="flex-grow w-[80%] border mt-2 h-[70vh] bg-white p-10 overflow-y-scroll print:border-none print:w-full print:p-0 print:overflow-visible">
           {shoppingList.map((obj) => {
             return (
               <li className="flex flex-row justify-between items-center mb-5">
@@ -81,10 +95,10 @@ export default function ShoppingList() {
                   {obj.book_title} by {obj.author}
                 </p>
                 <div className="flex flex-row no-wrap">
-                  <button className="border-black" onClick={() => handleMoveToRestock(obj.id)}>
+                  <button className="border-black print:hidden" onClick={() => handleMoveToRestock(obj.id)}>
                     Move to Restock
                   </button>
-                  <button className="ml-5 border-black" onClick={() => handleRemove(obj.id)}>
+                  <button className="ml-5 border-black print:hidden" onClick={() => handleRemove(obj.id)}>
                     Remove
                   </button>
                 </div>

@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal.jsx";
+import tailwindConfig from "../../tailwind.config";
 
 export default function ManageGenresTags() {
   const [genres, setGenres] = useState([]);
@@ -144,15 +145,48 @@ export default function ManageGenresTags() {
     }
   }
 
+
   return (
     <>
+      <svg
+        className="-z-10 absolute left-0 top-0"
+        width="100vw"
+        height="100%"
+        viewBox="0 0 100 100"
+        preserveAspectRatio="none"
+      >
+        <path
+          className="fill-lightBlue"
+          d="
+            M-0.5,12
+            C7,10 12,14 17,16
+            C22,18 27,14 32,12
+            C37,10 42,14 47,16
+            C52,18 57,14 62,12
+            C67,10 72,14 77,16
+            C82,18 87,14 92,12
+            C97,10 102,14 107,16
+            C110,17.5 114,16 117,14
+            C120,12 124,10 127,11
+            L132,11
+            L132,0
+            L0,0
+            Z"
+          transform="rotate(0, 50, 50) scale(1, 1.75)"
+        />
+      </svg>
+
       <NavBar
         useDarkTheme={true}
         showTitle={true}
-        bgColor={"#FFFFFF"}
+        bgColor={tailwindConfig.theme.colors.lightBlue}
+        textColor={tailwindConfig.theme.colors.black}
         showNavButtons={true}
-      ></NavBar>
-      <h1 className="text-center my-10">Edit Genres/Tags</h1>
+        back={true}
+      />
+
+      <h1 className="text-center my-10">Edit Genres and Tags</h1>
+
       {message ? (
         <ErrorModal
           id="error-modal"
@@ -164,8 +198,9 @@ export default function ManageGenresTags() {
           }}
         />
       ) : null}
-      <div className="flex flex-row justify-between w-full h-[calc(100vh-200px)]">
-        <section id="genres-container" className="flex-1 w-full h-full mx-[5%] ml-[10%] ">
+
+      <div className="flex flex-row mt-40 justify-between w-full h-[calc(100vh-200px)]">
+        <section id="genres-container" className="flex-1 w-full h-full mx-[5%] ml-[10%]">
           <ul
             className="border h-[70%] overflow-y-scroll"
             onKeyDown={(e) => {

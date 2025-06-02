@@ -305,21 +305,23 @@ export default function BacklogUpdateBook() {
             L132,0
             L0,0
             Z"
-          transform="rotate(0, 50, 50) scale(1, 1.5)"
+          transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
+
       <NavBar
         useDarkTheme={true}
         showTitle={true}
         bgColor={tailwindConfig.theme.colors.lightBlue}
         textColor={tailwindConfig.theme.colors.black}
-        homeNavOnClick="/admin"
+        showNavButtons={true}
+        back={true}
       />
 
       <div className="flex flex-col justify-between h-5/6">
-        <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Backlog Update Books</h1>
+        <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Update Backlog Books</h1>
         <div className="flex flex-row pb-20">
-          <section className="p-20 flex flex-col max-w-2xl">
+          <section className="2xl:p-20 xl:p-10 p-5 flex flex-col max-w-2xl">
             <h4>ISBN Number</h4>
             <form
               className="flex rounded-xl items-center"
@@ -355,8 +357,6 @@ export default function BacklogUpdateBook() {
             >
               Grab Next Backlog Book
             </button>
-            {/* <br></br>
-            <br></br> */}
 
             <p>1. Use the scanner to scan a book's ISBN Number, usually on the back.</p>
             <p>2. Verify the information in the details to the right, updating it as needed.</p>
@@ -389,7 +389,7 @@ export default function BacklogUpdateBook() {
             )} */}
           </section>
 
-          <section className="p-20 flex-1">
+          <section className="2xl:p-20 xl:p-10 p-5 flex-1">
             <div className="border-2 border-darkBlue rounded-md min-h-56 h-full">
               <h4 className="bg-lightBlue text-center text-black text-2xl p-2">Back Log Book:</h4>
 

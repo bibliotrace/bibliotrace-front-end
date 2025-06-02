@@ -105,18 +105,20 @@ export default function CreateNewUser() {
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
+
       <NavBar
         useDarkTheme={false}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.purple}
         textColor={tailwindConfig.theme.colors.white}
-        homeNavOnClick="/admin"
+        showNavButtons={true}
+        back={true}
       />
 
       <h1 className="text-center 5xl:my-16 lg:my-10 4xl:text-[6rem] 3xl:text-5xl xl:text-2xl  text-white font-rector">
-        Create User
+        Create New User
       </h1>
-      <div className="flex flex-row">
+
+      <div className="flex flex-row mt-12">
         {message && (
           <ErrorModal
             description={title}
@@ -126,7 +128,7 @@ export default function CreateNewUser() {
             }}
           />
         )}
-        <section className="2xl:p-20 p-10 mt-14 flex-1 flex flex-col text-lg">
+        <section className="2xl:p-20 xl:p-10 p-5 mt-14 flex-1 flex flex-col text-lg">
           <p>1. Please only create an account if the location you are at has no account.</p>
           <p>
             2. Please do not use a username or login information related to your id or health
@@ -144,7 +146,7 @@ export default function CreateNewUser() {
           }
         </section>
 
-        <section className="2xl:p-20 xl:p-5 flex-1">
+        <section className="2xl:p-20 xl:p-10 p-5 flex-1">
           <div className="flex flex-col min-h-48 h-full text-lg">
             <div className="flex-1 items-center mb-3 mt-4">
               <label className="text-purple">Email: </label>

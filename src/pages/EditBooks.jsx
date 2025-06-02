@@ -198,7 +198,7 @@ export default function EditBooks() {
         preserveAspectRatio="none"
       >
         <path
-          className="fill-peachPink"
+          className="fill-lightBlue"
           d="
             M-0.5,12
             C7,10 12,14 17,16
@@ -217,18 +217,21 @@ export default function EditBooks() {
           transform="rotate(0, 50, 50) scale(1, 1.75)"
         />
       </svg>
+
       <NavBar
         useDarkTheme={true}
         showTitle={true}
-        bgColor={tailwindConfig.theme.colors.peachPink}
+        bgColor={tailwindConfig.theme.colors.lightBlue}
         textColor={tailwindConfig.theme.colors.black}
-        homeNavOnClick="/admin"
+        showNavButtons={true}
+        back={true}
       />
 
       <div className="flex flex-col justify-between">
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Edit Book Data</h1>
+
         <div className="flex flex-row pb-20 justify-center overflow-x-auto">
-          <section className="p-20 pr-10 flex flex-col min-w-[32rem] max-w-[40rem]">
+          <section className="2xl:p-20 xl:p-10 p-5 flex flex-col min-w-[32rem] max-w-[40rem]">
             <h4>ISBN Number</h4>
             <form
               className="flex rounded-xl items-center"
@@ -267,7 +270,7 @@ export default function EditBooks() {
             </a>
           </section>
 
-          <section className="p-20 pl-10 flex-1 max-w-[76rem]">
+          <section className="2xl:p-20 xl:p-10 p-5 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
               <h4 className={`${(message != '') ? 'bg-lightGreen' : 'bg-peachPink' } text-center text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
                 {message ? `${message}` : "Book Details"}
