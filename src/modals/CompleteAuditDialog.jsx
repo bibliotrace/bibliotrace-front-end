@@ -27,6 +27,7 @@ export default function CompleteAuditDialog({
         <button
           className="mx-2 bg-darkBlue text-white"
           onClick={() => {
+            completeAuditDialog.current.close();
             completeLocation(currentLocation);
             completeAudit();
           }}
