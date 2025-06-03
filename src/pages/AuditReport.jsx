@@ -47,7 +47,7 @@ export default function AuditReport() {
 
       <h1 className="text-center print:text-xl">Audit Report</h1>
       <p className="text-xl text-center my-2 print:text-md print:mt-0">
-        {location.state?.audit.start_date.split("T")[0]} to {location.state?.audit.completed_date.split("T")[0]}
+        {location.state?.audit.start_date.split("T")[0]} to {!!location.state?.audit?.completed_date ? location.state?.audit.completed_date.split("T")[0] : "In Progress"}
       </p>
       <div
         className="flex flex-col w-full items-center
@@ -55,13 +55,13 @@ export default function AuditReport() {
       >
         <div className="flex-grow flex flex-row w-[80%] justify-between items-center text-lg print:text-xs">
           <p>
-            Missing Books: {numMissing} ({((numMissing / auditEntries.length) * 100).toFixed(0)}%)
+            Missing Books: {numMissing} ({auditEntries.length > 0 ? ((numMissing / auditEntries.length) * 100).toFixed(0) : 0}%)
           </p>
           <p>
-            Misplaced Books: {numMisplaced} ({((numMisplaced / auditEntries.length) * 100).toFixed(0)}%)
+            Misplaced Books: {numMisplaced} ({auditEntries.length > 0 ? ((numMisplaced / auditEntries.length) * 100).toFixed(0) : 0}%)
           </p>
           <p>
-            Found Books: {numFound} ({((numFound / auditEntries.length) * 100).toFixed(0)}%)
+            Found Books: {numFound} ({auditEntries.length > 0 ? ((numFound / auditEntries.length) * 100).toFixed(0) : 0}%)
           </p>
           <button className="print:hidden border-black" onClick={window.print}>
             Print Report
