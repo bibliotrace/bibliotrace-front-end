@@ -86,6 +86,7 @@ const Genre = () => {
           />
         ))}
       </ul>
+      <div>&nbsp;</div>
     </div>
   );
 };
