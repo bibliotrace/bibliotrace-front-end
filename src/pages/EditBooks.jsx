@@ -110,17 +110,17 @@ export default function EditBooks() {
       },
     });
 
+    setImage(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setThumbnail(objectURL);
+        setImage(objectURL);
       }
     } else {
       if (response.status === 401) {
-        navigate("/login");
+        navigate('/login')
       }
-      setThumbnail(defaultBook);
     }
   }
 
@@ -272,7 +272,7 @@ export default function EditBooks() {
 
           <section className="2xl:p-20 xl:p-10 p-5 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
-              <h4 className={`${(message != '') ? 'bg-lightGreen' : 'bg-peachPink' } text-center text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
+              <h4 className={`${(message != '') ? 'bg-lightGreen' : 'bg-peachPink'} text-center text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
                 {message ? `${message}` : "Book Details"}
               </h4>
 
@@ -363,6 +363,7 @@ export default function EditBooks() {
         <div id="detail-editor-modal">
           {openEditModal && (
             <BookDetailEditor
+              mode="edit"
               bookData={bookData}
               colorScheme="peachPink"
               onExit={(bookData) => onEditExit(bookData)}

@@ -141,17 +141,17 @@ export default function AddScannedBooks() {
       },
     });
 
+    setImage(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setThumbnail(objectURL);
+        setImage(objectURL);
       }
     } else {
       if (response.status === 401) {
-        navigate("/login");
+        navigate('/login')
       }
-      setThumbnail(defaultBook);
     }
   }
 
@@ -253,6 +253,9 @@ export default function AddScannedBooks() {
     setGenres(book.genre_list ?? genres);
     setOpenEditModal(false);
     getCoverThumbnail(isbn);
+    if (qrInputRef.current) {
+      qrInputRef.current.focus();
+    }
   }
 
   return (
@@ -297,6 +300,32 @@ export default function AddScannedBooks() {
         <h1 className="text-center my-10 text-black font-rector pb-20 text-5xl">Add New Books</h1>
         <div className="flex flex-row pb-20 justify-center overflow-x-auto">
           <section className="2xl:p-20 xl:p-10 p-5 flex flex-col min-w-[32rem] max-w-[40rem]">
+
+            <h4>Location:</h4>
+            <form>
+              <select
+                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
+                value={location}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setLocation(e.target.value);
+                }}
+              >
+                <option value="" disabled>
+                  -- Choose an option --
+                </option>
+                {locations.map((location_obj) => {
+                  return (
+                    <option key={location_obj.id} value={location_obj.id}>
+                      {location_obj.location_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </form>
+
+            <br></br>
+
             <h4>ISBN Number</h4>
             <form
               className="flex rounded-xl items-center"
@@ -323,31 +352,6 @@ export default function AddScannedBooks() {
                 Grab Book Information
               </button>
             </form>
-
-            <br></br>
-
-            <label>
-              Location:
-              <select
-                className="self-center border-2 w-full p-4 m-2 mx-0 rounded-lg text-2xl"
-                value={location}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setLocation(e.target.value);
-                }}
-              >
-                <option value="" disabled>
-                  -- Choose an option --
-                </option>
-                {locations.map((location_obj) => {
-                  return (
-                    <option key={location_obj.id} value={location_obj.id}>
-                      {location_obj.location_name}
-                    </option>
-                  );
-                })}
-              </select>
-            </label>
 
             <br></br>
 
@@ -395,7 +399,7 @@ export default function AddScannedBooks() {
 
           <section className="2xl:p-20 xl:p-10 flex-1 max-w-[76rem]">
             <div className="border-2 border-darkBlue rounded-md min-h-56 bg-white">
-              <h4 className={` text-center ${(message != '') ? 'bg-lightGreen' : 'bg-lightBlue' } text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
+              <h4 className={` text-center ${(message != '') ? 'bg-lightGreen' : 'bg-lightBlue'} text-black text-2xl p-2 transition-colors duration-500 ease-in`}>
                 {message ? `${message}` : "Book Details"}
               </h4>
 
@@ -484,6 +488,7 @@ export default function AddScannedBooks() {
         <div id="detail-editor-modal">
           {openEditModal && (
             <BookDetailEditor
+              mode="add"
               key={bookData.isbn || "hello"}
               bookData={bookData}
               colorScheme="lightBlue"

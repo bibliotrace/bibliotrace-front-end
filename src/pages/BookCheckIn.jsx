@@ -38,11 +38,16 @@ export default function Checkin() {
     }
     const qr_code = e.target.value;
 
+    if (inputRef.current) {
+      inputRef.current.select();
+      inputRef.current.focus({ focusVisible: true });
+    }
+
     setTitle("");
     setAuthor("");
     setThumbnail(defaultBook);
     setMessage("");
-    e.target.value = "";
+    // e.target.value = "";
 
     const jwtDataString = Cookies.get("jwtData");
     if (jwtDataString == null) {
@@ -87,17 +92,17 @@ export default function Checkin() {
       },
     });
 
+    setImage(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setThumbnail(objectURL);
+        setImage(objectURL);
       }
     } else {
       if (response.status === 401) {
-        navigate("/login");
+        navigate('/login')
       }
-      setThumbnail(defaultBook);
     }
   }
 

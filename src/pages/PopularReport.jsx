@@ -7,6 +7,7 @@ import useSorttable from "../components/useSorttable";
 export default function PopularReport() {
   const [popular, setPopular] = useState([]);
   const [message, setMessage] = useState("");
+  const [totalCheckouts, setTotalCheckouts] = useState(0);
 
   useSorttable();
 
@@ -21,8 +22,8 @@ export default function PopularReport() {
       setMessage("Please enter a date range");
       return;
     }
-    if (start_date >= end_date) {
-      setMessage("End date must be after start date");
+    if (start_date > end_date) {
+      setMessage("Start date cannot be after end date");
       return;
     }
 
@@ -37,6 +38,7 @@ export default function PopularReport() {
       const data = await response.json();
       if (data.object) {
         setPopular(data.object);
+        setTotalCheckouts(data.object.reduce((acc, entry) => acc + entry.num_checkouts, 0));
       }
     } catch (e) {
       console.log(e.message);
@@ -75,7 +77,7 @@ export default function PopularReport() {
           <button className="border-black py-1 rounded ml-5 print:hidden" type="submit">
             Apply
           </button>
-          <button className="whitespace-nowrap border-black py-1 rounded ml-5 print:hidden" onClick={(e) => { printReport(e)}}>
+          <button className="whitespace-nowrap border-black py-1 rounded ml-5 print:hidden" onClick={(e) => { printReport(e) }}>
             <i className="fa-solid fa-print mr-2"></i>
             Print Report
           </button>
@@ -84,6 +86,10 @@ export default function PopularReport() {
 
       <div className="flex flex-col w-full items-center">
         <ul className="flex-grow w-[80%] border mt-2 h-[70vh] bg-white p-10 overflow-y-scroll print:border-none print:w-full print:p-0 print:overflow-visible">
+          <div className="text-right mt-2 mr-2">
+            <span className="font-bold">Total Checkouts:&nbsp;&nbsp;</span>
+            <span>{totalCheckouts}</span>
+          </div>
           <table className="sortable border w-full print:text-xs">
             <thead>
               <tr>
