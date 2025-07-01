@@ -1,12 +1,13 @@
 import NavBar from "../components/NavBar";
 import tailwindConfig from "../../tailwind.config";
 import { useState, useEffect, useRef } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 // import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 import BackLogDetailEditor from "../modals/BackLogDetailEditor.jsx";
+
 export default function BacklogUpdateBook() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
   const [title, setTitle] = useState("");
@@ -33,7 +34,7 @@ export default function BacklogUpdateBook() {
   const [message, setMessage] = useState("");
   const [openEditModal, setOpenEditModal] = useState(false);
   const [bookData, setBookData] = useState({});
-  
+
   const jwt = Cookies.get("authToken");
   const navigate = useNavigate();
 
@@ -50,7 +51,7 @@ export default function BacklogUpdateBook() {
     //   setLocations(locationList);
     // }
     // getLocations();
-    
+
   }, []);
 
   useEffect(() => {
@@ -74,13 +75,13 @@ export default function BacklogUpdateBook() {
     setTags([]);
     setGenres([]);
     setThumbnail(defaultBook);
-    
+
     const response = await fetch("http://localhost:8080/api/bookdata/backlog", {
       headers: {
         Authorization: `Bearer ${jwt}`,
       },
     });
-    
+
     if (response.ok) {
       const book = (await response.json()).object;
       setBookid(book.id);
@@ -192,17 +193,17 @@ export default function BacklogUpdateBook() {
       },
     });
 
+    setImage(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setThumbnail(objectURL);
+        setImage(objectURL);
       }
     } else {
       if (response.status === 401) {
-        navigate("/login");
+        navigate('/login')
       }
-      setThumbnail(defaultBook);
     }
   }
 

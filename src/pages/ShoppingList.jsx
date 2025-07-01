@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import tailwindConfig from "../../tailwind.config";
 import Cookies from "js-cookie";
+import useSorttable from "../components/useSorttable";
 
 export default function ShoppingList() {
   const [shoppingList, setShoppingList] = useState([]);
@@ -9,6 +10,8 @@ export default function ShoppingList() {
   useEffect(() => {
     getShoppingList();
   }, []);
+
+  useSorttable();
 
   async function getShoppingList() {
     try {
@@ -88,23 +91,40 @@ export default function ShoppingList() {
 
       <div className="flex flex-col w-full items-center">
         <ul className="flex-grow w-[80%] border mt-2 h-[70vh] bg-white p-10 overflow-y-scroll print:border-none print:w-full print:p-0 print:overflow-visible">
-          {shoppingList.map((obj) => {
-            return (
-              <li className="flex flex-row justify-between items-center mb-5">
-                <p className="text-lg">
-                  {obj.book_title} by {obj.author}
-                </p>
-                <div className="flex flex-row no-wrap">
-                  <button className="border-black print:hidden" onClick={() => handleMoveToRestock(obj.id)}>
-                    Move to Restock
-                  </button>
-                  <button className="ml-5 border-black print:hidden" onClick={() => handleRemove(obj.id)}>
-                    Remove
-                  </button>
-                </div>
-              </li>
-            );
-          })}
+          <table className="sortable border w-full print:text-xs">
+            <thead>
+              <tr>
+                <th className="border hover:cursor-pointer">Title</th>
+                <th className="border hover:cursor-pointer">Author</th>
+                <th className="border hover:cursor-pointer">Genre</th>
+                <th className="border hover:cursor-pointer print:hidden"></th>
+                <th className="border hover:cursor-pointer print:hidden"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {shoppingList.map((entry) => {
+                return (
+                  <>
+                    <tr className="hover:bg-gray">
+                      <td className="border p-5 text-center print:p-2">{entry.book_title}</td>
+                      <td className="border p-5 text-center print:p-2">{entry.author}</td>
+                      <td className="border p-5 text-center print:p-2">{entry.genre_name}</td>
+                      <td className="border p-5 text-center print:hidden">
+                        <button className="border-black print:hidden" onClick={() => handleMoveToRestock(entry.id)}>
+                          Move to Restock
+                        </button>
+                      </td>
+                      <td className="border p-5 text-center print:hidden">
+                        <button className="ml-5 border-black print:hidden" onClick={() => handleRemove(entry.id)}>
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody>
+          </table>
         </ul>
       </div>
     </div>

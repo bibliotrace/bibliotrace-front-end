@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import AuditCompletedDialog from "../modals/AuditCompletedDialog";
@@ -7,13 +7,13 @@ import CompleteAuditDialog from "../modals/CompleteAuditDialog";
 import CompleteLocationDialog from "../modals/CompleteLocationDialog";
 import tailwindConfig from "../../tailwind.config";
 import SyncAuditDialog from "../modals/SyncAuditDialog";
-import { sync } from "motion";
 
 export default function Audit() {
   const completeLocationDialog = useRef(null);
   const completeAuditDialog = useRef(null);
   const syncAuditDialog = useRef(null);
   const auditCompletedDialog = useRef(null);
+  const qrCodeInputRef = useRef(null);
   const [isAuditOngoing, setIsAuditOngoing] = useState(null);
   const [auditID, setAuditID] = useState(null);
   const [lastAuditCompletedDate, setLastAuditCompletedDate] = useState("");
@@ -26,7 +26,6 @@ export default function Audit() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    //set isAuditOngoing
     async function getCurrentAudit() {
       try {
         const response = await fetch("http://localhost:8080/api/inventory/audit", {
@@ -95,6 +94,9 @@ export default function Audit() {
     }
     if (!currentLocation) {
       setMessage("Select a location before scanning");
+      if (qrCodeInputRef.current) {
+        qrCodeInputRef.current.value = "";
+      }
       return;
     }
     //clear values
@@ -113,10 +115,15 @@ export default function Audit() {
       if (!response.ok || !data.object) {
         setMessage(data.message);
       } else {
-        e.target.value = "";
+        //e.target.value = "";
         //set book data
         setBookTitle(data.object.book_title);
         setBookAuthor(data.object.author);
+      }
+
+      if (qrCodeInputRef.current) {
+        //qrCodeInputRef.current.focus();
+        qrCodeInputRef.current.select();
       }
     } catch (error) {
       console.log(error.message);
@@ -164,7 +171,7 @@ export default function Audit() {
       if (!response.ok) {
         setMessage(data.message);
       } else {
-        setIsAuditOngoing(false);
+        //setIsAuditOngoing(false);
         auditCompletedDialog.current.showModal();
       }
     } catch (error) {
@@ -175,7 +182,7 @@ export default function Audit() {
   async function confirmSyncAudit() {
     syncAuditDialog.current.showModal();
   }
-  
+
   return (
     <>
       <svg
@@ -230,8 +237,8 @@ export default function Audit() {
             currentLocation={currentLocation}
             completeLocation={completeLocation}
           />
-          <AuditCompletedDialog auditCompletedDialog={auditCompletedDialog} />
-          <SyncAuditDialog syncAuditDialog={syncAuditDialog} onYes={() => completeAudit(true)} onNo={() => completeAudit(false)}/>
+          <AuditCompletedDialog auditCompletedDialog={auditCompletedDialog} onOK={() => setIsAuditOngoing(false)} />
+          <SyncAuditDialog syncAuditDialog={syncAuditDialog} onYes={() => completeAudit(true)} onNo={() => completeAudit(false)} />
           <h2 className="text-center text-2xl mb-20">Started On: {lastAuditStartDate}</h2>
           <p className="text-center">{message}</p>
           <div className="flex flex-row justify-around h-[60%]">
@@ -271,8 +278,9 @@ export default function Audit() {
             </section>
 
             <section className="flex flex-col w-full mx-10">
-              <h3 className="text-center text-xl mb-5">.</h3>
+              <h3 className="text-center text-xl mb-5">Scan QR Codes</h3>
               <input
+                ref={qrCodeInputRef}
                 className="border p-2 mb-10"
                 type="text"
                 placeholder="Start Scanning"
@@ -307,7 +315,7 @@ export default function Audit() {
             </button>
             <button
               className="m-5 border-black"
-              onClick={() => { navigate("/audit-list");}}
+              onClick={() => { navigate("/audit-list"); }}
             >
               View Audit Reports
             </button>

@@ -116,17 +116,17 @@ export default function SetLocation() {
       },
     });
 
+    setImage(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setThumbnail(objectURL);
+        setImage(objectURL);
       }
     } else {
       if (response.status === 401) {
-        navigate("/login");
+        navigate('/login')
       }
-      setThumbnail(defaultBook);
     }
   }
 

@@ -7,27 +7,28 @@ import AdminNavBar from "../components/admin/AdminNavBar.jsx";
 import AdminMainMenu from "../components/admin/AdminMainMenu.jsx";
 import AdminSideBar from "../components/admin/AdminSideBar.jsx";
 import AdminManageMenu from "../components/admin/AdminManageMenu.jsx";
+import AdminMenuState from "../components/admin/AdminHomeState.js";
 import ScreenSizeChecker from "../components/admin/ScreenSizeChecker.jsx";
 
-export default function AdminHome({}) {
+export default function AdminHome({ }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  let localStorageActiveMenu = localStorage.getItem("activeMenu");
-  let localStorageActiveButton = localStorage.getItem("activeButton");
+  let localStorageActiveMenu = AdminMenuState.getActiveMenu();
+  let localStorageActiveButton = AdminMenuState.getActiveButton();
 
-  const [activeMenu, realSetActiveMenu] = useState(localStorageActiveMenu ?? "main"); //for the component
-  const [activeButton, realSetActiveButton] = useState(localStorageActiveButton ?? null); //for side bar highlighting
+  const [activeMenu, setActiveMenu] = useState(localStorageActiveMenu ?? "main"); //for the component
+  const [activeButton, setActiveButton] = useState(localStorageActiveButton ?? null); //for side bar highlighting
   const [searchInput, setSearchInput] = useState("");
 
-  let setActiveMenu = (menu) => {
-    realSetActiveMenu(menu);
-    localStorage.setItem("activeMenu", menu);
+  let setAndStoreActiveMenu = (menu) => {
+    setActiveMenu(menu);
+    AdminMenuState.setActiveMenu(menu);
   };
 
-  let setActiveButton = (button) => {
-    realSetActiveButton(button);
-    localStorage.setItem("activeButton", button);
+  let setAndStoreActiveButton = (button) => {
+    setActiveButton(button);
+    AdminMenuState.setActiveButton(button);
   };
 
   const handleSearch = () => {
@@ -196,6 +197,14 @@ export default function AdminHome({}) {
     },
   ];
 
+  const handleHomeClick = () => {
+    // We are already on the admin home page, so we don't need to navigate.
+    // We just need to force a re-render.
+    setAndStoreActiveMenu("main");
+    setAndStoreActiveButton(null);
+    //navigate("/admin");
+  }
+
   return (
     <div className="min-h-screen w-screen pb-5 flex flex-col relative overflow-hidden">
       {/* <ScreenSizeChecker /> */}
@@ -220,13 +229,11 @@ export default function AdminHome({}) {
         />
       </svg>
       <AdminNavBar
-        onMenuChange={setActiveMenu}
-        setActiveButton={setActiveButton}
+        handleHomeClick={handleHomeClick}
         useDarkTheme={true}
         showTitle={false}
         bgColor={"#FFFFFF"}
         textColor={"#110057"}
-        resetActiveButton={() => setActiveButton(null)}
       />
 
       <div className="flex-1 flex gap-5 w-full justify-center mb-10">
@@ -274,7 +281,7 @@ export default function AdminHome({}) {
             </>
           ) : null}
         </div>
-        <AdminSideBar onMenuChange={setActiveMenu} activeButton={activeButton} setActiveButton={setActiveButton} />
+        <AdminSideBar onMenuChange={setAndStoreActiveMenu} activeButton={activeButton} setActiveButton={setAndStoreActiveButton} />
       </div>
     </div>
   );

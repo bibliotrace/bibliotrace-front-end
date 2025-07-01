@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import IhLogo from "../assets/ih-color.svg?react";
 import IhLogoDark from "../assets/ih-dark.svg?react";
@@ -7,6 +6,7 @@ import HomeLogoDark from "../assets/home-black.svg?react";
 import LogoutLogo from "../assets/logout-white.svg?react";
 import LogoutLogoDark from "../assets/logout-black.svg?react";
 import Cookies from "js-cookie";
+import AdminHomeState from "../components/admin/AdminHomeState.js";
 
 const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onHomeClick, back = false }) => {
   const navigate = useNavigate();
@@ -19,14 +19,18 @@ const NavBar = ({ useDarkTheme, showTitle, textColor, showNavButtons = true, onH
   }
 
   const navigateHome = () => {
+    //console.log("Home Button was pressed");
     if (onHomeClick) {
       onHomeClick();
     }
-    //console.log("Home Button was pressed");
-    if (isAdmin) {
-      navigate("/admin");
-    } else {
-      navigate("/");
+    else {
+      if (isAdmin) {
+        AdminHomeState.clearActiveMenu();
+        AdminHomeState.clearActiveButton();
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }
   };
   const navigateLogOut = () => {

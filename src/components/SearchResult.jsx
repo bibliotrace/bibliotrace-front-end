@@ -9,7 +9,7 @@ const SearchResult = ({ bookData }) => {
   const [openModal, setOpenModal] = useState(false);
   const [isTapped, setIsTapped] = useState(false);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const isbn = bookData.isbn;
   const coverImageId = bookData.coverImageId;
@@ -72,6 +72,7 @@ const SearchResult = ({ bookData }) => {
           });
         }
 
+        setImage(defaultBook);
         if (response.ok) {
           const blob = await response.blob();
           if (blob.size >= 100) {
@@ -79,14 +80,12 @@ const SearchResult = ({ bookData }) => {
             setImage(objectURL);
           }
         } else {
-            if (response.status === 401) {
-                navigate('/login')
-            }
-            setImage(defaultBook);
+          if (response.status === 401) {
+            navigate('/login')
+          }
         }
       } catch (e) {
         console.log(e);
-        setImage(defaultBook);
       }
     };
     fetchImage();
@@ -122,16 +121,16 @@ const SearchResult = ({ bookData }) => {
       >
         <div className="flex md:hidden w-70 h-64 relative rounded-lg shadow-lg overflow-hidden items-center justify-start p-4">
           <img src={image} className="w-26 h-32 object-cover rounded-md mr-4" alt="Cover Thumbnail"></img>
-          
+
           <div className="flex flex-col justify-center items-start text-left">
             <h3 className="text-lg font-bold text-[#000000] text-left">{bookTitle}</h3>
             <p className="text-md text-[#000000]">{bookAuthor}</p>
             <p className="text-sm text-[#000000]">{bookGenre}</p>
             <p className="text-sm text-[#000000]">{bookSeries}</p>
-          </div>  
+          </div>
         </div>
       </div>
-      
+
 
       {openModal && (
         <BookDetails onExit={toggleModal} bookData={bookData} imageSrc={image} />

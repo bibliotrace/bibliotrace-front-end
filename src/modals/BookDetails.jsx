@@ -54,8 +54,8 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
       setTags(bookDataReturned.tag_list);
       setSeriesNumber(bookDataReturned.series_number);
       setSecondaryGenres(bookDataReturned.genre_list);
-      
-      result = await fetch (`http://localhost:8080/api/inventory/quantities/${bookDataReturned.id}`, {
+
+      result = await fetch(`http://localhost:8080/api/inventory/quantities/${bookDataReturned.id}`, {
         headers: {
           Authorization: `Bearer ${jwt}`,
         }
@@ -68,8 +68,6 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
         setQuantities(quantityData);
       }
     }
-
-    
   };
 
   useEffect(() => {
@@ -260,7 +258,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
               <div className="p-6 pt-0">
                 <h4 className="font-bold pr-2 text-xl">Synopsis:</h4>
                 <p className="overflow-x-scroll no-scrollar">{synopsis}</p>
-                </div>
+              </div>
             </motion.div>
           </motion.div>
         }

@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 
-export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
+export default function BookDetailEditor({ mode, bookData, onExit, colorScheme }) {
   const allGenresList = Cookies.get("genreList");
   const allAudiencesList = Cookies.get("audienceList");
   const allTagsList = Cookies.get("tagList");
@@ -112,19 +112,56 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
       body: JSON.stringify(fetchBody),
     });
 
-    if (result.ok) {
-      packageExit((await result.json()).message);
-    } else {
+    if (!result.ok) {
       setMessageString(`Error Submitting: ${(await result.json()).message}`);
+      return;
     }
 
-    console.log(result);
+    if (mode === "add") {
+      for (const genre of secondaryGenres) {
+        const result = await callAddSecondaryGenre(genre);
+        if (!result.ok) {
+          setMessageString(`Error Adding Secondary Genre: ${(await result.json()).message}`);
+          return;
+        }
+      }
+
+      for (const tag of tags) {
+        const result = await callAddTag(tag);
+        if (!result.ok) {
+          setMessageString(`Error Adding Tag: ${(await result.json()).message}`);
+          return;
+        }
+      }
+    }
+
+    packageExit((await result.json()).message);
   };
 
   const handleAddSecondaryGenre = async (e) => {
     e.preventDefault();
+    if (mode === "edit") {
+      const result = await callAddSecondaryGenre(targetSecondaryGenre);
+      if (result.ok) {
+        setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
+        setTargetSecondaryGenre("");
+      } else {
+        setMessageString(`Error Adding Secondary Genre: ${(await result.json()).message}`);
+      }
+    }
+    else if (mode === "add") {
+      if (targetSecondaryGenre && !secondaryGenres.includes(targetSecondaryGenre)) {
+        setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
+        setTargetSecondaryGenre("");
+      } else {
+        setMessageString("Error Adding Secondary Genre");
+      }
+    }
+  };
+
+  const callAddSecondaryGenre = async (genre) => {
     const fetchBody = {
-      genre: targetSecondaryGenre,
+      genre,
     };
     console.log(fetchBody);
     const result = await fetch(
@@ -138,44 +175,63 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
         body: JSON.stringify(fetchBody),
       }
     );
-
-    if (result.ok) {
-      setSecondaryGenres([...secondaryGenres, targetSecondaryGenre]);
-      setTargetSecondaryGenre("");
-    } else {
-      setMessageString(`Error Adding Secondary Genre: ${(await result.json()).message}`);
-    }
-  };
+    return result;
+  }
 
   const handleRemoveSecondaryGenre = async (e, index) => {
     e.preventDefault();
-    const fetchBody = {
-      genre: secondaryGenres[index],
-    };
-    console.log(fetchBody);
-    const result = await fetch(
-      `http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-        body: JSON.stringify(fetchBody),
-      }
-    );
+    if (mode === "edit") {
+      const fetchBody = {
+        genre: secondaryGenres[index],
+      };
+      console.log(fetchBody);
+      const result = await fetch(
+        `http://localhost:8080/api/bookdata/genre-list/${isbn.split("|")[0]}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+          },
+          method: "DELETE",
+          body: JSON.stringify(fetchBody),
+        }
+      );
 
-    if (result.ok) {
+      if (result.ok) {
+        setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
+      } else {
+        setMessageString(`Error Removing Secondary Genre: ${(await result.json()).message}`);
+      }
+    }
+    else if (mode == "add") {
       setSecondaryGenres(secondaryGenres.filter((_, i) => i !== index));
-    } else {
-      setMessageString(`Error Removing Secondary Genre: ${(await result.json()).message}`);
     }
   };
 
   const handleAddTag = async (e, newTag) => {
     e?.preventDefault();
+    if (mode === "edit") {
+      const result = await callAddTag(newTag);
+      if (result.ok) {
+        setTags([...tags, newTag]);
+        setTagSearchTerm("");
+      } else {
+        setMessageString(`Error Adding Tag: ${(await result.json()).message}`);
+      }
+    }
+    else if (mode === "add") {
+      if (newTag && !tags.includes(newTag)) {
+        setTags([...tags, newTag]);
+        setTagSearchTerm("");
+      } else {
+        setMessageString("Error Adding Tag");
+      }
+    }
+  };
+
+  const callAddTag = async (tag) => {
     const fetchBody = {
-      tag: newTag,
+      tag,
     };
     console.log(fetchBody);
     const result = await fetch(
@@ -189,36 +245,35 @@ export default function BookDetailEditor({ bookData, onExit, colorScheme }) {
         body: JSON.stringify(fetchBody),
       }
     );
-
-    if (result.ok) {
-      setTags([...tags, newTag]);
-      setTagSearchTerm("");
-    } else {
-      setMessageString(`Error Adding Tag: ${(await result.json()).message}`);
-    }
-  };
+    return result;
+  }
 
   const handleRemoveTag = async (e, index) => {
     e?.preventDefault();
-    const fetchBody = {
-      tag: tags[index],
-    };
-    const result = await fetch(
-      `http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`,
-      {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-          "Content-Type": "application/json",
-        },
-        method: "DELETE",
-        body: JSON.stringify(fetchBody),
-      }
-    );
+    if (mode === "edit") {
+      const fetchBody = {
+        tag: tags[index],
+      };
+      const result = await fetch(
+        `http://localhost:8080/api/bookdata/tag-list/${isbn.split("|")[0]}`,
+        {
+          headers: {
+            Authorization: `Bearer ${jwt}`,
+            "Content-Type": "application/json",
+          },
+          method: "DELETE",
+          body: JSON.stringify(fetchBody),
+        }
+      );
 
-    if (result.ok) {
+      if (result.ok) {
+        setTags(tags.filter((_, i) => i !== index));
+      } else {
+        setMessageString(`Error Removing Tag: ${(await result.json()).message}`);
+      }
+    }
+    else if (mode === "add") {
       setTags(tags.filter((_, i) => i !== index));
-    } else {
-      setMessageString(`Error Removing Tag: ${(await result.json()).message}`);
     }
   };
 

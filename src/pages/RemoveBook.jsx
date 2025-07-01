@@ -15,6 +15,8 @@ export default function RemoveBook() {
   const [success, setSuccess] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const isbnInputRef = useRef(null);
+  const qrInputRef = useRef(null);
 
   async function scanQr(e, qr) {
     e.preventDefault();
@@ -53,6 +55,9 @@ export default function RemoveBook() {
       setMessage(`${error.message}`);
       setLoading(false);
       return;
+    } finally {
+      qrInputRef.current.focus();
+      qrInputRef.current.select();
     }
 
     try {
@@ -135,7 +140,10 @@ export default function RemoveBook() {
     } catch (error) {
       setMessage(`${error.message}`);
     }
-
+    finally {
+      isbnInputRef.current.focus();
+      isbnInputRef.current.select();
+    }
     setLoading(false);
   }
 
@@ -147,17 +155,17 @@ export default function RemoveBook() {
       },
     });
 
+    setImage(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setThumbnail(objectURL);
+        setImage(objectURL);
       }
     } else {
       if (response.status === 401) {
-        navigate("/login");
+        navigate('/login')
       }
-      setThumbnail(defaultBook);
     }
   }
 
@@ -213,11 +221,12 @@ export default function RemoveBook() {
           }}
         />
       )}
-      
+
       <div className="flex flex-row mt-40">
         <section className="2xl:p-20 xl:p-10 p-5 flex-1 flex flex-col justify-around text-lg">
           <div className="mb-5 flex items-center w-full">
             <input
+              ref={qrInputRef}
               id="qr"
               type="text"
               className="flex-grow p-2 border-2 border-darkBlue rounded-lg focus:outline-none focus:border-darkBlue"
@@ -239,6 +248,7 @@ export default function RemoveBook() {
           </div>
           <div className="mb-5 flex items-center w-full">
             <input
+              ref={isbnInputRef}
               id="isbn"
               type="text"
               className="flex-grow p-2 border-2 border-darkBlue rounded-lg focus:outline-none focus:border-darkBlue"
