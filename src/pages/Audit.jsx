@@ -171,7 +171,7 @@ export default function Audit() {
         body: JSON.stringify({ audit_id: auditID, sync_inventory: syncInventory }),
       });
 
-      await new Promise(r => setTimeout(r, 5000));
+      //await new Promise(r => setTimeout(r, 5000));
 
       const data = await response.json();
 
