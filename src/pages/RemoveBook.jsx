@@ -4,6 +4,7 @@ import tailwindConfig from "../../tailwind.config";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
 import defaultBook from "../assets/generic-book.png?react";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function RemoveBook() {
   const bulkAddDialog = useRef(null);
@@ -155,12 +156,12 @@ export default function RemoveBook() {
       },
     });
 
-    setImage(defaultBook);
+    setThumbnail(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setImage(objectURL);
+        setThumbnail(objectURL);
       }
     } else {
       if (response.status === 401) {
@@ -234,7 +235,7 @@ export default function RemoveBook() {
               value={qr}
               onChange={(e) => setQr(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !message) {
+                if (scannerInputComplete(e.key) && !message) {
                   scanQr(e, qr);
                 }
               }}
@@ -256,7 +257,7 @@ export default function RemoveBook() {
               value={isbn}
               onChange={(e) => setIsbn(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter" && !message) {
+                if (scannerInputComplete(e.key) && !message) {
                   scanIsbn(e, isbn);
                 }
               }}
@@ -341,7 +342,7 @@ export default function RemoveBook() {
             value={isbn}
             onChange={(e) => setIsbn(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && !message) {
+              if (scannerInputComplete(e.key) && !message) {
                 scanIsbn(e, isbn);
               }
             }}

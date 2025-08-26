@@ -7,16 +7,18 @@ import CompleteAuditDialog from "../modals/CompleteAuditDialog";
 import CompleteLocationDialog from "../modals/CompleteLocationDialog";
 import tailwindConfig from "../../tailwind.config";
 import SyncAuditDialog from "../modals/SyncAuditDialog";
+import AuditBeingFinalizedDialog from "../modals/AuditBeingFinalizedDialog.jsx";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function Audit() {
   const completeLocationDialog = useRef(null);
   const completeAuditDialog = useRef(null);
   const syncAuditDialog = useRef(null);
+  const auditBeingFinalizedDialog = useRef(null);
   const auditCompletedDialog = useRef(null);
   const qrCodeInputRef = useRef(null);
   const [isAuditOngoing, setIsAuditOngoing] = useState(null);
   const [auditID, setAuditID] = useState(null);
-  const [lastAuditCompletedDate, setLastAuditCompletedDate] = useState("");
   const [lastAuditStartDate, setLastAuditStartDate] = useState("");
   const [currentLocation, setCurrentLocation] = useState("");
   const [locations, setLocations] = useState([]);
@@ -89,7 +91,7 @@ export default function Audit() {
   }
 
   async function handleScan(e) {
-    if (e.key !== "Enter" || e.target.value === "") {
+    if (!scannerInputComplete(e.key) || e.target.value === "") {
       return;
     }
     if (!currentLocation) {
@@ -161,13 +163,20 @@ export default function Audit() {
 
   async function completeAudit(syncInventory) {
     try {
+      auditBeingFinalizedDialog.current.showModal();
+
       const response = await fetch("http://localhost:8080/api/inventory/audit/complete", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${Cookies.get("authToken")}` },
         body: JSON.stringify({ audit_id: auditID, sync_inventory: syncInventory }),
       });
 
+      await new Promise(r => setTimeout(r, 5000));
+
       const data = await response.json();
+
+      auditBeingFinalizedDialog.current.close();
+
       if (!response.ok) {
         setMessage(data.message);
       } else {
@@ -237,10 +246,11 @@ export default function Audit() {
             currentLocation={currentLocation}
             completeLocation={completeLocation}
           />
-          <AuditCompletedDialog auditCompletedDialog={auditCompletedDialog} onOK={() => setIsAuditOngoing(false)} />
           <SyncAuditDialog syncAuditDialog={syncAuditDialog} onYes={() => completeAudit(true)} onNo={() => completeAudit(false)} />
+          <AuditBeingFinalizedDialog auditBeingFinalizedDialog={auditBeingFinalizedDialog} />
+          <AuditCompletedDialog auditCompletedDialog={auditCompletedDialog} onOK={() => setIsAuditOngoing(false)} />
           <h2 className="text-center text-2xl mb-20">Started On: {lastAuditStartDate}</h2>
-          <p className="text-center">{message}</p>
+          <p className="text-center text-xl text-medium text-error">{message}</p>
           <div className="flex flex-row justify-around h-[60%]">
             <section className="flex flex-col w-full mx-10">
               <h3 className="text-center text-xl mb-5">Current Location: {currentLocation.location_name}</h3>
@@ -308,7 +318,6 @@ export default function Audit() {
         </>
       ) : (
         <>
-          {/* <h2 className="text-center text-2xl mb-20">Last Audit Completed: {lastAuditCompletedDate}</h2> */}
           <div className="flex flex-row justify-center items-center mt-32">
             <button className="m-5 border-black" onClick={handleStartAudit}>
               Start New Audit

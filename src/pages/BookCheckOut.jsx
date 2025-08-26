@@ -6,6 +6,7 @@ import defaultBook from "../assets/generic-book.png?react";
 import NavBar from "../components/NavBar";
 import BulkQrOnlyDump from "../modals/BulkQrOnlyDump";
 import ErrorModal from "../modals/ErrorModal";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function Checkout() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
@@ -45,7 +46,7 @@ export default function Checkout() {
   }, [bulkModalShow]);
 
   async function scanBook(e) {
-    if (e.key !== "Enter") {
+    if (!scannerInputComplete(e.key)) {
       return;
     }
 
@@ -111,12 +112,12 @@ export default function Checkout() {
       },
     });
 
-    setImage(defaultBook);
+    setThumbnail(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setImage(objectURL);
+        setThumbnail(objectURL);
       }
     } else {
       if (response.status === 401) {

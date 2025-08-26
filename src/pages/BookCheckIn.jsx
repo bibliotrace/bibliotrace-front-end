@@ -5,6 +5,7 @@ import tailwindConfig from "../../tailwind.config";
 import defaultBook from "../assets/generic-book.png?react";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function Checkin() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
@@ -33,7 +34,7 @@ export default function Checkin() {
   });
 
   async function scanBook(e) {
-    if (e.key !== "Enter" || e.target.value == "") {
+    if (!scannerInputComplete(e.key) || e.target.value == "") {
       return;
     }
     const qr_code = e.target.value;
@@ -92,12 +93,12 @@ export default function Checkin() {
       },
     });
 
-    setImage(defaultBook);
+    setThumbnail(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setImage(objectURL);
+        setThumbnail(objectURL);
       }
     } else {
       if (response.status === 401) {

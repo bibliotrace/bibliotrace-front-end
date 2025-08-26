@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import defaultBook from "../assets/generic-book.png?react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function AddScannedBooks() {
   const [searchParams] = useSearchParams();
@@ -141,12 +142,12 @@ export default function AddScannedBooks() {
       },
     });
 
-    setImage(defaultBook);
+    setThumbnail(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setImage(objectURL);
+        setThumbnail(objectURL);
       }
     } else {
       if (response.status === 401) {
@@ -330,7 +331,7 @@ export default function AddScannedBooks() {
             <form
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (scannerInputComplete(e.key)) {
                   getBookInformationByIsbn(e);
                 }
               }}
@@ -359,7 +360,7 @@ export default function AddScannedBooks() {
             <form
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (scannerInputComplete(e.key)) {
                   onSubmitNewQr(e);
                 }
               }}
