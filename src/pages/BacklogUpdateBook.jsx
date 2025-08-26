@@ -7,6 +7,7 @@ import defaultBook from "../assets/generic-book.png?react";
 import ErrorModal from "../modals/ErrorModal.jsx";
 // import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 import BackLogDetailEditor from "../modals/BackLogDetailEditor.jsx";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function BacklogUpdateBook() {
   const [thumbnail, setThumbnail] = useState(defaultBook);
@@ -193,12 +194,12 @@ export default function BacklogUpdateBook() {
       },
     });
 
-    setImage(defaultBook);
+    setThumbnail(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setImage(objectURL);
+        setThumbnail(objectURL);
       }
     } else {
       if (response.status === 401) {
@@ -327,7 +328,7 @@ export default function BacklogUpdateBook() {
             <form
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (scannerInputComplete(e.key)) {
                   getBookInformationByIsbn(e);
                 }
               }}

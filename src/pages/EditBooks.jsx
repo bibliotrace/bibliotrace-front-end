@@ -6,6 +6,7 @@ import defaultBook from "../assets/generic-book.png?react";
 import NavBar from "../components/NavBar";
 import BookDetailEditor from "../modals/BookDetailEditor.jsx";
 import ErrorModal from "../modals/ErrorModal.jsx";
+import { scannerInputComplete } from "./scanner.js";
 
 export default function EditBooks() {
   const [searchParams] = useSearchParams();
@@ -110,12 +111,12 @@ export default function EditBooks() {
       },
     });
 
-    setImage(defaultBook);
+    setThumbnail(defaultBook);
     if (response.ok) {
       const blob = await response.blob();
       if (blob.size >= 100) {
         const objectURL = URL.createObjectURL(blob);
-        setImage(objectURL);
+        setThumbnail(objectURL);
       }
     } else {
       if (response.status === 401) {
@@ -236,7 +237,7 @@ export default function EditBooks() {
             <form
               className="flex rounded-xl items-center"
               onKeyDown={(e) => {
-                if (e.key === "Enter") {
+                if (scannerInputComplete(e.key)) {
                   getBookInformationByIsbn(e);
                 }
               }}

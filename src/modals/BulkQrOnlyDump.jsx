@@ -1,15 +1,24 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Cookies from "js-cookie";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import ErrorModal from "./ErrorModal";
+import { scannerInputComplete } from "../pages/scanner.js";
 
 export default function BulkQrOnlyDump({ title, onExit }) {
   const [inputs, setInputs] = useState([""]);
   const [result, setResult] = useState("");
   const inputRefs = useRef([]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (inputRefs && inputRefs.current && inputRefs.current.length > 0) {
+        inputRefs.current[inputRefs.current.length - 1]?.focus();
+      }
+    }, 0);
+  }, []);
+
   const handleKeyDown = (e, index) => {
-    if (e.key === "Enter") {
+    if (scannerInputComplete(e.key)) {
       e.preventDefault();
 
       if (inputs[index].trim() != "") {
@@ -23,12 +32,12 @@ export default function BulkQrOnlyDump({ title, onExit }) {
   };
 
   const handleChange = (e, index) => {
-    if (e.target.value.length <=6) {
+    if (e.target.value.length <= 6) {
       const newInputs = [...inputs];
       newInputs[index] = e.target.value;
       setInputs(newInputs);
     }
-  
+
   };
 
   const handleRemove = (e, index) => {
@@ -64,8 +73,8 @@ export default function BulkQrOnlyDump({ title, onExit }) {
       const qrFailures = resultJson.object.report.errors;
       const successTitles = resultJson.object.report.successes.map(val => val.book_title);
       resultString = `${resultJson.message}\n
-                      Successful Titles Checked Out: ${successTitles.join(', ')}\n
-                      Failed QRs: ${qrFailures.join(', ')}`;
+                      Successful Titles Checked Out:\n${successTitles.join('\n')}\n
+                      Failed QRs:\n${qrFailures.join('\n')}`;
     } else {
       resultString = `API Returned ${await result.text()} Status: ${result.status}`;
     }
@@ -123,7 +132,7 @@ export default function BulkQrOnlyDump({ title, onExit }) {
                 </button>
               </div>
             </div>
-            {result && <ErrorModal description="Bulk Result" message={result} onExit={() => setResult("")} />}
+            {result && <ErrorModal description="Bulk Result" message={result} onExit={() => { setResult(""); setInputs([""]); }} />}
           </motion.div>
         </motion.div>
       }

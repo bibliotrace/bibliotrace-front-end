@@ -5,7 +5,7 @@ import BookDetails from "../modals/BookDetails";
 import Cookies from "js-cookie";
 
 const SearchResult = ({ bookData }) => {
-  const [image, setImage] = useState(defaultBook);
+  const [image, setThumbnail] = useState(defaultBook);
   const [openModal, setOpenModal] = useState(false);
   const [isTapped, setIsTapped] = useState(false);
 
@@ -72,12 +72,12 @@ const SearchResult = ({ bookData }) => {
           });
         }
 
-        setImage(defaultBook);
+        setThumbnail(defaultBook);
         if (response.ok) {
           const blob = await response.blob();
           if (blob.size >= 100) {
             const objectURL = URL.createObjectURL(blob);
-            setImage(objectURL);
+            setThumbnail(objectURL);
           }
         } else {
           if (response.status === 401) {

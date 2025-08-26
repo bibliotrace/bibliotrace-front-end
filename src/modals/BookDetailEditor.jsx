@@ -18,11 +18,11 @@ export default function BookDetailEditor({ mode, bookData, onExit, colorScheme }
   const [secondaryGenres, setSecondaryGenres] = useState([]);
   const [targetSecondaryGenre, setTargetSecondaryGenre] = useState("");
   const [audience, setAudience] = useState("");
-  const [pages, setPages] = useState();
-  const [seriesName, setSeriesName] = useState();
-  const [seriesNumber, setSeriesNumber] = useState();
-  const [publishDate, setPublishDate] = useState();
-  const [language, setLanguage] = useState();
+  const [pages, setPages] = useState("");
+  const [seriesName, setSeriesName] = useState("");
+  const [seriesNumber, setSeriesNumber] = useState("");
+  const [publishDate, setPublishDate] = useState("");
+  const [language, setLanguage] = useState("English");
   const [genres, setGenres] = useState(allGenresList.split(",") ?? ["No Genres Found"]);
   const [availableGenres, setAvailableGenres] = useState([]);
   const [audiences, setAudiences] = useState(allAudiencesList.split(",") ?? ["No Audiences Found"]);

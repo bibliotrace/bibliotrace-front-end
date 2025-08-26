@@ -79,30 +79,32 @@ export default function AuditList() {
       <div className="flex flex-column w-full justify-center">
         <ul className="flex-grow max-w-[80%] lg:max-w-[900px] bg-white border h-[70vh] p-10 overflow-y-scroll">
           <table className="border w-full">
-            <tr>
-              <th className="border w-[25%]">Audit #</th>
-              <th className="border w-[25%]">Start Date</th>
-              <th className="border w-[25%]">Completed Date</th>
-              <th className="border w-[25%]"></th>
-            </tr>
-            {auditList.map((audit, i) => {
-              return (
-                <>
-                  <tr className="hover:bg-gray hover:cursor-pointer">
-                    <td className="border p-5 text-center" onClick={() => handleSelectAudit(audit)}>Audit #{i + 1} </td>
-                    <td className="border p-5 text-center" onClick={() => handleSelectAudit(audit)}>{audit.start_date.split("T")[0]}</td>
-                    <td className="border p-5 text-center" onClick={() => handleSelectAudit(audit)}>
-                      {audit.completed_date ? audit.completed_date.split("T")[0] : "In Progress"}
-                    </td>
-                    <td className="border p-5 item-center">
-                      <button className="ml-5 border-black print:hidden" onClick={() => handleRemoveAudit(audit.id)}>
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                </>
-              );
-            })}
+            <thead>
+              <tr>
+                <th className="border w-[25%]">Start Date</th>
+                <th className="border w-[25%]">Completed Date</th>
+                <th className="border w-[25%]"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {auditList.map((audit) => {
+                return (
+                  <>
+                    <tr className="hover:bg-gray hover:cursor-pointer">
+                      <td className="border p-5 text-center" onClick={() => handleSelectAudit(audit)}>{audit.start_date.split("T")[0]}</td>
+                      <td className="border p-5 text-center" onClick={() => handleSelectAudit(audit)}>
+                        {audit.completed_date ? audit.completed_date.split("T")[0] : "In Progress"}
+                      </td>
+                      <td className="border p-5 item-center">
+                        <button className="ml-5 border-black print:hidden" onClick={() => handleRemoveAudit(audit.id)}>
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  </>
+                );
+              })}
+            </tbody>
           </table>
           <RemoveAuditDialog
             removeAuditDialog={removeAuditDialog}

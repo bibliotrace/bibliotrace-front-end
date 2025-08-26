@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-
 export default function AuditCompletedDialog({ auditCompletedDialog, onOK }) {
   return (
     <dialog className="rounded-md p-8 border-2 border-darkPeach" ref={auditCompletedDialog}>
