@@ -9,6 +9,7 @@ import SearchPage from "../pages/Search";
 import SuggestPage from "../pages/SuggestPage";
 import NotFound from "../pages/NotFound";
 import Login from "../pages/Login";
+import Login2 from "../pages/Login2.jsx";
 import AdminHome from "../pages/AdminHome";
 import AddScannedBooks from "../pages/AddScannedBooks";
 import EditBooks from "../pages/EditBooks.jsx";
@@ -74,7 +75,8 @@ const AppRoutes = () => {
   return (
     <Router basename={"/"}>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login2 />} />
+        <Route path="/adminlogin" element={<Login />} />
         {/*public pages*/}
         <Route element={<PublicRoute />}>
           <Route path="/" element={<Home />} />

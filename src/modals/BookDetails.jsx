@@ -10,8 +10,9 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
   const [audience, setAudience] = useState("");
   const [published, setPublished] = useState("");
   const [tags, setTags] = useState([]);
+  const [primaryGenre, setPrimaryGenre] = useState("");
   const [secondaryGenres, setSecondaryGenres] = useState([]);
-  const [seriesNumber, setSeriesNumber] = useState("");
+  const [seriesNumber, setSeriesNumber] = useState("-");
   const [synopsis, setSynopsis] = useState("");
   const [quantities, setQuantities] = useState([]);
 
@@ -52,7 +53,8 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
       setPublished(bookDataReturned.publish_date);
       setSynopsis(bookDataReturned.short_description);
       setTags(bookDataReturned.tag_list);
-      setSeriesNumber(bookDataReturned.series_number);
+      setSeriesNumber(bookDataReturned.series_number ? bookDataReturned.series_number.toString() : "-");
+      setPrimaryGenre(bookDataReturned.primary_genre_name);
       setSecondaryGenres(bookDataReturned.genre_list);
 
       result = await fetch(`http://localhost:8080/api/inventory/quantities/${bookDataReturned.id}`, {
@@ -123,7 +125,7 @@ export default function BookDetails({ bookData, imageSrc, onExit }) {
                   </div>
                   <div className="flex text-xl pt-4 items-center flex-wrap">
                     <h6 className="font-bold pr-2">Genre:</h6>
-                    <p className="bg-darkBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">{genre}</p>
+                    <p className="bg-darkBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap">{primaryGenre}</p>
                     {secondaryGenres.map((genre) => {
                       return <p className="bg-darkBlue px-4 py-1 m-2 rounded-3xl text-white text-center text-nowrap italic">{genre}</p>;
                     })}

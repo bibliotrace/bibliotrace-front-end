@@ -9,6 +9,7 @@ import WhatsPopular from "../assets/WhatsPopular.jpg";
 import CustomButton from "../components/ButtonComponent";
 import NavBar from "../components/NavBar";
 import PopUpBar from "../modals/PopUpSideBar";
+import { openSuggestForm } from "./suggest";
 
 const Home = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -43,7 +44,8 @@ const Home = () => {
   };
 
   const handleSuggestBookNav = () => {
-    navigate("/suggest");
+    //navigate("/suggest");
+    openSuggestForm();
   };
 
   const handleExploreByAge = () => {
@@ -197,7 +199,7 @@ const Home = () => {
 
         <CustomButton
           imageSrc={SuggestBook}
-          text={"Suggest a\nBook"}
+          text={"Suggest A\nBook"}
           textColor="#FFFFFF"
           onClick={handleSuggestBookNav}
           borderColor="#e12502"
@@ -277,7 +279,7 @@ const Home = () => {
 
         <CustomButton
           imageSrc={SuggestBook}
-          text={"Suggest a Book"}
+          text={"Suggest A Book"}
           textColor="#FFFFFF"
           onClick={handleSuggestBookNav}
           borderColor="#e12502"

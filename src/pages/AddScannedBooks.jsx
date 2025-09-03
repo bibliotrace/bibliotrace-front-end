@@ -342,7 +342,7 @@ export default function AddScannedBooks() {
                 placeholder="Start Scanning Here"
                 ref={isbnInputRef}
                 value={isbn}
-                onChange={(e) => setIsbn(e.target.value)}
+                onChange={(e) => setIsbn(e.target.value.trim())}
               />
               <button
                 className="m-4"

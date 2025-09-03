@@ -233,7 +233,7 @@ export default function RemoveBook() {
               className="flex-grow p-2 border-2 border-darkBlue rounded-lg focus:outline-none focus:border-darkBlue"
               placeholder="QR code"
               value={qr}
-              onChange={(e) => setQr(e.target.value)}
+              onChange={(e) => setQr(e.target.value.trim())}
               onKeyDown={(e) => {
                 if (scannerInputComplete(e.key) && !message) {
                   scanQr(e, qr);
@@ -255,7 +255,7 @@ export default function RemoveBook() {
               className="flex-grow p-2 border-2 border-darkBlue rounded-lg focus:outline-none focus:border-darkBlue"
               placeholder="ISBN"
               value={isbn}
-              onChange={(e) => setIsbn(e.target.value)}
+              onChange={(e) => setIsbn(e.target.value.trim())}
               onKeyDown={(e) => {
                 if (scannerInputComplete(e.key) && !message) {
                   scanIsbn(e, isbn);
@@ -340,7 +340,7 @@ export default function RemoveBook() {
             name="isbn"
             placeholder="ISBN"
             value={isbn}
-            onChange={(e) => setIsbn(e.target.value)}
+            onChange={(e) => setIsbn(e.target.value.trim())}
             onKeyDown={(e) => {
               if (scannerInputComplete(e.key) && !message) {
                 scanIsbn(e, isbn);

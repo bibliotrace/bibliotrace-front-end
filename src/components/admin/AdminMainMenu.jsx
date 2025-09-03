@@ -12,6 +12,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PopUpBar from "../../modals/PopUpSideBar";
 import CustomButton from "../ButtonComponent";
+import { openSuggestForm } from "../../pages/suggest";
+
 
 export default function MainMenu() {
   const navigate = useNavigate();
@@ -41,9 +43,12 @@ export default function MainMenu() {
       textWidth: "35rem",
     },
     {
-      label: "Suggest A Book",
+      label: "Suggest a Book",
       imageSrc: RedIcon,
-      onclick: () => navigate("/suggest"),
+      onclick: () => {
+        //navigate("/suggest");
+        openSuggestForm();
+      },
       borderColor: "#e12502",
       textWidth: "35rem",
     },
@@ -87,7 +92,7 @@ export default function MainMenu() {
         });
       });
     }
-  
+
     const agesListString = Cookies.get("audienceList");
     if (agesListString) {
       const agesList = agesListString.split(",");
