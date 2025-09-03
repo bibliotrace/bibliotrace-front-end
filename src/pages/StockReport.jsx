@@ -95,21 +95,21 @@ export default function StockReport() {
     }
   };
 
-  const viewBookData = async (bookId) => {
+  const viewBookData = async (bookId, genreName) => {
     let rawBookData = await getBookData(bookId);
     if (rawBookData) {
-      let _bookData = {
+      let bd = {
         id: String(rawBookData.id),
         title: rawBookData.book_title,
         author: rawBookData.author ?? "Unknown",
-        genre: rawBookData.genre_name,
+        genre: genreName,
         series: rawBookData.series_name ?? "None",
         isbn: rawBookData.isbn_list?.split("|")[0] ?? "Unknown",
         coverImageId: null,
       };
-      setBookData(_bookData);
+      setBookData(bd);
       setCoverImage(defaultBook);
-      let _coverImage = await getBookCoverImage(_bookData.isbn);
+      let _coverImage = await getBookCoverImage(bd.isbn);
       if (_coverImage) {
         setCoverImage(_coverImage);
       }
@@ -149,7 +149,7 @@ export default function StockReport() {
               {stock.map((entry) => {
                 return (
                   <>
-                    <tr className="hover:bg-gray" onClick={() => viewBookData(entry.id)}>
+                    <tr className="hover:bg-gray" onClick={() => viewBookData(entry.id, entry.genre_name)}>
                       <td className="border p-5 text-center print:p-2">{entry.book_title}</td>
                       <td className="border p-5 text-center print:p-2">{entry.author}</td>
                       <td className="border p-5 text-center print:p-2">{entry.genre_name}</td>
