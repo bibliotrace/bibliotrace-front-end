@@ -24,7 +24,7 @@ export default function Login({ loginType }) {
       if (jwtDataString != null) {
         const jwtData = JSON.parse(jwtDataString);
 
-        if (jwtData.userRole.userType === "Admin") {
+        if (jwtData.userRole.roleType === "Admin") {
           navigate("/admin");
         } else {
           navigate("/");
