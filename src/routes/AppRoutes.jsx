@@ -61,9 +61,16 @@ const AppRoutes = () => {
     }
   };
 
+  const logout = () => {
+    Object.keys(Cookies.get()).forEach((item) => {
+      Cookies.remove(item);
+    });
+  };
+
   const PrivateRoute = () => {
     const token = getToken();
-    if (token == null || token.userRole == null || checkJwtIsExpired(token.exp)) {
+    if (!token || !token.userRole || !token.userRole.roleType || token.userRole.roleType === "User" || checkJwtIsExpired(token.exp)) {
+      logout();
       return <Navigate to="/login" />;
     } else if (String(token.userRole.roleType) === "Admin") {
       return <Outlet />;
@@ -75,37 +82,37 @@ const AppRoutes = () => {
   return (
     <Router basename={"/"}>
       <Routes>
-        <Route path="/login" element={<Login2 />} />
-        <Route path="/adminlogin" element={<Login />} />
+        <Route path="login" element={<Login2 />} />
+        <Route path="adminlogin" element={<Login />} />
         {/*public pages*/}
         <Route element={<PublicRoute />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/genre" element={<Genre />} />
-          <Route path="/age" element={<Age />} />
-          <Route path="/filter" element={<Filter />} />
-          <Route path="/suggest" element={<SuggestPage />} />
-          <Route path="/search" element={<SearchPage />} />
+          <Route index element={<Home />} />
+          <Route path="genre" element={<Genre />} />
+          <Route path="age" element={<Age />} />
+          <Route path="filter" element={<Filter />} />
+          <Route path="suggest" element={<SuggestPage />} />
+          <Route path="search" element={<SearchPage />} />
         </Route>
         {/*private pages*/}
         <Route element={<PrivateRoute />}>
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/add-scanned" element={<AddScannedBooks />} />
-          <Route path="/edit-book" element={<EditBooks />} />
-          <Route path="/edit-genres-tags" element={<ManageGenresTags />} />
-          <Route path="/audit" element={<Audit />} />
-          <Route path="/audit-list" element={<AuditList />} />
-          <Route path="/audit-report" element={<AuditReport />} />
-          <Route path="/remove-book" element={<RemoveBook />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/checkin" element={<CheckIn />} />
-          <Route path="/shopping-list" element={<ShoppingList />} />
-          <Route path="/restock-list" element={<RestockList />} />
-          <Route path="/popular" element={<PopularReport />} />
-          <Route path="/stock" element={<StockReport />} />
-          <Route path="/set-location" element={<SetLocation />} />
-          <Route path="/manage-locations" element={<ManageLocations />} />
-          <Route path="/create-user" element={<CreateUser />} />
-          <Route path="/backlog-update-book" element={<BacklogUpdateBook />} />
+          <Route path="admin" element={<AdminHome />} />
+          <Route path="add-scanned" element={<AddScannedBooks />} />
+          <Route path="edit-book" element={<EditBooks />} />
+          <Route path="edit-genres-tags" element={<ManageGenresTags />} />
+          <Route path="audit" element={<Audit />} />
+          <Route path="audit-list" element={<AuditList />} />
+          <Route path="audit-report" element={<AuditReport />} />
+          <Route path="remove-book" element={<RemoveBook />} />
+          <Route path="checkout" element={<Checkout />} />
+          <Route path="checkin" element={<CheckIn />} />
+          <Route path="shopping-list" element={<ShoppingList />} />
+          <Route path="restock-list" element={<RestockList />} />
+          <Route path="popular" element={<PopularReport />} />
+          <Route path="stock" element={<StockReport />} />
+          <Route path="set-location" element={<SetLocation />} />
+          <Route path="manage-locations" element={<ManageLocations />} />
+          <Route path="create-user" element={<CreateUser />} />
+          <Route path="backlog-update-book" element={<BacklogUpdateBook />} />
         </Route>
         <Route path="*" element={<NotFound />} /> {/* Catch-all route for 404 */}
       </Routes>
