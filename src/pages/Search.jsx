@@ -212,7 +212,7 @@ const Search = () => {
       style={{ minHeight: "100vh" }}
     >
       <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} />
-      <h1 className="mt-16 text-5xl">Bibliotrace 3.0</h1>
+      <h1 className="mt-16 text-5xl">Bibliotrace</h1>
       <div className="h-16 my-6 flex w-10/12 md:w-7/12 justify-center">
         {" "}
         {/* Search Bar */}

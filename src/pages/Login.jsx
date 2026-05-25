@@ -210,8 +210,8 @@ export default function Login({ loginType }) {
         <NavBar
           useDarkTheme={false}
           showTitle={true}
-          bgColor={"#ff50e0"}
-          textColor={"white"}
+          bgColor={"white"}
+          textColor={"#110057"}
           showNavButtons={false}
         />
         <div className="h-[calc(100%-64px)] flex flex-col items-center">

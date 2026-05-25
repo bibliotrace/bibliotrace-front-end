@@ -241,7 +241,7 @@ export default function AdminHome({ }) {
           {/* Search Bar */}
           <div className="mt-6 px-14 flex flex-col justify-start">
             {/* Header */}
-            <h1 className="text-white text-center pb-4">Bibliotrace 3.0</h1>
+            <h1 className="text-white text-center pb-4">Bibliotrace</h1>
 
             {/* Search Bar & Button */}
             <div className="flex items-center w-full m-auto px-[10%]">
