@@ -45,7 +45,7 @@ const NavBar = ({ useDarkTheme, showTitle, bgColor, textColor, showNavButtons = 
   if (showTitle) {
     title = (
       <h1 className="hidden h-16 absolute top-0 right-0 left-0 md:flex text-center md:text-3xl items-center justify-center p-2 pointer-events-none">
-        BiblioTrace
+        Bibliotrace
       </h1>
     );
   }

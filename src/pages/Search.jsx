@@ -1,30 +1,31 @@
 import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
+import { Menu, Search as SearchIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Filter from "../assets/filter.svg?react";
-import NextIcon from "../components/NextIcon.jsx";
-import PrevIcon from "../components/PrevIcon.jsx";
-import FilterBox from "../components/FilterBox.jsx";
 import LoadingSpinner from "../components/LoadingSpinner.jsx";
 import NavBar from "../components/NavBar.jsx";
-import SearchResult from "../components/SearchResult.jsx";
+import SearchResultCard from "../components/SearchResultCard.jsx";
+import SearchSidebar from "../components/SearchSidebar.jsx";
 
-const Search = () => {
+const INITIAL_VISIBLE = 5;
+const SHOW_MORE_INCREMENT = 5;
+
+export default function Search() {
   const location = useLocation();
   const navigate = useNavigate();
-  const rowHeight = 160;
-  const headerHeight = 450;
-  const [showFilter, setShowFilter] = useState(false);
-  const [rowCount, setRowCount] = useState(0);
-  const [pageOffset, setPageOffset] = useState(0);
-  const [isLoading, setLoading] = useState(false);
-  const [searchInput, setSearchInput] = useState(location.state?.initSearchInput ?? ""); // Arch idea: use the initSearchInput as a text-based passthrough for searches by Genre, Age group, date range, etc...
-  // Maybe the string can be like "||GENRE:fantasy||" or "||AGE:board||" or "||DATE_START:01/02/0003 DATE_END:04/05/0006||" or "||IDENTIFIER:searchstring||"
+
+  const [searchInput, setSearchInput] = useState(location.state?.initSearchInput ?? "");
   const [filterInput, setFilterInput] = useState(
     location.state?.initFilterInput ?? { Audiences: [], Genres: [], Special: [] }
   );
   const [inputQuery, setInputQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+
+  const genres = (Cookies.get("genreList") ?? "").split(",").filter(Boolean);
+  const audiences = (Cookies.get("audienceList") ?? "").split(",").filter(Boolean);
 
   const conductSearch = () => {
     const emptyFilters =
@@ -32,140 +33,66 @@ const Search = () => {
       filterInput.Genres.length === 0 &&
       filterInput.Special.length === 0;
 
-    // Note: this check was not working correctly before, which meant that empty searches were actually processed
-    // which typically resulted in just outputting all books as empty strings match on basically everything
-    // Do we want some kind of functionality later to show all books?
     if (searchInput.trim() === "" && emptyFilters) {
       setSearchResults([]);
+      setInputQuery("");
       return;
     }
 
     setLoading(true);
 
-    // Generate Filter String
     let filterString = "";
     if (filterInput.Audiences.length > 0) {
-      filterString += "||Audience:";
-      for (let i = 0; i < filterInput.Audiences.length; i++) {
-        filterString += encodeURIComponent(filterInput.Audiences[i]);
-        if (i < filterInput.Audiences.length - 1) {
-          filterString += ",";
-        }
-      }
-      filterString += "||";
+      filterString +=
+        "||Audience:" + filterInput.Audiences.map(encodeURIComponent).join(",") + "||";
     }
     if (filterInput.Genres.length > 0) {
-      filterString += "||Genre:";
-      for (let i = 0; i < filterInput.Genres.length; i++) {
-        filterString += encodeURIComponent(filterInput.Genres[i]);
-        if (i < filterInput.Genres.length - 1) {
-          filterString += ",";
-        }
-      }
-      filterString += "||";
+      filterString += "||Genre:" + filterInput.Genres.map(encodeURIComponent).join(",") + "||";
     }
     if (filterInput.Special.length > 0) {
-      filterString += "||Special:";
-      for (let i = 0; i < filterInput.Special.length; i++) {
-        filterString += encodeURIComponent(filterInput.Special[i]);
-        if (i < filterInput.Special.length - 1) {
-          filterString += ",";
-        }
-      }
-      filterString += "||";
+      filterString +=
+        "||Special:" + filterInput.Special.map(encodeURIComponent).join(",") + "||";
     }
 
-    try {
-      const jwt = Cookies.get("authToken");
-      fetch(`http://localhost:8080/api/search/query/${filterString}${searchInput}`, {
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      })
-        .then((response) => {
-          if (response.status === 200) {
-            response.json().then((data) => {
-              const bookItems = data.results;
-              console.log("I GOT THE RESULTS!!");
-              console.log(bookItems);
-              setSearchResults(bookItems);
-              setPageOffset(0);
-              setInputQuery(searchInput);
-              setLoading(false);
-            });
-          } else {
-            if (response.status === 401) {
-              navigate("/login");
-            }
-            setSearchResults([
-              {
-                author: `Error: ${response.status} Code Received`,
-                key: "Error Code",
-              },
-              {
-                author: `Error Address: ${response.url}`,
-                key: "Error Addy",
-              },
-            ]);
-            setPageOffset(0);
-            setInputQuery(searchInput);
-            setLoading(false);
-          }
-        })
-        .catch((error) => {
-          setSearchResults([
-            {
-              author: `Error: ${error}`,
-              key: "errorResult",
-            },
-          ]);
-          setPageOffset(0);
+    const jwt = Cookies.get("authToken");
+    fetch(`http://localhost:8080/api/search/query/${filterString}${searchInput}`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          navigate("/login");
+          return;
+        }
+        if (!response.ok) {
+          setSearchResults([]);
+          setInputQuery(searchInput);
+          setLoading(false);
+          return;
+        }
+        response.json().then((data) => {
+          setSearchResults(data.results ?? []);
+          setVisibleCount(INITIAL_VISIBLE);
           setInputQuery(searchInput);
           setLoading(false);
         });
-    } catch (error) {
-      setSearchResults([
-        {
-          author: `Error: ${error}`,
-        },
-      ]);
-      setPageOffset(0);
-      setInputQuery(searchInput);
-      setLoading(false);
-    }
+      })
+      .catch(() => {
+        setSearchResults([]);
+        setLoading(false);
+      });
   };
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      conductSearch();
-    }
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") conductSearch();
   };
 
-  // Function to calculate the number of rows that can fit
-  const calculateRowCount = () => {
-    const availableHeight = window.innerHeight - headerHeight;
-    const count = Math.max(5, Math.floor(availableHeight / rowHeight));
-    setRowCount(count);
-  };
-
-  // Effect that runs once at initialization
   useEffect(() => {
-    if (searchInput != "") {
-      conductSearch();
-    }
-
-    calculateRowCount(); // Initial calculation
-    window.addEventListener("resize", calculateRowCount);
-
-    // Clean up the listener on unmount
-    return () => {
-      window.removeEventListener("resize", calculateRowCount);
-    };
+    if (searchInput !== "") conductSearch();
   }, []);
 
   useEffect(() => {
     if (
-      searchInput != "" ||
+      searchInput !== "" ||
       filterInput.Audiences.length > 0 ||
       filterInput.Genres.length > 0 ||
       filterInput.Special.length > 0
@@ -174,171 +101,112 @@ const Search = () => {
     }
   }, [filterInput]);
 
-  const incrementPage = () => {
-    if (pageOffset + rowCount < searchResults.length) {
-      setPageOffset(pageOffset + rowCount);
-    }
-  };
+  const visibleResults = searchResults.slice(0, visibleCount);
+  const hasMore = visibleCount < searchResults.length;
 
-  const decrementPage = () => {
-    if (pageOffset - rowCount < 0) {
-      setPageOffset(0);
-    } else {
-      setPageOffset(pageOffset - rowCount);
-    }
-  };
-
-  const handleFilterPress = () => {
-    console.log("Buttons been pressed");
-    setShowFilter(!showFilter);
-  };
-
-  const handleMobileFilterNav = () => {
-    console.log("going to filter");
-    console.log("filter input: ", filterInput);
-    const filterBody = {
-      Audiences: [...filterInput.Audiences],
-      Genres: [...filterInput.Genres],
-      Special: [...filterInput.Special],
-    };
-    navigate("/filter", {
-      state: { initFilterCheckBox: filterBody, initSearchInput: searchInput },
-    });
+  const sidebarProps = {
+    filterInput,
+    setFilterInput,
+    genres,
+    audiences,
   };
 
   return (
-    <div
-      className="w-screen pb-5 search-bg flex flex-col items-center"
-      style={{ minHeight: "100vh" }}
-    >
-      <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} />
-      <h1 className="mt-16 text-5xl">Bibliotrace</h1>
-      <div className="h-16 my-6 flex w-10/12 md:w-7/12 justify-center">
-        {" "}
-        {/* Search Bar */}
-        <input
-          className="m-2 px-3 w-10/12 border-2 border-[#110057] rounded-2xl"
-          type="text"
-          placeholder="Search For Books"
-          value={searchInput}
-          onInput={(e) => setSearchInput(e.target.value)}
-          onKeyDown={handleKeyDown}
-        ></input>
-        <button
-          className="flex items-center m-2 border-[#110057] border-2 bg-white rounded-2xl"
-          onClick={conductSearch}
-        >
-          {isLoading ? <LoadingSpinner size={"3rem"} /> : "Go!"}
-        </button>
-      </div>
-      <div className="w-10/12">
-        {" "}
-        {/* Search Results Table */}
-        <div className="w-full flex justify-between my-4">
-          {" "}
-          {/* Buttons Above Results */}
-          <button
-            className="bg-[transparent] border-none flex xl:hidden "
-            onClick={handleMobileFilterNav}
-          >
-            <Filter />
-          </button>
-          <button
-            className="bg-[transparent] border-none hidden xl:flex"
-            onClick={handleFilterPress}
-          >
-            <Filter />
-          </button>
-          {/* Filter Box (Overlay) */}
-          {showFilter && (
-            <>
-              {/*Overlay everything behind filter when filter box is open*/}
-              <div
-                className="fixed inset-0 bg-[transparent] z-40"
-                onClick={() => {
-                  setShowFilter(false); // close the filter when you click outside of it
-                }}
-              ></div>
-              <div
-                className="fixed top-5 left-52 w-full h-full flex justify-center items-center z-50
-                          sm:w-80 md:w-96 lg:w-[30vw] xl:w-[50vw] max-w-full p-4"
-                style={{ pointerEvents: "all" }}
-              >
-                <FilterBox
-                  onClose={(selectedFilters) => {
-                    setShowFilter(false);
-                    setFilterInput(selectedFilters);
-                  }}
-                  prevSelectedItems={filterInput}
-                />
-              </div>
-            </>
-          )}
-          <p className="flex items-center">
-            {inputQuery != "" ? `Showing search results for "${inputQuery}"` : ""}
-          </p>
-          <div className="w-10"></div> {/* placeholder to put above p element in the center */}
-        </div>
-        <div className="">
-          {" "}
-          {/* Results Table */}
-          <div className="h-10 hidden md:flex justify-between bg-[#110057] text-white text-center items-center rounded-t-2xl">
-            {" "}
-            {/* Table Header */}
-            <div className="h-10 flex items-center justify-center px-3 border-r-slate-50 border-r-2 w-28 text-transparent">
-              <h3>Cover</h3>
-            </div>
-            <div className="h-10 flex items-center justify-center px-3 border-r-slate-50 border-r-2 w-1/3">
-              <h3>Title</h3>
-            </div>
-            <div className="h-10 flex items-center justify-center px-3 border-r-slate-50 border-r-2 w-1/5">
-              <h3>Author</h3>
-            </div>
-            <div className="h-10 flex items-center justify-center px-3 border-r-slate-50 border-r-2 w-1/5">
-              <h3>Genre</h3>
-            </div>
-            <div className="h-10 flex items-center justify-center px-3 w-1/5">
-              <h3>Series</h3>
+    <div className="min-h-screen w-full flex flex-col bg-white">
+      <NavBar useDarkTheme={true} showTitle={false} bgColor="white" textColor="#110057" />
+
+      <div className="flex flex-1">
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:block w-80 border-r border-gray-200 shrink-0">
+          <SearchSidebar {...sidebarProps} />
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 min-w-0 px-4 sm:px-8 py-6">
+          <div className="mb-6">
+            <p className="text-xs text-[#110057]">Bibliotrace</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#110057]">Search Results</h2>
+            <div className="relative mt-4 max-w-xl">
+              <SearchIcon
+                size={18}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#9c7ad6] pointer-events-none"
+              />
+              <input
+                type="text"
+                value={searchInput}
+                onInput={(e) => setSearchInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="search"
+                className="w-full pl-10 pr-4 py-2 border-2 border-[#9c7ad6] rounded-full text-[#110057] placeholder-[#9c7ad6] focus:outline-none focus:border-[#110057]"
+              />
             </div>
           </div>
-          {searchResults.length == 0 ? (
-            <div className="text-center w-full py-4">
-              <p>No results found. Please try a different query.</p>
-            </div>
-          ) : (
-            Array.from({ length: rowCount }, (_, index) => {
-              const targetIndex = index + pageOffset;
-              if (targetIndex >= searchResults.length) {
-                return <></>;
-              }
-              const bookData = searchResults[index + pageOffset];
-              return bookData ? <SearchResult key={bookData.id} bookData={bookData} /> : <></>;
-            })
+
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            className="lg:hidden mb-4 inline-flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-full text-sm font-semibold text-[#110057]"
+          >
+            <Menu size={16} /> Filters
+          </button>
+
+          {inputQuery && (
+            <>
+              <h3 className="text-lg sm:text-xl font-bold text-[#110057]">
+                Showing results for &ldquo;{inputQuery}&rdquo;
+              </h3>
+              <p className="text-sm text-gray-600 mb-4">
+                {searchResults.length} {searchResults.length === 1 ? "result" : "results"} found
+              </p>
+            </>
           )}
-        </div>
-        <div className="flex align-middle items-center justify-center py-4">
-          {" "}
-          {/* Pagination Buttons */}
-          <button className="bg-[transparent] flex flex-col items-center" onClick={decrementPage}>
-            {pageOffset === 0 ? <PrevIcon color="#A9A9A9" /> : <PrevIcon />}
-            <p className="">Previous</p>
-          </button>
-          <p className="h-12">
-            Showing {searchResults.length === 0 ? 0 : pageOffset + 1}-
-            {Math.min(pageOffset + rowCount, searchResults.length)} of {searchResults.length}
-          </p>
-          <button className="bg-[transparent] flex flex-col items-center" onClick={incrementPage}>
-            {pageOffset + rowCount >= searchResults.length ? (
-              <NextIcon color="#A9A9A9" />
-            ) : (
-              <NextIcon />
-            )}
-            <p className="">Next</p>
-          </button>
-        </div>
+
+          {isLoading ? (
+            <div className="flex justify-center py-12">
+              <LoadingSpinner size="3rem" />
+            </div>
+          ) : searchResults.length === 0 ? (
+            inputQuery ? (
+              <p className="text-gray-700">No results found. Please try a different query.</p>
+            ) : null
+          ) : (
+            <>
+              <div className="flex flex-col gap-4">
+                {visibleResults.map((bookData) => (
+                  <SearchResultCard
+                    key={bookData.id ?? bookData.isbn}
+                    bookData={bookData}
+                  />
+                ))}
+              </div>
+              {hasMore && (
+                <div className="flex justify-center mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount(visibleCount + SHOW_MORE_INCREMENT)}
+                    className="px-6 py-2 bg-white border border-gray-300 rounded-full text-sm font-semibold text-[#110057] shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    Show more
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </main>
       </div>
+
+      {/* Mobile drawer */}
+      {drawerOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+            onClick={() => setDrawerOpen(false)}
+          />
+          <aside className="fixed inset-y-0 left-0 w-80 max-w-[85%] bg-white z-50 lg:hidden shadow-xl">
+            <SearchSidebar {...sidebarProps} onClose={() => setDrawerOpen(false)} />
+          </aside>
+        </>
+      )}
     </div>
   );
-};
-
-export default Search;
+}
