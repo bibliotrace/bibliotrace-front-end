@@ -106,7 +106,7 @@ const Home = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl short:text-2xl font-serif font-bold">
             Bibliotrace
           </h1>
-          <p className="mt-1 text-sm sm:text-base short:text-xs">Search our library by...</p>
+          <p className="mt-1 text-sm sm:text-base short:text-xs">Search our library</p>
         </div>
       </div>
 
@@ -119,7 +119,7 @@ const Home = () => {
           />
           <input
             type="text"
-            placeholder="title, author, or genre"
+            placeholder="title or author"
             value={searchInput}
             onInput={(e) => setSearchInput(e.target.value)}
             onKeyDown={handleKeyDown}
