@@ -201,8 +201,9 @@ export default function Login2() {
             <p className="text-base font-semibold mb-2">Children&rsquo;s Health</p>
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Bibliotrace</h1>
             <p className="text-base mb-8 leading-relaxed">
-              Something about the purpose of this site. Should be about two to three lines of
-              information and why they should choose from locations below.
+              Click on your location to see our full inventory of free books available in the
+              Primary Children’s Hospital School Zone!
+              Each patient may select one free book to keep.
             </p>
             <div className="flex flex-row flex-wrap gap-4">
               {campuses.map((campusName, index) => (
