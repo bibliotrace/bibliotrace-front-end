@@ -25,6 +25,7 @@ export default {
         abc: ["ABC Social", "cursive"],
       },
       screens: {
+        short: { raw: "(max-height: 900px) and (orientation: landscape)" },
         "h-sm": { raw: "(min-height: 640px)" },
         "h-md": { raw: "(min-height: 768px)" },
         "h-lg": { raw: "(min-height: 1024px)" },

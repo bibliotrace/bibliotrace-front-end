@@ -69,7 +69,7 @@ const MobileFilter = () => {
     <div className={`h-full w-full pb-5  search-bg flex flex-col items-center`}>
       <NavBar useDarkTheme={true} showTitle={false} bgColor={"none"} textColor={"#000000"} />
 
-      <h1 className="mt-3 md:mt-16 md:text-5xl text-2xl text-gray">Bibliotrace 3.0</h1>
+      <h1 className="mt-3 md:mt-16 md:text-5xl text-2xl text-gray">Bibliotrace</h1>
 
       {/* Search Bar */}
       <div className="h-16 my-6 flex md:w-7/12 w-full justify-center">

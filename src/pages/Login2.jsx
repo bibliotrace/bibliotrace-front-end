@@ -1,49 +1,11 @@
 import Cookies from "js-cookie";
+import { MapPin } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
 import ErrorModal from "../modals/ErrorModal";
-import loginBackground from "../assets/login-background.png";
-import CustomButton from "../components/ButtonComponent";
-//Icons
-import PeachColorIcon from "../assets/CheckInIcon.jpg";
-import OrangeIcon from "../assets/ExploreByAge.jpg";
-import BlueIcon from "../assets/ExploreByGenre.jpg";
-import YellowIcon from "../assets/NewArrivalsIcon.jpg";
-import RedIcon from "../assets/SuggestBook.jpg";
-import PinkIcon from "../assets/WhatsPopular.jpg";
-import PurpleIcon from "../assets/checkoutIcon.jpg";
-
-const buttonStyles = [
-  {
-    imageSrc: PurpleIcon,
-    borderColor: "#4b00e3",
-  },
-  {
-    imageSrc: PeachColorIcon,
-    borderColor: "#fbb7a4",
-  },
-  {
-    imageSrc: RedIcon,
-    borderColor: "#e12502",
-  },
-  {
-    imageSrc: PinkIcon,
-    borderColor: "#ff50df",
-  },
-  {
-    imageSrc: YellowIcon,
-    borderColor: "#FFD700",
-  },
-  {
-    imageSrc: OrangeIcon,
-    borderColor: "#fa8804",
-  },
-  {
-    imageSrc: BlueIcon,
-    borderColor: "#669bff",
-  },
-];
+import loginBackground from "../assets/pattern-backgroup.svg";
+import girlSwinging from "../assets/swing-girl.svg";
 
 export default function Login2() {
   const [campuses, setCampusList] = useState([]);
@@ -214,34 +176,47 @@ export default function Login2() {
 
   return (
     <>
-      <div
-        className="size-full bg-cover bg-center bg-no-repeat "
-        style={{ backgroundImage: `url(${loginBackground})` }}
-        onClick={handleClick}
-      >
+      <div className="p-2 w-full" style={{ backgroundColor: "white" }}>
         <NavBar
           useDarkTheme={false}
-          showTitle={true}
-          bgColor={"#ff50e0"}
-          textColor={"white"}
+          showTitle={false}
+          bgColor={"transparent"}
+          textColor={"#110057"}
           showNavButtons={false}
         />
-        <div className="h-[calc(100%-64px)] flex flex-col items-center">
-          <h1 className="text-white mb-10 mt-20">{location.state?.loginType ?? ""}</h1>
-          <div className="flex flex-col w-1/2 items-center">
-            {campuses.map((campusName, index) => (
-              <CustomButton
-                key={index}
-                imageSrc={buttonStyles[index % buttonStyles.length].imageSrc}
-                text={campusName}
-                textColor="#FFFFFF"
-                onClick={() => campusLogin(campusName)}
-                borderColor={buttonStyles[index % buttonStyles.length].borderColor}
-                bgColor="#110057"
-                layout="row"
-                textSize="1.25rem"
-              />
-            ))}
+      </div>
+      <div
+        className="bg-cover bg-center bg-no-repeat"
+        style={{
+          width: "100%",
+          height: "90%",
+          backgroundImage: `url("${girlSwinging}"), url("${loginBackground}")`,
+          backgroundSize: "70% 70%, 100% 100%",
+          backgroundPosition: "100% top, top",
+        }}
+        onClick={handleClick}
+      >
+        <div className="h-[calc(100%-64px)] flex items-center px-6 sm:px-12 lg:px-24 overflow-x-hidden">
+          <div className="flex flex-col max-w-lg text-white">
+            <p className="text-base font-semibold mb-2">Children&rsquo;s Health</p>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">Bibliotrace</h1>
+            <p className="text-base mb-8 leading-relaxed">
+              Click on your location to see our full inventory of free books available in the
+              Primary Children’s Hospital School Zone!
+              Each patient may select one free book to keep.
+            </p>
+            <div className="flex flex-row flex-wrap gap-4">
+              {campuses.map((campusName, index) => (
+                <button
+                  key={index}
+                  onClick={() => campusLogin(campusName)}
+                  className="flex items-center gap-2 bg-white text-[#110057] font-semibold px-8 py-3 rounded-full shadow-md hover:shadow-lg transition-shadow"
+                >
+                  <MapPin size={18} />
+                  {campusName}
+                </button>
+              ))}
+            </div>
           </div>
           <div id="error-modal" ref={errorModalRef}>
             {message ? (
@@ -258,6 +233,9 @@ export default function Login2() {
           </div>
         </div>
       </div>
+      <p className="fixed bottom-4 left-6 text-xs text-gray-500">
+        Copyright &copy;2026, Intermountain Health, all rights reserved.
+      </p>
     </>
   );
 }
